@@ -20,6 +20,7 @@
 </optgroup>
 <% if is_triggered_by.blank? || (is_triggered_by.present? && is_triggered_by == 'issue_tracker_id') %>
     <script type="text/javascript">
+    (function(){
         let load_url = '<%= url_for(controller: 'issue_templates', action: 'load', project_id: @project) %>';
         let should_replaced = '<%= should_replaced %>';
         let confirm_msg = "<%=h escape_javascript((l(:defaulf_template_loaded, tracker: @tracker))) %>";
@@ -29,5 +30,6 @@
 
         var templateNS = templateNS || new ISSUE_TEMPLATE();
         templateNS.load_template(load_url, confirm_msg, should_replaced, false, confirmation, general_text_Yes, general_text_No);
+    })();
     </script>
 <% end %>
