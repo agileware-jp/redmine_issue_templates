@@ -64,7 +64,7 @@ Redmine::Plugin.register :redmine_issue_templates do
 
     menu :project_menu, :issue_templates, { controller: 'issue_templates', action: 'index' },
          caption: :issue_templates, param: :project_id,
-         after: :settings, if: template_menu_allowed?
+         before: :issues, if: template_menu_allowed?
 
     project_module :issue_templates do
       permission :edit_issue_templates, issue_templates: %i[new create edit update destroy move], note_templates: %i[new create edit update destroy move]
