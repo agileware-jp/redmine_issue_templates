@@ -15,7 +15,7 @@ class GlobalNoteTemplatesController < ApplicationController
   # Action for global template : Admin right is required.
   #
   def index
-    trackers = Tracker.all
+    trackers = Tracker.sorted
     template_map = {}
     trackers.each do |tracker|
       tracker_id = tracker.id
@@ -94,7 +94,7 @@ class GlobalNoteTemplatesController < ApplicationController
   end
 
   def render_form_params
-    trackers = Tracker.all
+    trackers = Tracker.sorted
     projects = Project.all
 
     { layout: !request.xhr?,
