@@ -22,6 +22,23 @@ class GlobalIssueTemplatesControllerTest < Redmine::ControllerTest
     assert_response :success
   end
 
+  def test_get_index_should_sort_trackers_in_position_order
+    [
+      ['Feature request', 1],
+      ['Support request', 2],
+      ['Bug', 3],
+    ].each do |name, position|
+      tracker = Tracker.find_by(name: name)
+      tracker.position = position
+      tracker.save!(validate: false)
+    end
+    get :index
+    assert_response :success
+    assert_select 'div.template_box:nth-of-type(1) h3.template_tracker', 'Feature request'
+    assert_select 'div.template_box:nth-of-type(2) h3.template_tracker', 'Support request'
+    assert_select 'div.template_box:nth-of-type(3) h3.template_tracker', 'Bug'
+  end
+
   def test_update_template
     put :update, params: { id: 2, global_issue_template:
       { description: 'Update Test Global template2' } }
