@@ -15,7 +15,7 @@ class GlobalIssueTemplatesController < ApplicationController
   # Action for global template : Admin right is required.
   #
   def index
-    trackers = Tracker.all
+    trackers = Tracker.sorted
     template_map = {}
     trackers.each do |tracker|
       tracker_id = tracker.id
@@ -135,7 +135,7 @@ class GlobalIssueTemplatesController < ApplicationController
   end
 
   def render_form_params
-    trackers = Tracker.all
+    trackers = Tracker.sorted
     projects = Project.all
     tracker_id = @global_issue_template.tracker_id
     custom_fields = core_fields_map_by_tracker_id(tracker_id: tracker_id)
