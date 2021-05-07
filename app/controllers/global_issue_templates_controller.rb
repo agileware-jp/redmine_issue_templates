@@ -13,7 +13,7 @@ class GlobalIssueTemplatesController < ApplicationController
   # Action for global template : Admin right is required.
   #
   def index
-    trackers = Tracker.all
+    trackers = Tracker.sorted
     template_map = {}
     trackers.each do |tracker|
       tracker_id = tracker.id
@@ -110,7 +110,7 @@ class GlobalIssueTemplatesController < ApplicationController
   end
 
   def render_form_params
-    trackers = Tracker.all
+    trackers = Tracker.sorted
     projects = Project.all
     { layout: !request.xhr?,
       locals: { checklist_enabled: checklist_enabled?, trackers: trackers, apply_all_projects: apply_all_projects?,
