@@ -4,7 +4,6 @@ ja:
   issue_template: チケットテンプレート
   issue_template_note: メモ
   label_enabled: "有効"
-  label_disabled: "無効"
   label_help_message: "テンプレートについて"
   label_show_help_message: "ヘルプメッセージを有効にする"
   about_help_message: "プロジェクト毎にテンプレートに関するヘルプを設定できます。"

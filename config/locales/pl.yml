@@ -4,7 +4,6 @@ pl:
   issue_template: Szablon zagadnienia
   issue_template_note: info
   label_enabled: Włącz
-  label_disabled: Wyłącz
   label_help_message: O szablonach
   label_show_help_message: Pokazuj pomoc przy tworzeniu / edycji zagadnień. 
   about_help_message: Każdy projekt może mieć swoje wiadomości pomocy dla szablonów.

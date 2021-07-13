@@ -4,7 +4,6 @@ ru:
   issue_template: Шаблон задачи
   issue_template_note: Заметка
   label_enabled: Вкл.
-  label_disabled: Выкл.
   label_help_message: Подсказка по шаблонам
   label_show_help_message: Показывать подсказку по шаблонам при создаии/редактировании задачи.
   about_help_message: У каждого проекта может быть своя подсказа по шаблонам

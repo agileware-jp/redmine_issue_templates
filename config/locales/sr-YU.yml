@@ -4,7 +4,6 @@ sr:
   issue_template: Šablon problema
   issue_template_note: nota
   label_enabled: Aktivno
-  label_disabled: Neaktivno
   label_help_message: O šablonu
   label_show_help_message: Prikaži poruku za pomoć prilikom kreiranja ili ažuriranja problema.
   about_help_message: Za svaki projekat se može prilagoditi poruka za pomoć za upotrebu šablona.

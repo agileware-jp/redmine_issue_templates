@@ -5,7 +5,6 @@ es:
   issue_template: "Plantilla de peticiones"
   issue_template_note: "Nota"
   label_enabled: "Habilitado"
-  label_disabled: "Deshabilitado"
   label_help_message: "Acerca de plantillas"
   label_show_help_message: "Mostrar el mensaje de ayuda cunado se crean/modifican las peticiones."
   about_help_message: "Cada proyecto puede personalizar el mensaje de ayuda para las plantillas."

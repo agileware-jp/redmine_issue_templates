@@ -4,7 +4,6 @@ it:
   issue_template: Modello segnalazione
   issue_template_note: Note
   label_enabled: Attivato
-  label_disabled: Disattivato
   label_help_message: Info sui modelli
   label_show_help_message: Mostra messaggio d'aiuto durante la creazione o modifica delle segnalazioni.
   about_help_message: Ogni progetto può avere messaggi d'aiuto personalizzati per i modelli.

@@ -4,7 +4,6 @@ da:
   issue_template: Sagsskabelon
   issue_template_note: Note
   label_enabled: Aktiveret
-  label_disabled: Deaktiveret
   label_help_message: Skabelon-hjælpetekst
   label_show_help_message: Vis hjælpetekst ved oprettelse eller redigering af sag.
   about_help_message: Hvert projekt kan have sin egen hjælpetekst.

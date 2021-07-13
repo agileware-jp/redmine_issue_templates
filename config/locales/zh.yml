@@ -4,7 +4,6 @@ zh:
   issue_template: ISSUE模板管理
   issue_template_note: 批注
   label_enabled: 启用
-  label_disabled: 禁用
   label_help_message: 关于ISSUE模板
   label_show_help_message: 当创建/修改问题时显示对应的帮助信息。
   about_help_message: 每个项目都可以自定义ISSUE模板帮助信息。

@@ -4,7 +4,6 @@ fr:
   issue_template: "Gabarit des demandes"
   issue_template_note: "Note"
   label_enabled: "Activer"
-  label_disabled: "Désactiver"
   label_help_message: "À propos des gabarits"
   label_show_help_message: "Afficher le message d'aide lors de la création ou mise à jour d'une demande."
   about_help_message: "Le message d'aide peut-être personnalisé pour chaque projet."

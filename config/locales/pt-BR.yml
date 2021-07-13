@@ -4,7 +4,6 @@ pt-BR:
   issue_template: Modelo de tarefa
   issue_template_note: notas
   label_enabled: Habilitado
-  label_disabled: Desabilitado
   label_help_message: Sobre modelos
   label_show_help_message: Visualizar mensagem de ajuda ao Criar/Atualizar tarefa. 
   about_help_message: Cada projeto pode customizar mensagem de ajuda para os modelos.

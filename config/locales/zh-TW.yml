@@ -4,7 +4,6 @@ zh-TW:
   issue_template: "問題樣板"
   issue_template_note: "註釋"
   label_enabled: "啟用"
-  label_disabled: "停用"
   label_help_message: "關於樣板"
   label_show_help_message: "建立/修改問題時顯示提示訊息。"
   about_help_message: "每個專案都可以為這個樣板定義提示訊息。"

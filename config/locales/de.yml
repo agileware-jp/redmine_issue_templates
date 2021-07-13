@@ -4,7 +4,6 @@ de:
   issue_template: Ticketvorlage
   issue_template_note: Notiz
   label_enabled: aktivieren
-  label_disabled: deaktivieren
   label_help_message: Hilfe
   label_show_help_message: Hilfe-Dialog im Vorlagenformular anzeigen
   about_help_message: Jedes Projekt kann die Onlinehilfe für ihre Vorlagen definieren.
