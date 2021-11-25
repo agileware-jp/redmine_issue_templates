@@ -5,7 +5,7 @@ class GlobalIssueTemplatesController < ApplicationController
   layout 'base'
   helper :issues
   include IssueTemplatesHelper
-  include Concerns::IssueTemplatesCommon
+  include IssueTemplatesCommon
   menu_item :issues
   before_action :find_object, only: %i[show edit update destroy]
   before_action :find_project, only: %i[edit update]
@@ -37,7 +37,7 @@ class GlobalIssueTemplatesController < ApplicationController
 
     begin
       @global_issue_template.safe_attributes = valid_params
-    rescue ActiveRecord::SerializationTypeMismatch, Concerns::IssueTemplatesCommon::InvalidTemplateFormatError
+    rescue ActiveRecord::SerializationTypeMismatch, IssueTemplatesCommon::InvalidTemplateFormatError
       flash[:error] = I18n.t(:builtin_fields_should_be_valid_json, default: 'Please enter a valid JSON fotmat string.')
       render render_form_params.merge(action: :new)
       return
@@ -52,7 +52,7 @@ class GlobalIssueTemplatesController < ApplicationController
   def update
     begin
       @global_issue_template.safe_attributes = valid_params
-    rescue ActiveRecord::SerializationTypeMismatch, Concerns::IssueTemplatesCommon::InvalidTemplateFormatError
+    rescue ActiveRecord::SerializationTypeMismatch, IssueTemplatesCommon::InvalidTemplateFormatError
       flash[:error] = I18n.t(:builtin_fields_should_be_valid_json, default: 'Please enter a valid JSON fotmat string.')
       render render_form_params.merge(action: :show)
       return

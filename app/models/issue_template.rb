@@ -2,7 +2,7 @@
 
 class IssueTemplate < ActiveRecord::Base
   include Redmine::SafeAttributes
-  include Concerns::IssueTemplate::Common
+  include IssueTemplateCommon
   belongs_to :project
   validates :project_id, presence: true
   validates :title, uniqueness: { scope: :project_id }

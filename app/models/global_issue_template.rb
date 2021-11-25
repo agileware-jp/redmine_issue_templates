@@ -2,7 +2,7 @@
 
 class GlobalIssueTemplate < ActiveRecord::Base
   include Redmine::SafeAttributes
-  include Concerns::IssueTemplate::Common
+  include IssueTemplateCommon
   validates :title, uniqueness: { scope: :tracker_id }
   has_and_belongs_to_many :projects
 
