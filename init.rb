@@ -20,9 +20,9 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
-require 'redmine'
-require 'issue_templates/issues_hook'
-require 'issue_templates/journals_hook'
+require File.dirname(__FILE__) + '/../../lib/redmine'
+require File.dirname(__FILE__) + '/lib/issue_templates/issues_hook'
+require File.dirname(__FILE__) + '/lib/issue_templates/journals_hook'
 
 # NOTE: Keep error message for a while to support Redmine3.x users.
 def issue_template_version_message(original_message = nil)
