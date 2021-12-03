@@ -3,7 +3,7 @@ class GlobalIssueTemplatesController < ApplicationController
   layout 'base'
   helper :issues
   include IssueTemplatesHelper
-  include Concerns::IssueTemplatesCommon
+  include IssueTemplatesCommon
   menu_item :issues
   before_action :find_object, only: %i[show edit update destroy]
   before_action :find_project, only: %i[edit update]

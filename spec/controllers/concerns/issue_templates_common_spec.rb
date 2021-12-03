@@ -5,7 +5,7 @@ require_relative '../../spec_helper'
 describe 'IssueTemplatesCommon' do
   before do
     class FakesController < ApplicationController
-      include Concerns::IssueTemplatesCommon
+      include IssueTemplatesCommon
     end
     allow_any_instance_of(FakesController).to receive(:action_name).and_return('fake_action')
     User.current = FactoryBot.build(:user)

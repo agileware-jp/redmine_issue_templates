@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class NoteTemplatesController < ApplicationController
-  include Concerns::ProjectTemplatesCommon
+  include ProjectTemplatesCommon
   layout 'base'
   helper :issue_templates
   menu_item :issues
