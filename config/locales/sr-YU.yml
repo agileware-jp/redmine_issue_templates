@@ -1,5 +1,5 @@
 # English strings go here for Rails i18n
-sr:
+sr-YU:
   issue_templates: Šabloni problema
   issue_template: Šablon problema
   issue_template_note: nota
