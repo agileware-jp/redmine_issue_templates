@@ -23,6 +23,7 @@ class NoteTemplate < ActiveRecord::Base
   validates :project_id, presence: true
   validates :name, uniqueness: { scope: :project_id }
   validates :name, presence: true
+  validates :tracker, presence: true
   acts_as_positioned scope: %i[project_id tracker_id]
 
   enum visibility: { mine: 0, roles: 1, open: 2 }
