@@ -81,4 +81,14 @@ class NoteTemplateTest < ActiveSupport::TestCase
     # Check error message.
     assert_equal 'Please select at least one role.', e.message
   end
+
+  def test_create_should_require_tracker
+    template = NoteTemplate.new(name: 'NoteTemplate1', project_id: 1, visibility: 'open')
+    assert_no_difference 'NoteTemplate.count' do
+      assert_raises ActiveRecord::RecordInvalid do
+        template.save!
+      end
+    end
+    assert_equal ['Tracker cannot be blank'], template.errors.full_messages
+  end
 end
