@@ -45,7 +45,12 @@ class NoteTemplatesController < ApplicationController
     # Workaround in case author id is null
     @note_template.author = User.current if @note_template.author.blank?
     @note_template.safe_attributes = template_params
-    @note_template.role_ids = template_params[:role_ids]
+    @note_template.role_ids =
+      if template_params.key?(:role_ids)
+        template_params[:role_ids]
+      else
+        @note_template.note_visible_role_ids
+      end
 
     save_and_flash(:notice_successful_update, :show)
   end
