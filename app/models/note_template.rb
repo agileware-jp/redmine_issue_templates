@@ -79,14 +79,18 @@ class NoteTemplate < ActiveRecord::Base
   end
 
   def loadable?(user_id:)
-    return true if open?
-    return true if mine? && user_id == author_id
+    user = User.find(user_id)
+    return true if user.admin? || open?
 
-    user_project_roles = User.find(user_id).roles_for_project(project).pluck(:id)
-    match_roles = user_project_roles & roles.ids
-    return true if roles? && !match_roles.empty?
-
-    false
+    if mine?
+      user_id == author_id
+    elsif roles?
+      user_project_roles = user.roles_for_project(project).pluck(:id)
+      match_roles = user_project_roles & roles.ids
+      !match_roles.empty?
+    else
+      false
+    end
   end
 
   private
