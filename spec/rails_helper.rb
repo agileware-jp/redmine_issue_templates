@@ -5,8 +5,8 @@ ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../../config/environment', __dir__)
 
 abort('The Rails environment is running in production mode!') if Rails.env.production?
-require 'spec_helper'
-require 'rspec/rails'
+require File.expand_path('./spec_helper', __dir__)
+require 'selenium-webdriver'
 
 ActiveRecord::Migration.maintain_test_schema!
 
@@ -15,39 +15,26 @@ RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
 
   config.before :suite do
-    require 'selenium-webdriver'
+    chrome_options = {
+      #
+      # NOTE: When using Chrome headress, default window size is 800x600.
+      # In case window size is not specified, Redmine renderes its contents with responsive mode.
+      #
+      args: %w[window-size=1280,800]
+    }
     if ENV['DRIVER'] == 'headless'
-      Capybara.register_driver :headless_chrome do |app|
-        capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
-          #
-          # NOTE: When using Chrome headress, default window size is 800x600.
-          # In case window size is not specified, Redmine renderes its contents with responsive mode.
-          #
-          chromeOptions: { args: %w[headless disable-gpu window-size=1280,800] }
-        )
-        options = Selenium::WebDriver::Chrome::Options.new
-        options.add_option('w3c', false)
-        Capybara::Selenium::Driver.new(
-          app,
-          browser: :chrome,
-          desired_capabilities: capabilities,
-          options: options
-        )
-      end
-    else
-      Capybara.register_driver :headless_chrome do |app|
-        capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
-          chromeOptions: { args: %w[window-size=1280,800] }
-        )
-        options = Selenium::WebDriver::Chrome::Options.new
-        options.add_option('w3c', false)
-        Capybara::Selenium::Driver.new(
-          app,
-          browser: :chrome,
-          desired_capabilities: capabilities,
-          options: options
-        )
-      end
+      chrome_options[:args].concat(%w[headless disable-gpu])
+    end
+
+    Capybara.register_driver :headless_chrome do |app|
+      capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
+        'goog:chromeOptions': chrome_options
+      )
+      Capybara::Selenium::Driver.new(
+        app,
+        browser: :chrome,
+        capabilities: [capabilities]
+      )
     end
   end
 
@@ -63,7 +50,6 @@ RSpec.configure do |config|
 
   config.filter_rails_from_backtrace!
 
-  require 'database_cleaner'
   config.before(:suite) do
     DatabaseCleaner.strategy = :truncation
     DatabaseCleaner.clean_with(:truncation)
