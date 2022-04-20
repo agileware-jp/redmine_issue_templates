@@ -18,7 +18,6 @@ RSpec.configure do |config|
     FactoryBot.reload
   end
 
-  require 'database_cleaner'
   config.before(:suite) do
     DatabaseCleaner.strategy = :truncation
     DatabaseCleaner.clean_with(:truncation)
