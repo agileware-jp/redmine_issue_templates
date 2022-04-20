@@ -13,8 +13,6 @@ feature 'Templates can be reorder via drag and drop', js: true do
   given(:table) { page.find('table.list.issues.table-sortable:first-of-type > tbody') }
 
   background do
-    FactoryBot.create_list(:issue_template, 4, project_id: project.id, tracker_id: tracker.id)
-
     project.trackers << tracker
     assign_template_priv(role, add_permission: :show_issue_templates)
     assign_template_priv(role, add_permission: :edit_issue_templates)
@@ -23,7 +21,9 @@ feature 'Templates can be reorder via drag and drop', js: true do
     member.save
   end
 
-  scenario 'Can drag and drop' do
+  scenario 'Can drag and drop on Issue Templates' do
+    FactoryBot.create_list(:issue_template, 4, project_id: project.id, tracker_id: tracker.id)
+
     visit_template_list(user)
 
     first_target = table.find('tr:nth-child(1) > td.buttons > span')
@@ -32,7 +32,7 @@ feature 'Templates can be reorder via drag and drop', js: true do
     # change id: 1, 2, 3, 4 to 4, 1, 2, 3
     expect do
       first_target.drag_to(last_target)
-      sleep 0.5
+      wait_for_ajax
     end.to change {
              IssueTemplate.order(:id).pluck(:position).to_a
            }.from([1, 2, 3, 4]).to([4, 1, 2, 3])
@@ -43,9 +43,65 @@ feature 'Templates can be reorder via drag and drop', js: true do
 
     expect do
       second_target.drag_to(last_target)
-      sleep 0.5
+      wait_for_ajax
     end.to change {
              IssueTemplate.order(:id).pluck(:position).to_a
+           }.from([4, 1, 2, 3]).to([3, 1, 4, 2])
+  end
+
+  scenario 'Can drag and drop on Note Templates' do
+    FactoryBot.create_list(:note_template, 4, project_id: project.id, tracker_id: tracker.id)
+
+    visit_note_template_list(user)
+
+    first_target = table.find('tr:nth-child(1) > td.buttons > span')
+    last_target = table.find('tr:nth-child(4) > td.buttons > span')
+
+    # change id: 1, 2, 3, 4 to 4, 1, 2, 3
+    expect do
+      first_target.drag_to(last_target)
+      wait_for_ajax
+    end.to change {
+             NoteTemplate.reorder(:id).pluck(:position).to_a
+           }.from([1, 2, 3, 4]).to([4, 1, 2, 3])
+
+    # change id: 4, 1, 2, 3 to 3, 1, 4, 2
+    second_target = table.find('tr:nth-child(2) > td.buttons > span')
+    last_target = table.find('tr:nth-child(4) > td.buttons > span')
+
+    expect do
+      second_target.drag_to(last_target)
+      wait_for_ajax
+    end.to change {
+             NoteTemplate.reorder(:id).pluck(:position).to_a
+           }.from([4, 1, 2, 3]).to([3, 1, 4, 2])
+  end
+
+  scenario 'Can drag and drop on Global Issue Templates' do
+    FactoryBot.create_list(:global_issue_template, 4, tracker_id: tracker.id)
+
+    visit_global_template_list(user)
+
+    first_target = table.find('tr:nth-child(1) > td.buttons > span')
+    last_target = table.find('tr:nth-child(4) > td.buttons > span')
+
+    # change id: 1, 2, 3, 4 to 4, 1, 2, 3
+    expect do
+      first_target.drag_to(last_target)
+      wait_for_ajax
+    end.to change {
+             GlobalIssueTemplate.reorder(:id).pluck(:position).to_a
+           }.from([1, 2, 3, 4]).to([4, 1, 2, 3])
+
+    # change id: 4, 1, 2, 3 to 3, 1, 4, 2
+    second_target = table.find('tr:nth-child(2) > td.buttons > span')
+    last_target = table.find('tr:nth-child(4) > td.buttons > span')
+
+    expect do
+      second_target.drag_to(last_target)
+      wait_for_ajax
+    end.to change {
+             GlobalIssueTemplate.reorder(:id).pluck(:position).to_a
            }.from([4, 1, 2, 3]).to([3, 1, 4, 2])
   end
 
@@ -56,6 +112,21 @@ feature 'Templates can be reorder via drag and drop', js: true do
     user.update_attribute(:admin, false)
     log_user(user.login, user.password)
     visit "/projects/#{project.identifier}/issue_templates"
+  end
+
+  def visit_note_template_list(user)
+    # TODO: If does not user update, authentication is failed. This is workaround.
+    user.update_attribute(:admin, false)
+    log_user(user.login, user.password)
+    visit "/projects/#{project.identifier}/note_templates"
+  end
+
+  def visit_global_template_list(user)
+    # Prevent to call User#deliver_security_notification when user is created.
+    expect(user).to receive(:deliver_security_notification).and_return(true)
+    user.update_attribute(:admin, true)
+    log_user(user.login, user.password)
+    visit "/global_issue_templates"
   end
 
   def offset_array(from, to)
