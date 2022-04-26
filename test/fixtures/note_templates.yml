@@ -1,0 +1,61 @@
+---
+note_templates_001:
+  id: 1
+  name: note template 1
+  description: |-
+    comment 1-1
+    comment 1-2
+  project_id: 1
+  tracker_id: 1
+  author_id: 2
+  enabled: true
+  position: 1
+  visibility: mine
+note_templates_002:
+  id: 2
+  name: note template 2
+  description: |-
+    comment 2-1
+    comment 2-2
+  project_id: 1
+  tracker_id: 1
+  author_id: 2
+  enabled: true
+  position: 2
+  visibility: roles
+note_templates_003:
+  id: 3
+  name: note template 3
+  description: |-
+    comment 3-1
+    comment 3-2
+  project_id: 1
+  tracker_id: 1
+  author_id: 2
+  enabled: true
+  position: 3
+  visibility: roles
+note_templates_004:
+  id: 4
+  name: note template 4
+  description: |-
+    comment 4-1
+    comment 4-2
+  project_id: 1
+  tracker_id: 1
+  author_id: 2
+  enabled: true
+  position: 4
+  visibility: open
+note_templates_005:
+  id: 5
+  name: note template 5
+  description: |-
+    comment 5-1
+    comment 5-2
+  project_id: 1
+  tracker_id: 1
+  author_id: 3
+  enabled: true
+  position: 5
+  visibility: mine
