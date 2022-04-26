@@ -1,0 +1,13 @@
+---
+note_visible_roles_001:
+  id: 1
+  note_template_id: 2
+  role_id: 1
+note_visible_roles_002:
+  id: 2
+  note_template_id: 2
+  role_id: 2
+note_visible_roles_003:
+  id: 3
+  note_template_id: 3
+  role_id: 2
