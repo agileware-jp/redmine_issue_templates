@@ -423,13 +423,17 @@ ISSUE_TEMPLATE.prototype = {
     document.getElementById('issue_template').dispatchEvent(changeEvent)
   },
   checkSelectedWatchers: function (values) {
-    let targets = document.querySelectorAll('input[name="issue[watcher_user_ids][]"]')
-    for (let i = 0; i < targets.length; i++) {
-      let target = targets[i]
-      if (values.includes(target.value)) {
-        target.checked = true
-      }
-    }
+    // HACK: want to get this url and params in a stable way.
+    const rootPath = $('a.home').attr('href');
+    const projectPath = $('a.overview')?.attr('href') ?? `/projects/${$('#issue_project_id').val()}`;
+    const { projectId }  = /projects\/(?<projectId>.+)/.exec(projectPath).groups;
+    $.post({
+      url: `${rootPath}watchers/append.js`,
+      data: {
+        project_id: projectId,
+        watcher: { user_ids: values }
+      },
+    });
   },
   filterTemplate: function (event) {
     let cols = document.getElementsByClassName('template_data')
