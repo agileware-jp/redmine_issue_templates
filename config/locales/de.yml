@@ -26,7 +26,7 @@ de:
   defaulf_template_loaded: "Die Standardvorlage für den Tracker '%{tracker}' wurde in das Beschreibungsfeld übernommen."
   text_no_tracker_enabled: Bisher wurde keine Konfiguration der Tracker und Ticketvorlagen für dieses Projekt vorgenommen.\nBitte konfigurieren Sie diese notwendige Einstellung, um die Funktion zu nutzen.
   label_enabled_sharing: Vererbung mit Projektbaum erlauben.
-  label_inherit_templates: Vorlagen vererben
+  label_inherit_templates: Vorlagen erben
   label_inherit_templates_help_message: Vorlage von Elternprojekt erben (nur falls Vererbung erlaubt)
   label_inherited_templates: Geerbte Vorlagen
   no_issue_templates_for_this_project: Für dieses Projekt sind keine Vorlagen definiert.
