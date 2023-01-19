@@ -15,26 +15,18 @@ RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
 
   config.before :suite do
-    chrome_options = {
+    Capybara.register_driver :headless_chrome do |app|
+      options = Selenium::WebDriver::Chrome::Options.new
       #
-      # NOTE: When using Chrome headress, default window size is 800x600.
+      # NOTE: When using Chrome headless, default window size is 800x600.
       # In case window size is not specified, Redmine renderes its contents with responsive mode.
       #
-      args: %w[window-size=1280,800]
-    }
-    if ENV['DRIVER'] == 'headless'
-      chrome_options[:args].concat(%w[headless disable-gpu])
-    end
-
-    Capybara.register_driver :headless_chrome do |app|
-      capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
-        'goog:chromeOptions': chrome_options
-      )
-      Capybara::Selenium::Driver.new(
-        app,
-        browser: :chrome,
-        capabilities: [capabilities]
-      )
+      options.add_argument('window-size=1280,800')
+      if ENV['DRIVER'] == 'headless'
+        options.add_argument('headless')
+        options.add_argument('disable-gpu')
+      end
+      Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
     end
   end
 
