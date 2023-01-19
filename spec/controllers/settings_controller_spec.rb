@@ -6,6 +6,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../support/controller_helper
 describe SettingsController, type: :controller do
   include_context 'As admin'
   before do
+    Redmine::SudoMode.disable!
     Redmine::Plugin.register(:redmine_issue_templates) do
       settings partial: 'settings/redmine_issue_templates',
                default: { 'apply_global_template_to_all_projects' => 'false' }
