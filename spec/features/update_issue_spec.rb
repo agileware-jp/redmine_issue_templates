@@ -38,13 +38,12 @@ feature 'Update issue', js: true do
       position_name: 'lowest'
     )
 
-    issue = Issue.create(project_id: project.id, tracker_id: tracker.id,
-                         author_id: user.id,
-                         priority: priority,
-                         subject: 'test_create',
-                         status_id: status.id,
-                         description: 'IssueTest#test_create')
-    issue.save
+    Issue.create(project_id: project.id, tracker_id: tracker.id,
+                 author_id: user.id,
+                 priority: priority,
+                 subject: 'test_create',
+                 status_id: status.id,
+                 description: 'IssueTest#test_create')
   end
 
   scenario 'Click edit link with apply_template_when_edit_issue flag', js: true do
