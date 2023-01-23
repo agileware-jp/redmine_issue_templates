@@ -49,32 +49,80 @@ feature 'Templates can be reorder via drag and drop', js: true do
            }.from([4, 1, 2, 3]).to([3, 1, 4, 2])
   end
 
-  scenario 'Can drag and drop on Note Templates' do
-    FactoryBot.create_list(:note_template, 4, project_id: project.id, tracker_id: tracker.id)
+  feature 'Note Templates' do
+    background do
+      FactoryBot.rewind_sequences
+    end
 
-    visit_note_template_list(user)
+    scenario 'Can drag and drop on Note Templates' do
+      FactoryBot.create_list(:note_template, 4, project_id: project.id, tracker_id: tracker.id)
 
-    first_target = table.find('tr:nth-child(1) > td.buttons > span')
-    last_target = table.find('tr:nth-child(4) > td.buttons > span')
+      visit_note_template_list(user)
 
-    # change id: 1, 2, 3, 4 to 4, 1, 2, 3
-    expect do
-      first_target.drag_to(last_target)
-      wait_for_ajax
-    end.to change {
-             NoteTemplate.reorder(:id).pluck(:position).to_a
-           }.from([1, 2, 3, 4]).to([4, 1, 2, 3])
+      first_target = table.find('tr:nth-child(1) > td.buttons > span')
+      last_target = table.find('tr:nth-child(4) > td.buttons > span')
 
-    # change id: 4, 1, 2, 3 to 3, 1, 4, 2
-    second_target = table.find('tr:nth-child(2) > td.buttons > span')
-    last_target = table.find('tr:nth-child(4) > td.buttons > span')
+      #              id: 1, 2, 3, 4    1, 2, 3, 4
+      #--------------------------------------------
+      # change position: 1, 2, 3, 4 to 4, 1, 2, 3
+      expect do
+        first_target.drag_to(last_target)
+        wait_for_ajax
+      end.to change {
+               NoteTemplate.reorder(:id).pluck(:position).to_a
+             }.from([1, 2, 3, 4]).to([4, 1, 2, 3])
 
-    expect do
-      second_target.drag_to(last_target)
-      wait_for_ajax
-    end.to change {
-             NoteTemplate.reorder(:id).pluck(:position).to_a
-           }.from([4, 1, 2, 3]).to([3, 1, 4, 2])
+      #              id: 1, 2, 3, 4    1, 2, 3, 4
+      #--------------------------------------------
+      # change position: 4, 1, 2, 3 to 3, 1, 4, 2
+      second_target = table.find('tr:nth-child(2) > td.buttons > span')
+      last_target = table.find('tr:nth-child(4) > td.buttons > span')
+
+      expect do
+        second_target.drag_to(last_target)
+        wait_for_ajax
+      end.to change {
+               NoteTemplate.reorder(:id).pluck(:position).to_a
+             }.from([4, 1, 2, 3]).to([3, 1, 4, 2])
+    end
+
+    scenario 'After changing the sort position, Role settings should not change' do
+      developer_role = FactoryBot.create(:role)
+      template_list =
+        FactoryBot.create_list(:note_template, 2,
+          project_id: project.id, tracker_id: tracker.id,
+          visibility: NoteTemplate::visibilities[:roles],
+          role_ids: [role.id, developer_role.id],
+        )
+      template_list.each(&:reload)
+
+      template1 = template_list.first
+      expect(template1.position).to eq(1)
+      expect(template1.roles?).to be_truthy
+      expect(template1.note_visible_roles.pluck(:role_id)).to eq([role.id, developer_role.id])
+
+      visit_note_template_list(user)
+
+      expect do
+        tr_idx = [1, 2]
+        5.times do
+          first_target = table.find("tr:nth-child(#{tr_idx.first}) > td.buttons > span")
+          last_target = table.find("tr:nth-child(#{tr_idx.last}) > td.buttons > span")
+
+          first_target.drag_to(last_target)
+          wait_for_ajax
+          tr_idx.reverse!
+        end
+      end.to \
+        change {
+          NoteTemplate.reorder(:id).pluck(:position).to_a
+        }.from([1, 2]).to([2, 1])
+
+      template1.reload
+      expect(template1.position).to eq(2)
+      expect(template1.roles?).to be_truthy
+      expect(template1.note_visible_roles.pluck(:role_id)).to eq([role.id, developer_role.id])
+    end
   end
 
   scenario 'Can drag and drop on Global Issue Templates' do
