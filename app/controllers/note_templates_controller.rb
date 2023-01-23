@@ -52,7 +52,7 @@ class NoteTemplatesController < ApplicationController
       if template_params.key?(:role_ids)
         template_params[:role_ids]
       else
-        @note_template.note_visible_role_ids
+        @note_template.note_visible_roles.pluck(:role_id)
       end
 
     save_and_flash(:notice_successful_update, :show)
