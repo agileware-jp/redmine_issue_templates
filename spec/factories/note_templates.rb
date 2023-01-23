@@ -8,7 +8,6 @@ FactoryBot.define do
     sequence(:memo) { |n| "note-template-memo: #{n}" }
     enabled { true }
     sequence(:position) { |n| n }
-    visibility { 1 }
-    role_ids { [1] }
+    visibility { NoteTemplate::visibilities[:open] }
   end
 end
