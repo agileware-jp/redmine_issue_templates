@@ -44,4 +44,41 @@ RSpec.describe 'Note Template', type: :request do
     json = JSON.parse(response.body)
     expect(target_template.name).to eq(json['note_template']['name'])
   end
+
+  context 'When editing an issue' do
+    before do
+      3.times do |idx|
+        NoteTemplate.create(project_id: project.id, tracker_id: tracker.id,
+          name: "Note Template name #{idx + 1}", description: 'Note Template desctiption',
+          enabled: true, visibility: :open
+        )
+      end
+    end
+
+    it 'Note templates list in the popup dialog displays in order' do
+      login_request(user.login, user.login)
+
+      template_list = NoteTemplate.visible_note_templates_condition(
+        user_id: user.id, project_id: project.id, tracker_id: tracker.id
+      ).sorted
+      expect(template_list.count).to eq 3
+
+      note_template = template_list.last
+      note_template.position = 1
+      note_template.save!
+
+      template_list.reload
+
+      get list_templates_note_templates_path(project_id: project.id, tracker_id: tracker.id), xhr: true
+
+      expect(response).to have_http_status(200)
+      assert_select('table.template_list') do
+        template_list.each.with_index(1) do |template, idx|
+          assert_select(
+            "tbody tr:nth-child(#{idx}) td:nth-child(3) a[class~='template-update-link'][data-note-template-id='#{template.id}']"
+          )
+        end
+      end
+    end
+  end
 end
