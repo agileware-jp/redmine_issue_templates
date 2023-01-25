@@ -181,6 +181,48 @@ feature 'Update issue', js: true do
     end
   end
 
+  context 'Have multiple global note templates' do
+    background do
+      FactoryBot.rewind_sequences
+      FactoryBot.create_list(:global_note_template, 3,
+        tracker_id: tracker.id, visibility: :open, enabled: true, project_ids: [project.id]
+      )
+    end
+
+    scenario 'List of global template for note on popup should be in the correct order' do
+      template_list = GlobalNoteTemplate.visible_note_templates_condition(
+        user_id: user.id, project_id: project.id, tracker_id: tracker.id
+      ).sorted
+      expect(template_list.count).to eq 3
+
+      note_template = template_list.last
+      note_template.position = 1
+      note_template.save!
+      template_list.reload
+      #              id: 1, 2, 3    1, 2, 3
+      #--------------------------------------
+      # change position: 1, 2, 3 to 2, 3, 1
+
+      visit_update_issue(user)
+      issue = Issue.last
+      visit "/issues/#{issue.id}"
+      page.find('#content > div:nth-child(1) > a.icon.icon-edit').click
+      sleep(0.2)
+      expect(page).to have_selector('a#link_template_issue_notes_dialog')
+
+      page.find('a#link_template_issue_notes_dialog').click
+      wait_for_ajax
+
+      page.assert_selector('#template_issue_notes_dialog table.template_list tbody') do |node|
+        template_list.each.with_index(1) do |template, idx|
+          node.assert_selector(
+            "tr:nth-child(#{idx}) td:nth-child(3) a[class~='template-update-link'][class~='template-global'][data-note-template-id='#{template.id}']"
+          )
+        end
+      end
+    end
+  end
+
   private
 
   def visit_update_issue(user)
