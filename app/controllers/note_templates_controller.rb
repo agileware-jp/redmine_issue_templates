@@ -90,7 +90,7 @@ class NoteTemplatesController < ApplicationController
 
     global_note_templates = GlobalNoteTemplate.visible_note_templates_condition(
       user_id: User.current.id, project_id: project_id, tracker_id: tracker_id
-    )
+    ).sorted
 
     respond_to do |format|
       format.html do
