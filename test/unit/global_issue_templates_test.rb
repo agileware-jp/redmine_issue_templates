@@ -26,4 +26,21 @@ class GlobalIssueTemplatesTest < ActiveSupport::TestCase
     b = GlobalIssueTemplate.new(title: 'Template5', position: 1, tracker_id: 1)
     assert_equal [b, a], [a, b].sort
   end
+
+  def test_required_attributes_should_be_validated
+    {
+      title: ' ',
+      tracker: nil,
+      description: " \n\n ",
+    }.each do |attr, val|
+      @global_issue_template.reload
+      @global_issue_template.__send__("#{attr}=", val)
+
+      assert_raises ActiveRecord::RecordInvalid do
+        @global_issue_template.save!
+      end
+
+      assert_includes @global_issue_template.errors[attr], 'cannot be blank'
+    end
+  end
 end
