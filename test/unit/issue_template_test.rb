@@ -41,4 +41,22 @@ class IssueTemplateTest < ActiveSupport::TestCase
       assert !template.is_default?
     end
   end
+
+  def test_required_attributes_should_be_validated
+    {
+      project_id: nil,
+      title: ' ',
+      tracker: nil,
+      description: " \n\n ",
+    }.each do |attr, val|
+      @issue_template.reload
+      @issue_template.__send__("#{attr}=", val)
+
+      assert_raises ActiveRecord::RecordInvalid do
+        @issue_template.save!
+      end
+
+      assert_includes @issue_template.errors[attr], 'cannot be blank'
+    end
+  end
 end
