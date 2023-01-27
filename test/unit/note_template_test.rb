@@ -86,6 +86,25 @@ class NoteTemplateTest < ActiveSupport::TestCase
     assert_equal ['Tracker cannot be blank'], template.errors.full_messages
   end
 
+  def test_required_attributes_should_be_validated
+    template = NoteTemplate.find(1)
+    {
+      project_id: nil,
+      name: ' ',
+      tracker: nil,
+      description: " \n\n ",
+    }.each do |attr, val|
+      template.reload
+      template.__send__("#{attr}=", val)
+
+      assert_raises ActiveRecord::RecordInvalid do
+        template.save!
+      end
+
+      assert_includes template.errors[attr], 'cannot be blank'
+    end
+  end
+
   def test_loadable_with_admin_user
     user = User.find_by_login('admin')
     assert_equal true, user.admin?
