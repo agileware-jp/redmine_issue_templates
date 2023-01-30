@@ -55,7 +55,7 @@ class NoteTemplateTest < ActiveSupport::TestCase
     # When enable validation: Raise ActiveRecord::RecordInvalid
     e = assert_raises ActiveRecord::RecordInvalid do
       NoteTemplate.create!(name: 'Template1', position: 2, project_id: 1, tracker_id: 1,
-                           visibility: 'roles')
+                           visibility: 'roles', description: 'description1')
     end
 
     # Check error message.
@@ -77,7 +77,7 @@ class NoteTemplateTest < ActiveSupport::TestCase
   end
 
   def test_create_should_require_tracker
-    template = NoteTemplate.new(name: 'NoteTemplate1', project_id: 1, visibility: 'open')
+    template = NoteTemplate.new(name: 'NoteTemplate1', project_id: 1, visibility: 'open', description: 'description1')
     assert_no_difference 'NoteTemplate.count' do
       assert_raises ActiveRecord::RecordInvalid do
         template.save!
