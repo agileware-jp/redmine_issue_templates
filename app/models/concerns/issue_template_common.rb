@@ -15,6 +15,7 @@ module IssueTemplateCommon
 
     validates :title, presence: true
     validates :tracker, presence: true
+    validates :description, presence: true
 
     scope :enabled, -> { where(enabled: true) }
     scope :sorted, -> { order(:position) }
