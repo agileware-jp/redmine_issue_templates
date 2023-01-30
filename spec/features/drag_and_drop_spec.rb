@@ -91,7 +91,7 @@ feature 'Templates can be reorder via drag and drop', js: true do
       template_list =
         FactoryBot.create_list(:note_template, 2,
           project_id: project.id, tracker_id: tracker.id,
-          visibility: NoteTemplate::visibilities[:roles],
+          visibility: NoteTemplate.visibilities[:roles],
           role_ids: [role.id, developer_role.id],
         )
       template_list.each(&:reload)
