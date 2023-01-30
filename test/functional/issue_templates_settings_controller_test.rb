@@ -23,6 +23,12 @@ class IssueTemplatesSettingsControllerTest < Redmine::ControllerTest
     Role.find(1).add_permission! :manage_issue_templates
 
     @project = Project.find(1)
+    Setting.text_formatting = 'textile'
+  end
+
+  def teardown
+    Setting.delete_all
+    Setting.clear_cache
   end
 
   def test_update_without_permission

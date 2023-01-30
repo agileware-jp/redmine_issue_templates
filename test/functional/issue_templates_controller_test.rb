@@ -18,6 +18,12 @@ class IssueTemplatesControllerTest < Redmine::ControllerTest
 
     # Set default permission: show template
     Role.find(1).add_permission! :show_issue_templates
+    Setting.text_formatting = 'textile'
+  end
+
+  def teardown
+    Setting.delete_all
+    Setting.clear_cache
   end
 
   def test_get_index_with_non_existing_project
