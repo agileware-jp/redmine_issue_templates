@@ -2,7 +2,6 @@
 
 class NoteTemplate < ActiveRecord::Base
   include Redmine::SafeAttributes
-  include ActiveModel::Validations
 
   class NoteTemplateError < StandardError; end
 
