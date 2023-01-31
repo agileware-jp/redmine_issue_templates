@@ -1,0 +1,12 @@
+---
+global_note_templates_001:
+  id: 1
+  name: global note template 1
+  description: |-
+    global description 1-1
+    global description 1-2
+  tracker_id: 1
+  author_id: 2
+  enabled: true
+  position: 1
+  visibility: open
