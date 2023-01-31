@@ -15,12 +15,6 @@ class GlobalIssueTemplatesControllerTest < Redmine::ControllerTest
     @project = Project.find(1)
     @project.enabled_modules << EnabledModule.new(name: 'issue_templates')
     @project.save!
-    Setting.text_formatting = 'textile'
-  end
-
-  def teardown
-    Setting.delete_all
-    Setting.clear_cache
   end
 
   def test_get_index
