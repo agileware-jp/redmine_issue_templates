@@ -2,7 +2,6 @@
 
 class GlobalNoteTemplate < ActiveRecord::Base
   include Redmine::SafeAttributes
-  include ActiveModel::Validations
 
   # author and project should be stable.
   safe_attributes 'name',
