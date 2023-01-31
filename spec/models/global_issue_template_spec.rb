@@ -4,7 +4,7 @@ require_relative '../spec_helper'
 
 describe GlobalIssueTemplate do
   describe '#valid?' do
-    let(:instance) { GlobalIssueTemplate.new(tracker_id: tracker.id, title: 'sample') }
+    let(:instance) { GlobalIssueTemplate.new(tracker_id: tracker.id, title: 'sample', description: 'description1') }
     let(:tracker) { FactoryBot.create(:tracker, :with_default_status) }
     subject { instance.valid? }
 

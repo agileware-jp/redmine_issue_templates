@@ -56,7 +56,7 @@ describe IssueTemplate do
   end
 
   describe '#valid?' do
-    let(:instance) { described_class.new(tracker_id: tracker.id, project_id: project.id, title: 'sample') }
+    let(:instance) { described_class.new(tracker_id: tracker.id, project_id: project.id, title: 'sample', description: 'description1') }
     subject { instance.valid? }
 
     it 'related_link in invalid format' do

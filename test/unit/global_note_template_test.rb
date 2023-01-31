@@ -9,7 +9,7 @@ class GlobalNoteTemplateTest < ActiveSupport::TestCase
   def teardown; end
 
   def test_create_should_require_tracker
-    template = GlobalNoteTemplate.new(name: 'GlobalNoteTemplate1', visibility: 'open')
+    template = GlobalNoteTemplate.new(name: 'GlobalNoteTemplate1', visibility: 'open', description: 'description1')
     assert_no_difference 'GlobalNoteTemplate.count' do
       assert_raises ActiveRecord::RecordInvalid do
         template.save!
