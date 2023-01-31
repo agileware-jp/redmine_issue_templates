@@ -15,6 +15,7 @@ module IssueTemplateCommon
 
     validates :title, presence: true
     validates :tracker, presence: true
+    validates :description, presence: true
     validates :related_link, format: { with: URI::DEFAULT_PARSER.make_regexp }, allow_blank: true
 
     scope :enabled, -> { where(enabled: true) }

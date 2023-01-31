@@ -28,6 +28,7 @@ class GlobalNoteTemplate < ActiveRecord::Base
 
   validates :name, presence: true
   validates :tracker, presence: true
+  validates :description, presence: true
   acts_as_positioned scope: %i[tracker_id]
 
   enum visibility: { roles: 1, open: 2 }
