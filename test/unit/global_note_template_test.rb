@@ -3,7 +3,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 class GlobalNoteTemplateTest < ActiveSupport::TestCase
-  fixtures :projects, :users, :trackers, :roles
+  fixtures :projects, :users, :trackers, :roles, :global_note_templates
 
   def setup; end
   def teardown; end
@@ -16,5 +16,23 @@ class GlobalNoteTemplateTest < ActiveSupport::TestCase
       end
     end
     assert_equal ['Tracker cannot be blank'], template.errors.full_messages
+  end
+
+  def test_required_attributes_should_be_validated
+    template = GlobalNoteTemplate.find(1)
+    {
+      name: ' ',
+      tracker: nil,
+      description: " \n\n ",
+    }.each do |attr, val|
+      template.reload
+      template.__send__("#{attr}=", val)
+
+      assert_raises ActiveRecord::RecordInvalid do
+        template.save!
+      end
+
+      assert_includes template.errors[attr], 'cannot be blank'
+    end
   end
 end
