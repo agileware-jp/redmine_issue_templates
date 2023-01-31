@@ -32,3 +32,16 @@ ActiveRecord::FixtureSet.create_fixtures(File.dirname(__FILE__) + '/fixtures/',
                                             global_issue_templates global_issue_templates_projects
                                             note_templates note_visible_roles
                                             global_note_templates])
+
+module Redmine
+  class ControllerTest
+    setup do
+      Setting.text_formatting = 'textile'
+    end
+
+    teardown do
+      Setting.delete_all
+      Setting.clear_cache
+    end
+  end
+end
