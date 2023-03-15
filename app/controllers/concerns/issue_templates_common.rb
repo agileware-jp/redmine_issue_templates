@@ -55,6 +55,7 @@ module IssueTemplatesCommon
   end
 
   def valid_params
+    return template_params unless template_params.has_key?(:builtin_fields)
     attributes = template_params.except(:builtin_fields)
     attributes[:builtin_fields_json] = builtin_fields_json if builtin_fields_enabled?
     attributes

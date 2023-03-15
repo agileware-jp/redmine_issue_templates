@@ -248,5 +248,15 @@ describe IssueTemplatesController do
         expect(issue_template.reload.title).to eq 'Issue Template updated title for update test'
       end
     end
+
+    context 'update position' do
+      let(:update_params) { { issue_template: { position: 10 } } }
+      let(:issue_template) { create :issue_template, builtin_fields_json: { key: "value" }}
+
+      it 'not updated builtin_fields' do
+        issue_template.reload
+        expect(issue_template.builtin_fields_json).to eq({ key: "value" })
+      end
+    end
   end
 end
