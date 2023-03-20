@@ -237,7 +237,7 @@ class IssueTemplatesController < ApplicationController
     is_triggered_by = request.parameters[:is_triggered_by]
     is_update_issue = request.parameters[:is_update_issue]
 
-    return false if is_triggered_by.present? && is_triggered_by != 'is_update_issue'
+    return false if is_triggered_by.present? && is_triggered_by != 'issue_tracker_id'
     return @default_template.present? && (is_update_issue.blank? || is_update_issue != 'true')
   end
 end
