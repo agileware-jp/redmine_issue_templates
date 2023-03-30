@@ -19,8 +19,7 @@ class GlobalNoteTemplate < ActiveRecord::Base
   belongs_to :author, class_name: 'User', inverse_of: false, foreign_key: 'author_id'
   belongs_to :tracker
 
-  has_many :global_note_template_projects, dependent: :nullify
-  has_many :projects, through: :global_note_template_projects
+  has_and_belongs_to_many :projects
 
   has_many :global_note_visible_roles, dependent: :nullify
   has_many :roles, through: :global_note_visible_roles
