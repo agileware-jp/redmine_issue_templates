@@ -30,7 +30,7 @@ describe GlobalNoteTemplate do
     note_template_with_project.projects << create(:project) << create(:project) << create(:project)
 
     expect(GlobalNoteTemplate.exists?(note_template_with_project.id)).to be true
-    note_template_with_project.destroy!
+    note_template_with_project.destroy
     expect(GlobalNoteTemplate.exists?(note_template_with_project.id)).to be false
   end
 end
