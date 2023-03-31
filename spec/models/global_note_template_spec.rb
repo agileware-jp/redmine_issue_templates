@@ -28,8 +28,8 @@ describe GlobalNoteTemplate do
     note_template_with_project = create(:global_note_template, tracker_id: tracker.id, position: 4, enabled: false)
     note_template_with_project.projects << create(:project) << create(:project) << create(:project)
 
-    expect(GlobalNoteTemplate.exists?(note_template_with_project.id)).to be true
+    expect(GlobalNoteTemplate.where(id: note_template_with_project.id)).not_to be_empty
     note_template_with_project.destroy
-    expect(GlobalNoteTemplate.exists?(note_template_with_project.id)).to be false
+    expect(GlobalNoteTemplate.where(id: note_template_with_project.id)).to be_empty
   end
 end
