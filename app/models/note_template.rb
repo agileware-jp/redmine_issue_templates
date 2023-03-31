@@ -127,7 +127,7 @@ class NoteTemplate < ActiveRecord::Base
 
       # return uniq ids
       ids = open_ids | mine_ids | role_ids
-      NoteTemplate.where(id: ids).includes(:note_visible_roles)
+      NoteTemplate.where(id: ids).enabled.includes(:note_visible_roles)
     end
   end
 end

@@ -130,7 +130,7 @@ class GlobalNoteTemplate < ActiveRecord::Base
 
       # return uniq ids
       ids = open_ids | role_ids
-      GlobalNoteTemplate.where(id: ids).includes(:global_note_visible_roles)
+      GlobalNoteTemplate.where(id: ids).enabled.includes(:global_note_visible_roles)
     end
 
     def get_templates_for_project_tracker(project_id, tracker_id = nil)

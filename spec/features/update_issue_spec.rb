@@ -132,6 +132,31 @@ feature 'Update issue', js: true do
         end
       end
     end
+
+  end
+
+  context 'Have disabled note templates' do
+    background do
+      FactoryBot.rewind_sequences
+      FactoryBot.create_list(
+        :note_template, 3, project_id: project.id, tracker_id: tracker.id, visibility: :open, enabled: false
+      )
+    end
+
+    scenario 'Disabled Templates would not to be shown.' do
+      template_list = NoteTemplate.visible_note_templates_condition(
+        user_id: user.id, project_id: project.id, tracker_id: tracker.id
+      )
+      expect(template_list).to be_empty
+
+      visit_update_issue(user)
+      issue = Issue.last
+      visit "/issues/#{issue.id}"
+
+      page.find('#content > div:nth-child(1) > a.icon.icon-edit').click
+      sleep(0.2)
+      expect(page).to have_no_selector('a#link_template_issue_notes_dialog')
+    end
   end
 
   context 'Have global note template' do
@@ -219,6 +244,29 @@ feature 'Update issue', js: true do
           )
         end
       end
+    end
+  end
+
+  context 'Have disabled global note templates' do
+    before do
+      Setting.send 'plugin_redmine_issue_templates=', 'apply_global_template_to_all_projects' => 'true'
+      create_list(
+        :global_note_template, 3, tracker_id: tracker.id, name: 'Global Note Template name', visibility: 2, enabled: false
+      )
+    end
+
+    scenario 'Disabled global note templates would not be show' do
+      template_list = GlobalNoteTemplate.visible_note_templates_condition(
+        user_id: user.id, project_id: project.id, tracker_id: tracker.id
+      )
+      expect(template_list).to be_empty
+
+      visit_update_issue(user)
+      issue = Issue.last
+      visit "/issues/#{issue.id}"
+      page.find('#content > div:nth-child(1) > a.icon.icon-edit').click
+      sleep(0.2)
+      expect(page).to have_no_selector('a#link_template_issue_notes_dialog')
     end
   end
 
