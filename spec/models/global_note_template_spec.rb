@@ -25,7 +25,6 @@ describe GlobalNoteTemplate do
   end
 
   it 'can be deleted even though some projects bound' do
-    project = create(:project)
     note_template_with_project = create(:global_note_template, tracker_id: tracker.id, position: 4, enabled: false)
     note_template_with_project.projects << create(:project) << create(:project) << create(:project)
 
