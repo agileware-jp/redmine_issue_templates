@@ -41,10 +41,10 @@
     <% end %>
     <hr/>
   </div>
-<% end %>
+<% else %>
 
 
-<div class='box tabular box-white'>
+<div id='view-note_template' class='box tabular box-white'>
   <p>
     <label><%= l(:issue_template_name) %></label>
     <%= h note_template.name %>
@@ -85,6 +85,6 @@
   </p>
 
 </div>
+<% end %>
 
 <%= render partial: 'common/template_links' %>
-
