@@ -3,6 +3,7 @@
 class IssueTemplate < ActiveRecord::Base
   include Redmine::SafeAttributes
   include IssueTemplateCommon
+  include AttributeNameMapper
   belongs_to :project
   validates :project_id, presence: true
   validates :title, uniqueness: { scope: :project_id }
@@ -69,6 +70,13 @@ class IssueTemplate < ActiveRecord::Base
                    .search_by_tracker(tracker_id)
                    .enabled
                    .sorted
+    end
+
+    def attribute_map
+      {
+        description: :issue_description,
+        title: :issue_template_name,
+      }
     end
   end
 end

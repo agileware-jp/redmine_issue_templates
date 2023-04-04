@@ -2,6 +2,7 @@
 
 class NoteTemplate < ActiveRecord::Base
   include Redmine::SafeAttributes
+  include AttributeNameMapper
 
   class NoteTemplateError < StandardError; end
 
@@ -128,6 +129,13 @@ class NoteTemplate < ActiveRecord::Base
       # return uniq ids
       ids = open_ids | mine_ids | role_ids
       NoteTemplate.where(id: ids).enabled.includes(:note_visible_roles)
+    end
+
+    def attribute_map
+      {
+        description: :label_comment,
+        name: :issue_template_name,
+      }
     end
   end
 end
