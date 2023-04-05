@@ -97,7 +97,7 @@ feature 'IssueTemplate', js: true do
       end
 
       scenario 'create template failed' do
-        expect(error_message).to have_content('Title cannot be blank')
+        expect(error_message).to have_content('Template name cannot be blank')
       end
     end
 

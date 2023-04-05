@@ -59,7 +59,7 @@ class GlobalIssueTemplatesControllerTest < Redmine::ControllerTest
     # render :show
     assert_select 'h2.global_issue_template', "#{l(:global_issue_templates)}: ##{global_issue_template.id}"
     # Error message should be displayed.
-    assert_select 'div#errorExplanation', { count: 1, text: /Title cannot be blank/ }, @response.body.to_s
+    assert_select 'div#errorExplanation', { count: 1, text: /Template name cannot be blank/ }, @response.body.to_s
   end
 
   def test_destroy_template
@@ -107,7 +107,7 @@ class GlobalIssueTemplatesControllerTest < Redmine::ControllerTest
     # render :new
     assert_select 'h2', text: "#{l(:issue_templates)} / #{l(:button_add)}"
     # Error message should be displayed.
-    assert_select 'div#errorExplanation', { count: 1, text: /Title cannot be blank/ }, @response.body.to_s
+    assert_select 'div#errorExplanation', { count: 1, text: /Template name cannot be blank/ }, @response.body.to_s
   end
 
   def test_preview_template

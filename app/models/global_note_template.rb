@@ -2,6 +2,7 @@
 
 class GlobalNoteTemplate < ActiveRecord::Base
   include Redmine::SafeAttributes
+  include AttributeNameMapper
 
   # author and project should be stable.
   safe_attributes 'name',
@@ -146,6 +147,14 @@ class GlobalNoteTemplate < ActiveRecord::Base
 
     def apply_all_projects?
       plugin_setting['apply_global_template_to_all_projects'].to_s == 'true'
+    end
+
+    def attribute_map
+      {
+        description: :label_comment,
+        name: :issue_template_name,
+        role_ids: :field_template_visibility,
+      }
     end
   end
 end
