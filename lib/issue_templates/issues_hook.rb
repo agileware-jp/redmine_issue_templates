@@ -3,6 +3,7 @@
 module IssueTemplates
   class IssuesHook < Redmine::Hook::ViewListener
     include IssuesHelper
+    include IssueTemplatesHelper
 
     CONTROLLERS = %(
       'IssuesController' 'IssueTemplatesController' 'ProjectsController' 'IssueTemplatesSettingsController'
@@ -14,7 +15,7 @@ module IssueTemplates
 
     def view_layouts_base_html_head(context = {})
       o = stylesheet_link_tag('issue_templates', plugin: 'redmine_issue_templates')
-      o << javascript_include_tag('issue_templates', plugin: 'redmine_issue_templates') if need_template_js?(context[:controller])
+      o << redmine_issue_template_javascript_include_tag('issue_templates') if need_template_js?(context[:controller])
       o
     end
 

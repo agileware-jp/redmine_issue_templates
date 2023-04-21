@@ -23,4 +23,15 @@ module IssueTemplatesHelper
       tag_builder.content_tag_string(:option, text, option, true)
     end.join("\n").html_safe
   end
+
+  def redmine_issue_template_javascript_include_tag(*sources)
+    if ENV['REDMINE_ISSUE_TEMPLATE_VITE_SERVE_URL'].present?
+      sources = sources.map { |source|
+        "#{ENV['REDMINE_ISSUE_TEMPLATE_VITE_SERVE_URL']}/scripts/#{source}.js"
+      }
+      javascript_include_tag(*sources)
+    else
+      javascript_include_tag(*sources, plugin: :redmine_issue_templates, type: :module)
+    end
+  end
 end

@@ -4,6 +4,7 @@
 class GlobalIssueTemplatesController < ApplicationController
   layout 'base'
   helper :issues
+  helper :issue_templates
   include IssueTemplatesHelper
   include IssueTemplatesCommon
   menu_item :issues

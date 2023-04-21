@@ -234,7 +234,5 @@
 </script>
 
 <% if builtin_fields_enable %>
-<%= javascript_include_tag('vue.min', plugin: 'redmine_issue_templates') %>
-<%= javascript_include_tag('template_fields', plugin: 'redmine_issue_templates') %>
+  <%= redmine_issue_template_javascript_include_tag('template_fields') %>
 <% end %>
-
