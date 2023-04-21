@@ -29,7 +29,7 @@ module IssueTemplatesHelper
       sources = sources.map { |source|
         "#{ENV['REDMINE_ISSUE_TEMPLATE_VITE_SERVE_URL']}/scripts/#{source}.js"
       }
-      javascript_include_tag(*sources)
+      javascript_include_tag(*sources, type: :module)
     else
       javascript_include_tag(*sources, plugin: :redmine_issue_templates, type: :module)
     end

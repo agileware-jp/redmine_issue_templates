@@ -38,80 +38,6 @@
     <!-- buildin field Generator -->
     <% if builtin_fields_enable %>
     <div id="json_generator">
-      <p>
-        <label><%= l(:label_select_field, default: 'Select a field') %></label>
-        <select v-model='newItemTitle' id='field_selector'>
-          <option v-for='(value, key) in customFields' v-bind:value='key'>
-           {{ value.name }}
-          </option>
-        </select>
-        <a class='icon icon-help template-help' title='<%= l(:help_for_this_field) %>'
-         data-tooltip-area='builtin_fields_help_area'
-         data-tooltip-content='builtin_fields_help_content'>
-           <%= l(:help_for_this_field) %>
-          <span class='tooltip-area' id='builtin_fields_help_area'></span>
-        </a>
-      </p>
-      <p>
-          <label for='value_selector'><%= l(:field_value) %></label>
-          <textarea id='issue_template_json_setting_field' v-if='fieldFormat() == "text"' rows=6
-              placeholder='<%= l(:enter_value, default: 'Please enter a value') %>' v-model='newItemValue'>
-          </textarea>
-
-          <input id='issue_template_json_setting_field' v-if='fieldFormat() == "string"'
-              type='text'
-              placeholder='<%= l(:enter_value, default: 'Please enter a value') %>' v-model='newItemValue'>
-
-          <input id='issue_template_json_setting_field' v-if='fieldFormat() == "int"'
-              :max='customFields[newItemTitle].max_length' :min='customFields[newItemTitle].min_length'
-              type="number" placeholder='<%= l(:enter_value, default: 'Please enter a value') %>' v-model='newItemValue'>
-
-          <input type='date' id='issue_template_json_setting_field' v-if='fieldFormat() == "date"' v-model='newItemValue'>
-
-          <select v-model='newItemValue' v-if='fieldFormat() == "ratio"'>
-            <option v-for="ratio in [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]">{{ ratio }} %</option>
-          </select>
-
-          <select v-model='newItemValue' :multiple='customFields[newItemTitle].multiple == true'
-            v-if='fieldFormat() == "list" || fieldFormat() == "bool"' id='value_selector'>
-            <option v-for="value in possibleValues()">{{ value }}</option>
-          </select>
-          <span style='margin-left: 4px;' class='icon icon-add' v-on:click='addField(newItemTitle, newItemValue)'>
-            <%= l(:button_add) %>
-          </span>
-      </p>
-      <div id='field_information' class='wiki' v-if='newItemTitle != ""'>
-        <b><%= l(:label_field_information, default: 'Field information') %></b>
-        <pre>{{ customFields[newItemTitle] }}</pre>
-      </div>
-      <div id='fields_setting_display_area'>
-        <ul class='json-list' v-if='items.length > 0'>
-          <li v-for='item in items'>
-            <span v-if='customFields[item.title]'>
-              <b>{{ customFields[item.title].name }}</b>: {{ item.value }} / {{ item.title }}
-            </span>
-            <span v-if='!customFields[item.title]'>
-              <i class='issue_template help_content'>
-                <%= l(:unavailable_fields_for_this_tracker, default: 'Unavailable field for this tarcker') %>
-              : {{ item.value }} / {{ item.title }}
-              </i>
-            </span>
-            <i class='icon icon-del' v-on:click='deleteField(item)'></i>
-          </li>
-        </ul>
-        <pre id='builtin_fields_data_via_vue' style='display: none;'>{{ items }}</pre>
-        <span class='icon icon-reload' id='reset-json' v-on:click='loadField()'><%= l(:button_reset) %></span>
-        <span class='icon icon-checked' id='paste-json'><%= l(:button_apply) %></span>
-      </div>
-      <!-- buildin field Generator -->
-      <p style='opacity: 0.6;'>
-        <%= f.text_area :builtin_fields,
-            required: false, cols: 60, rows: 4,
-            label: l(:label_builtin_fields_json, default: 'JSON for fields') %>
-      </p>
-      <div id='builtin_fields_help_content' class='wiki' style='display: none;'>
-        <%= l(:label_builtin_fields_help_message, default: 'Enter builtin filds or custom fields default values with JSON format. ') %>
-      </div>
     </div>
     <% end %>
     <!-- for Builtin Fields -->
@@ -198,17 +124,19 @@
   <%= l(:label_enabledshaing_help_message) %>
 </div>
 <!-- tooltip content -->
-<script>
-  const baseUrl = "<%= url_for(controller: 'issue_templates', action: 'load_selectable_fields') %>"
-  const templateId = "<%= issue_template&.id || '' %>"
-  const templateType = 'issue_template'
-  const trackerPulldownId = templateType + '_tracker_id'
-  const base_builtin_fields = <%= issue_template.builtin_fields.html_safe %>
-  const base_custom_fields = <%= custom_fields.html_safe %>
-  const projectId = "<%= project.id %>"
-</script>
-
 <% if builtin_fields_enable %>
-  <%= redmine_issue_template_javascript_include_tag('template_fields') %>
+<%= redmine_issue_template_javascript_include_tag('template_fields') %>
+<script>
+  $(function() {
+    RedmineIssueTemplate.TemplateFields({
+      baseUrl: "<%= url_for(controller: 'issue_templates', action: 'load_selectable_fields') %>",
+      templateId: "<%= issue_template&.id || '' %>",
+      templateType: 'issue_template',
+      trackerPulldownId: templateType + '_tracker_id',
+      base_builtin_fields: <%= issue_template.builtin_fields.html_safe %>,
+      base_custom_fields: <%= custom_fields.html_safe %>,
+      projectId: "<%= project.id %>",
+    });
+  });
+</script>
 <% end %>
-
