@@ -1,7 +1,2 @@
 coverage/
-doc/
-.yardoc/
-Gemfile.lock
-Gemfile
-.history
-.wercker
+node_modules
