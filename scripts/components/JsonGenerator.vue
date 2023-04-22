@@ -153,38 +153,28 @@ export default {
     },
     loadField: function () {
       this.api_builtin_fields = this.base_builtin_fields;
-      this.api_custom_fields = this.base_custom_fields;
-      this.items = []
+      // this.api_custom_fields = this.base_custom_fields;
+      this.items = [];
       if (this.api_builtin_fields) {
         for (const [key, value] of Object.entries(this.api_builtin_fields)) {
           this.items.push({
             title: key,
             value: value
-          })
+          });
         }
       }
       // { "issue_priority_id":"Priority", "issue_start_date":"Start date" }
-      if (this.api_custom_fields) {
-        for (const [key, value] of Object.entries(this.api_custom_fields)) {
-
-          this.customFields[key] = value
-        }
-      }
-    },
-    updateSelectableField: function () {
-      let tmpFields = {}
-      if (this.api_custom_fields) {
-        for (const [key, value] of Object.entries(this.api_custom_fields)) {
-          tmpFields[key] = value
-        }
-      }
-      this.customFields = tmpFields
+      // if (this.api_custom_fields) {
+      //   for (const [key, value] of Object.entries(this.api_custom_fields)) {
+      //     this.customFields[key] = value
+      //   }
+      // }
     },
     fieldFormat: function () {
-      const fields = this.customFields
-      const title = this.newItemTitle
+      const fields = this.customFields;
+      const title = this.newItemTitle;
       if (fields[title] && fields[title].field_format) {
-        const format = fields[title].field_format
+        const format = fields[title].field_format;
         if (format === 'int' || format === 'date' || format === 'ratio' ||
           format === 'list' || format === 'bool' || format === 'string') {
           return fields[title].field_format
@@ -198,35 +188,23 @@ export default {
       return fields[title].possible_values
     }
   },
-  mounted: function () {
-    const trackerPulldown = document.getElementById(this.trackerPulldownId)
-    if (trackerPulldown) {
-      if (trackerPulldown.value === '') {
-        this.$el.style.display = 'none'
-      }
-      trackerPulldown.addEventListener('change', event => {
+  mounted: async function () {
+    const trackerPulldown = document.getElementById(this.trackerPulldownId);
+    if (trackerPulldown?.value) {
+      this.$el.style.display = 'block';
+      this.customFields = await this.getCustomFields(trackerPulldown?.value);
+      trackerPulldown.addEventListener('change', async (event) => {
         if (event.target.value === '') {
-          this.$el.style.display = 'none'
-          return
+          this.$el.style.display = 'none';
+        } else {
+          this.$el.style.display = 'block';
+          this.customFields = await this.getCustomFields(event.target.value);
         }
-        this.$el.style.display = 'block'
-        const trackerId = event.target.value
-        let url = this.baseUrl + '?tracker_id=' + trackerId + '&template_id=' + this.templateId
-        if (typeof this.projectId !== 'undefined') {
-          url += '&project_id=' + this.projectId
-        }
-        window.fetch(url)
-          .then((response) => {
-            return response.text()
-          })
-          .then((data) => {
-            let obj = JSON.parse(data)
-            this.api_custom_fields = obj.custom_fields
-            this.updateSelectableField()
-          })
-      })
+      });
+    } else {
+      this.$el.style.display = 'none';
     }
-    this.loadField()
+    this.loadField();
   },
   computed: {
     // not yet

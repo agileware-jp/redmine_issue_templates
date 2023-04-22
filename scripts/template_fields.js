@@ -1,24 +1,29 @@
 import Vue from 'vue';
-import JsonGenerator from './components/JsonGenerator.vue'
+import JsonGenerator from './components/JsonGenerator.vue';
+import { CustomFieldPlugin } from './plugins/customFields';
 
 const TemplateFields = function (props = {}) {
   const {
-    baseUrl,
+    loadSelectableFieldsPath,
     templateId,
     projectId,
     trackerPulldownId,
     base_builtin_fields,
-    base_custom_fields,
     relativeUrlRoot,
     templateType,
   } = props;
+  Vue.use(CustomFieldPlugin, {
+    baseUrl: loadSelectableFieldsPath,
+    templateId,
+    projectId,
+  });
 
   new Vue({
     render: (h) => h(JsonGenerator, { props })
-  }).$mount('#json_generator')
+  }).$mount('#json_generator');
 
   // Apply post data.
-  const copyJson = document.getElementById('paste-json')
+  const copyJson = document.getElementById('paste-json');
   if (copyJson) {
     copyJson.addEventListener('click', () => {
       const data = document.getElementById('builtin_fields_data_via_vue')

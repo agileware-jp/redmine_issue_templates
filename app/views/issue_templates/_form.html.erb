@@ -129,12 +129,11 @@
 <script>
   $(function() {
     RedmineIssueTemplate.TemplateFields({
-      baseUrl: "<%= url_for(controller: 'issue_templates', action: 'load_selectable_fields') %>",
+      loadSelectableFieldsPath: "<%= url_for(controller: 'issue_templates', action: 'load_selectable_fields') %>",
       templateId: "<%= issue_template&.id || '' %>",
       templateType: 'issue_template',
       trackerPulldownId: templateType + '_tracker_id',
       base_builtin_fields: <%= issue_template.builtin_fields.html_safe %>,
-      base_custom_fields: <%= custom_fields.html_safe %>,
       projectId: "<%= project.id %>",
     });
   });
