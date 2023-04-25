@@ -19,53 +19,26 @@
       <label for="value_selector">
         <%= l(:field_value) %>
       </label>
-      <textarea
-        id="issue_template_json_setting_field"
+      <field-value
         placeholder="<%= l(:enter_value, default: 'Please enter a value') %>"
-        rows=6
+        :max="currentField?.max_length"
+        :min="currentField?.min_length"
+        :multiple="currentField?.multiple"
+        :options="currentField?.possible_values || []"
+        :format="fieldFormat"
         v-model="newItemValue"
-        v-if="fieldFormat() == 'text'">
-      </textarea>
-      <input
-        id="issue_template_json_setting_field"
-        type="text"
-        placeholder="<%= l(:enter_value, default: 'Please enter a value') %>"
-        v-model="newItemValue"
-        v-if="fieldFormat() == 'string'">
-      <input
-        id="issue_template_json_setting_field"
-        type="number"
-        placeholder="<%= l(:enter_value, default: 'Please enter a value') %>"
-        :max="customFields[newItemTitle].max_length"
-        :min="customFields[newItemTitle].min_length"
-        v-model="newItemValue"
-        v-if="fieldFormat() == 'int'">
-      <input
-        type="date"
-        id="issue_template_json_setting_field"
-        v-model="newItemValue"
-        v-if="fieldFormat() == 'date'">
-      <select v-model="newItemValue" v-if="fieldFormat() == 'ratio'">
-        <option v-for="ratio in [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]">{{ ratio }} %</option>
-      </select>
-      <select
-        id="value_selector"
-        :multiple="customFields[newItemTitle].multiple == true"
-        v-model="newItemValue"
-        v-if="fieldFormat() == 'list' || fieldFormat() == 'bool'">
-        <option v-for="value in possibleValues()">{{ value }}</option>
-      </select>
+      />
       <span style="margin-left: 4px;" class="icon icon-add" v-on:click="addField(newItemTitle, newItemValue)">
         <%= l(:button_add) %>
       </span>
     </p>
     <div id="field_information" class="wiki" v-if="newItemTitle != ''">
       <b><%= l(:label_field_information, default: "Field information") %></b>
-      <pre>{{ customFields[newItemTitle] }}</pre>
+      <pre>{{ currentField }}</pre>
     </div>
     <div id="fields_setting_display_area">
       <ul class="json-list" v-if="items.length > 0">
-        <li v-for="item in items">
+        <li :key="item.title" v-for="item in items">
           <span v-if="customFields[item.title]">
             <b>{{ customFields[item.title].name }}</b>: {{ item.value }} / {{ item.title }}
           </span>
@@ -102,10 +75,21 @@
 </template>
 
 <script>
+import FieldValue from './FieldValue.vue';
+
+const AVAILABLE_FORMATS = [
+  'int',
+  'data',
+  'ratio',
+  'list',
+  'bool',
+  'string',
+  'text',
+];
+
 export default {
   // eslint-disable-next-line vue/no-shared-component-data, vue/no-deprecated-data-object-declaration
   props: {
-    baseUrl: String,
     templateId: String,
     projectId: String,
     trackerPulldownId: String,
@@ -115,14 +99,9 @@ export default {
         return {};
       },
     },
-    base_custom_fields: {
-      type: Object,
-      default() {
-        return {};
-      },
-    },
     relativeUrlRoot: String,
   },
+  components: { FieldValue },
   data() {
     return {
       items: [],
@@ -170,23 +149,6 @@ export default {
       //   }
       // }
     },
-    fieldFormat: function () {
-      const fields = this.customFields;
-      const title = this.newItemTitle;
-      if (fields[title] && fields[title].field_format) {
-        const format = fields[title].field_format;
-        if (format === 'int' || format === 'date' || format === 'ratio' ||
-          format === 'list' || format === 'bool' || format === 'string') {
-          return fields[title].field_format
-        }
-      }
-      return 'text'
-    },
-    possibleValues: function () {
-      const fields = this.customFields
-      const title = this.newItemTitle
-      return fields[title].possible_values
-    }
   },
   mounted: async function () {
     const trackerPulldown = document.getElementById(this.trackerPulldownId);
@@ -207,7 +169,20 @@ export default {
     this.loadField();
   },
   computed: {
-    // not yet
+    currentField: function () {
+      const fields = this.customFields;
+      const title = this.newItemTitle;
+      return fields[title];
+    },
+    fieldFormat: function () {
+      const fields = this.customFields;
+      const title = this.newItemTitle;
+      const format = fields[title]?.field_format;
+      if (AVAILABLE_FORMATS.includes(format)) {
+        return format;
+      }
+      return 'text';
+    },
   },
   watch: {
     newItemTitle: function (val) {
