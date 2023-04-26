@@ -1,7 +1,7 @@
 <template>
   <div id="fields_setting_display_area">
     <ul class="json-list" v-if="items.length > 0">
-      <li :key="item.title" v-for="item in items">
+      <li :key="`${item.title}-${item.value}`" v-for="item in items">
         <span v-if="item.field">
           <b>{{ item.field.name }}</b>: {{ item.value }} / {{ item.title }}
         </span>

@@ -2,7 +2,8 @@
   <div>
     <p>
       <label><%= l(:label_select_field, default: "Select a field") %></label>
-      <select id="field_selector" v-model="newItemTitle">
+      <select id="field_selector" v-model="model.title">
+        <option value=""></option>
         <option :key="key" :value="key" v-for="(value, key) in customFields">
         {{ value.name }}
         </option>
@@ -26,13 +27,14 @@
         :multiple="currentField?.multiple"
         :options="currentField?.possible_values || []"
         :format="fieldFormat"
-        v-model="newItemValue"
+        v-model="model.value"
       />
-      <span style="margin-left: 4px;" class="icon icon-add" v-on:click="addField(newItemTitle, newItemValue)">
+      <span style="margin-left: 4px;" class="icon icon-add" v-on:click="addField">
+
         <%= l(:button_add) %>
       </span>
     </p>
-    <div id="field_information" class="wiki" v-if="newItemTitle != ''">
+    <div id="field_information" class="wiki" v-if="model.title != ''">
       <b><%= l(:label_field_information, default: "Field information") %></b>
       <pre>{{ currentField }}</pre>
     </div>
@@ -78,17 +80,14 @@ const AVAILABLE_FORMATS = [
 export default {
   // eslint-disable-next-line vue/no-shared-component-data, vue/no-deprecated-data-object-declaration
   props: {
-    templateType: String,
-    templateId: String,
-    projectId: String,
-    trackerPulldownId: String,
-    base_builtin_fields: {
+    builtinFields: {
       type: Object,
       default() {
         return {};
       },
     },
-    relativeUrlRoot: String,
+    templateType: String,
+    trackerPulldownId: String,
   },
   components: { DisplayArea, FieldValue },
   data() {
@@ -96,25 +95,26 @@ export default {
       json: '',
       items: [],
       customFields: {},
-      newItemTitle: '',
-      newItemValue: '',
-      api_builtin_fields: {},
-      api_custom_fields: {},
-      customFieldUrl: ''
+      model: {
+        title: '',
+        value: '',
+      },
     };
   },
   methods: {
-    addField: function (newFieldName, newFieldValue) {
-      if (newFieldName === '' || newFieldValue === '') {
+    addField: function () {
+      if (this.model.title === '' || this.model.value === '') {
         return;
       }
       this.items.push({
-        title: newFieldName,
-        value: newFieldValue,
-        field: this.customFields[newFieldName],
+        title: this.model.title,
+        value: this.model.value,
+        field: this.customFields[this.model.title],
       });
-      this.newFieldName = '';
-      this.newFieldValue = '';
+      this.model = {
+        title: '',
+        value: '',
+      };
     },
     deleteField: function (target) {
       this.items = this.items.filter(function (item) {
@@ -122,25 +122,19 @@ export default {
       });
     },
     loadField: function () {
-      this.api_builtin_fields = this.base_builtin_fields;
-      // this.api_custom_fields = this.base_custom_fields;
       this.items = [];
-      if (this.api_builtin_fields) {
-        for (const [key, value] of Object.entries(this.api_builtin_fields)) {
-          this.items.push({
-            title: key,
-            value: value,
-            field: this.customFields[key],
-          });
-        }
+      for (const [key, value] of Object.entries(this.builtinFields)) {
+        this.items.push({
+          title: key,
+          value: value,
+          field: this.customFields[key],
+        });
       }
+      this.model = {
+        title: '',
+        value: '',
+      };
       this.applyJson();
-      // { "issue_priority_id":"Priority", "issue_start_date":"Start date" }
-      // if (this.api_custom_fields) {
-      //   for (const [key, value] of Object.entries(this.api_custom_fields)) {
-      //     this.customFields[key] = value
-      //   }
-      // }
     },
     applyJson: function () {
       if (this.items?.length > 0) {
@@ -180,12 +174,12 @@ export default {
   computed: {
     currentField: function () {
       const fields = this.customFields;
-      const title = this.newItemTitle;
+      const title = this.model.title;
       return fields[title];
     },
     fieldFormat: function () {
       const fields = this.customFields;
-      const title = this.newItemTitle;
+      const title = this.model.title;
       const format = fields[title]?.field_format;
       if (AVAILABLE_FORMATS.includes(format)) {
         return format;
@@ -193,20 +187,5 @@ export default {
       return 'text';
     },
   },
-  watch: {
-    newItemTitle: function (val) {
-      if (typeof this.relativeUrlRoot === 'undefined') {
-        this.customFieldUrl = ''
-        return
-      }
-
-      let field = this.customFields[val]
-      if (field == null || field.type != 'IssueCustomField') {
-        this.customFieldUrl = ''
-        return
-      }
-      this.customFieldUrl = this.relativeUrlRoot + '/custom_fields/' + field.id + '/edit'
-    }
-  }
 };
 </script>
