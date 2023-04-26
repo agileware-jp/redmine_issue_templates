@@ -7,7 +7,7 @@
         </span>
         <span v-if="!item.field">
           <i class="issue_template help_content">
-            <%= l(:unavailable_fields_for_this_tracker, default: "Unavailable field for this tarcker") %>
+            {{ l('unavailable_fields_for_this_tracker') }}
             : {{ item.value }} / {{ item.title }}
           </i>
         </span>

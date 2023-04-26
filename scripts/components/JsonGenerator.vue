@@ -1,7 +1,7 @@
 <template>
   <div>
     <p>
-      <label><%= l(:label_select_field, default: "Select a field") %></label>
+      <label>{{ l('label_select_field') }}</label>
       <select id="field_selector" v-model="model.title">
         <option value=""></option>
         <option :key="key" :value="key" v-for="(value, key) in customFields">
@@ -9,19 +9,19 @@
         </option>
       </select>
       <a class="icon icon-help template-help"
-         title="<%= l(:help_for_this_field) %>"
+         :title="l('help_for_this_field')"
          data-tooltip-area="builtin_fields_help_area"
          data-tooltip-content="builtin_fields_help_content">
-        <%= l(:help_for_this_field) %>
+        {{ l('help_for_this_field') }}
         <span class="tooltip-area" id="builtin_fields_help_area"></span>
       </a>
     </p>
     <p>
       <label for="value_selector">
-        <%= l(:field_value) %>
+        {{ l('field_value') }}
       </label>
       <field-value
-        placeholder="<%= l(:enter_value, default: 'Please enter a value') %>"
+        :placeholder="l('enter_value')"
         :max="currentField?.max_length"
         :min="currentField?.min_length"
         :multiple="currentField?.multiple"
@@ -31,26 +31,26 @@
       />
       <span style="margin-left: 4px;" class="icon icon-add" v-on:click="addField">
 
-        <%= l(:button_add) %>
+        {{ l('button_add') }}
       </span>
     </p>
     <div id="field_information" class="wiki" v-if="model.title != ''">
-      <b><%= l(:label_field_information, default: "Field information") %></b>
+      <b>{{ l('label_field_information') }}</b>
       <pre>{{ currentField }}</pre>
     </div>
     <display-area :items="items" v-on:delete="deleteField" />
     <p>
       <span class="icon icon-reload" id="reset-json" v-on:click="loadField">
-        <%= l(:button_reset) %>
+        {{ l('button_reset') }}
       </span>
       <span class="icon icon-checked" v-on:click="applyJson">
-        <%= l(:button_apply) %>
+        {{ l('button_apply') }}
       </span>
     </p>
     <!-- buildin field Generator -->
     <p style="opacity: 0.6;">
       <label :for="`${templateType}_builtin_fields`">
-        <%= l(:label_builtin_fields_json, default: "JSON for fields") %>
+        {{ l('label_builtin_fields_json') }}
       </label>
       <textarea
         :id="`${templateType}_builtin_fields`"
