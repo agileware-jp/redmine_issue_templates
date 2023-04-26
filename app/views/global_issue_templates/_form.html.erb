@@ -36,6 +36,9 @@
     <% if builtin_fields_enable %>
     <div id="json_generator">
     </div>
+    <div id="builtin_fields_help_content" class="wiki" style="display: none;">
+      <%= l(:label_builtin_fields_help_message, default: "Enter builtin filds or custom fields default values with JSON format. ") %>
+    </div>
     <% end %>
     <!-- for Builtin Fields -->
 
@@ -156,6 +159,8 @@
       trackerPulldownId: 'global_issue_template_tracker_id',
       base_builtin_fields: <%= issue_template.builtin_fields.html_safe %>,
       relativeUrlRoot: "<%= Redmine::Utils.relative_url_root %>",
+      templateType: 'global_issue_template',
+      defaultJson: '<%= issue_template.builtin_fields.html_safe %>',
     });
   });
 </script>

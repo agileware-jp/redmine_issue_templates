@@ -52,21 +52,25 @@
         </li>
       </ul>
       <pre id="builtin_fields_data_via_vue" style="display: none;">{{ items }}</pre>
-      <span class="icon icon-reload" id="reset-json" v-on:click="loadField()">
+      <span class="icon icon-reload" id="reset-json" v-on:click="loadField">
         <%= l(:button_reset) %>
       </span>
-      <span class="icon icon-checked" id="paste-json">
+      <span class="icon icon-checked" v-on:click="applyJson">
         <%= l(:button_apply) %>
       </span>
     </div>
     <!-- buildin field Generator -->
     <p style="opacity: 0.6;">
-      <%= f.text_area :builtin_fields,
-                      required: false,
-                      cols: 60,
-                      rows: 4,
-                      label: l(:label_builtin_fields_json, default: "JSON for fields")
-      %>
+      <label :for="`${templateType}_builtin_fields`">
+        <%= l(:label_builtin_fields_json, default: "JSON for fields") %>
+      </label>
+      <textarea
+        :id="`${templateType}_builtin_fields`"
+        :name="`${templateType}[builtin_fields]`"
+        cols="60"
+        rows="4"
+        :value="json">
+      </textarea>
     </p>
     <div id="builtin_fields_help_content" class="wiki" style="display: none;">
       <%= l(:label_builtin_fields_help_message, default: "Enter builtin filds or custom fields default values with JSON format. ") %>
@@ -90,6 +94,11 @@ const AVAILABLE_FORMATS = [
 export default {
   // eslint-disable-next-line vue/no-shared-component-data, vue/no-deprecated-data-object-declaration
   props: {
+    defaultJson: {
+      type: String,
+      default: '{}',
+    },
+    templateType: String,
     templateId: String,
     projectId: String,
     trackerPulldownId: String,
@@ -104,6 +113,7 @@ export default {
   components: { FieldValue },
   data() {
     return {
+      json: this.defaultJson,
       items: [],
       customFields: {},
       newItemTitle: '',
@@ -148,6 +158,22 @@ export default {
       //     this.customFields[key] = value
       //   }
       // }
+    },
+    applyJson: function () {
+      if (this.items?.length > 0) {
+        let convertObj = {};
+        this.items.forEach((item) => {
+          let value = item.value;
+          if (item.title === 'issue_watcher_user_ids') {
+            value = item.value.map(user => {
+              let idx = user.lastIndexOf(':');
+              return user.substring(idx + 1);
+            });
+          }
+          convertObj[item.title] = value;
+        });
+        this.json = JSON.stringify(convertObj);
+      }
     },
   },
   mounted: async function () {
@@ -199,5 +225,5 @@ export default {
       this.customFieldUrl = this.relativeUrlRoot + '/custom_fields/' + field.id + '/edit'
     }
   }
-}
+};
 </script>
