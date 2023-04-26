@@ -36,29 +36,15 @@
       <b><%= l(:label_field_information, default: "Field information") %></b>
       <pre>{{ currentField }}</pre>
     </div>
-    <div id="fields_setting_display_area">
-      <ul class="json-list" v-if="items.length > 0">
-        <li :key="item.title" v-for="item in items">
-          <span v-if="customFields[item.title]">
-            <b>{{ customFields[item.title].name }}</b>: {{ item.value }} / {{ item.title }}
-          </span>
-          <span v-if="!customFields[item.title]">
-            <i class="issue_template help_content">
-              <%= l(:unavailable_fields_for_this_tracker, default: "Unavailable field for this tarcker") %>
-              : {{ item.value }} / {{ item.title }}
-            </i>
-          </span>
-          <i class="icon icon-del" v-on:click="deleteField(item)"></i>
-        </li>
-      </ul>
-      <pre id="builtin_fields_data_via_vue" style="display: none;">{{ items }}</pre>
+    <display-area :items="items" v-on:delete="deleteField" />
+    <p>
       <span class="icon icon-reload" id="reset-json" v-on:click="loadField">
         <%= l(:button_reset) %>
       </span>
       <span class="icon icon-checked" v-on:click="applyJson">
         <%= l(:button_apply) %>
       </span>
-    </div>
+    </p>
     <!-- buildin field Generator -->
     <p style="opacity: 0.6;">
       <label :for="`${templateType}_builtin_fields`">
@@ -72,13 +58,11 @@
         :value="json">
       </textarea>
     </p>
-    <div id="builtin_fields_help_content" class="wiki" style="display: none;">
-      <%= l(:label_builtin_fields_help_message, default: "Enter builtin filds or custom fields default values with JSON format. ") %>
-    </div>
   </div>
 </template>
 
 <script>
+import DisplayArea from './DisplayArea.vue';
 import FieldValue from './FieldValue.vue';
 
 const AVAILABLE_FORMATS = [
@@ -94,10 +78,6 @@ const AVAILABLE_FORMATS = [
 export default {
   // eslint-disable-next-line vue/no-shared-component-data, vue/no-deprecated-data-object-declaration
   props: {
-    defaultJson: {
-      type: String,
-      default: '{}',
-    },
     templateType: String,
     templateId: String,
     projectId: String,
@@ -110,10 +90,10 @@ export default {
     },
     relativeUrlRoot: String,
   },
-  components: { FieldValue },
+  components: { DisplayArea, FieldValue },
   data() {
     return {
-      json: this.defaultJson,
+      json: '',
       items: [],
       customFields: {},
       newItemTitle: '',
@@ -126,19 +106,20 @@ export default {
   methods: {
     addField: function (newFieldName, newFieldValue) {
       if (newFieldName === '' || newFieldValue === '') {
-        return
+        return;
       }
       this.items.push({
         title: newFieldName,
-        value: newFieldValue
-      })
-      this.newFieldName = ''
-      this.newFieldValue = ''
+        value: newFieldValue,
+        field: this.customFields[newFieldName],
+      });
+      this.newFieldName = '';
+      this.newFieldValue = '';
     },
     deleteField: function (target) {
       this.items = this.items.filter(function (item) {
-        return item !== target
-      })
+        return item !== target;
+      });
     },
     loadField: function () {
       this.api_builtin_fields = this.base_builtin_fields;
@@ -148,10 +129,12 @@ export default {
         for (const [key, value] of Object.entries(this.api_builtin_fields)) {
           this.items.push({
             title: key,
-            value: value
+            value: value,
+            field: this.customFields[key],
           });
         }
       }
+      this.applyJson();
       // { "issue_priority_id":"Priority", "issue_start_date":"Start date" }
       // if (this.api_custom_fields) {
       //   for (const [key, value] of Object.entries(this.api_custom_fields)) {
