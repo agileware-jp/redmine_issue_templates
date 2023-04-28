@@ -8,14 +8,13 @@ export default defineConfig({
     vue2(),
   ],
   build: {
-    rollupOptions: {
-      input: {
+    lib: {
+      entry: {
         issue_templates: '/scripts/issue_templates.js',
         template_fields: '/scripts/template_fields.js',
       },
-      output: {
-        entryFileNames: '[name].js'
-      }
+      name: 'RemineIssueTemplates',
+      formats: ['cjs'],
     },
     outDir: 'assets/javascripts',
   },
