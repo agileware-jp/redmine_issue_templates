@@ -12,25 +12,24 @@ axios.defaults.headers.common = {
   'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').getAttribute('content')
 };
 
-function ISSUE_TEMPLATE (config) {
-  this.pulldownUrl = config.pulldownUrl;
-  this.loadUrl = config.loadUrl;
-  this.confirmMsg = config.confirmMessage;
-  this.shouldReplaced = config.shouldReplaced;
-  this.generalTextYes = config.generalTextYes;
-  this.generalTextNo = config.generalTextNo;
-  this.isTriggeredBy = config.isTriggeredBy;
-}
-
-ISSUE_TEMPLATE.prototype = {
-  clearValue: (id) => {
+class ISSUE_TEMPLATE {
+  constructor(config) {
+    this.pulldownUrl = config.pulldownUrl;
+    this.loadUrl = config.loadUrl;
+    this.confirmMsg = config.confirmMessage;
+    this.shouldReplaced = config.shouldReplaced;
+    this.generalTextYes = config.generalTextYes;
+    this.generalTextNo = config.generalTextNo;
+    this.isTriggeredBy = config.isTriggeredBy;
+  }
+  clearValue(id) {
     const target = document.getElementById(id);
     if (target == null) {
       return;
     }
     target.value = '';
-  },
-  eraseSubjectAndDescription: function () {
+  }
+  eraseSubjectAndDescription() {
     this.clearValue('issue_description');
     this.clearValue('issue_subject');
 
@@ -41,8 +40,8 @@ ISSUE_TEMPLATE.prototype = {
     } catch (e) {
       // do nothing.
     }
-  },
-  openDialog: function (url, title) {
+  }
+  openDialog(url, title) {
     // Open dialog (modal window) to display selectable templates list.
     axios.get(url).then(({ data }) => {
       document.getElementById('filtered_templates_list').innerHTML = data;
@@ -56,8 +55,8 @@ ISSUE_TEMPLATE.prototype = {
         });
       });
     });
-  },
-  revertAppliedTemplate: function () {
+  }
+  revertAppliedTemplate() {
     const issueSubject = document.getElementById('issue_subject');
     const oldSubject = document.getElementById('original_subject');
 
@@ -81,8 +80,8 @@ ISSUE_TEMPLATE.prototype = {
     oldDescription.textContent = '';
     oldDescription.textContent = '';
     document.getElementById('revert_template').classList.add('disabled');
-  },
-  loadTemplate: function () {
+  }
+  loadTemplate() {
     const selectedTemplate = document.getElementById('issue_template');
     const ns = this;
 
@@ -129,8 +128,8 @@ ISSUE_TEMPLATE.prototype = {
       }
       ns.replaceTemplateValue(obj);
     });
-  },
-  replaceTemplateValue: function (obj) {
+  }
+  replaceTemplateValue(obj) {
     const ns = this;
 
     let oldVal = '';
@@ -182,8 +181,8 @@ ISSUE_TEMPLATE.prototype = {
     ns.setRelatedLink(obj);
     ns.builtinFields(obj);
     ns.confirmToReplace = true;
-  },
-  confirmToReplaceContent: function (obj) {
+  }
+  confirmToReplaceContent(obj) {
     const ns = this;
     const dialog = document.getElementById('issue_template_confirm_to_replace_dialog');
     dialog.style.visibility = 'visible';
@@ -214,8 +213,8 @@ ISSUE_TEMPLATE.prototype = {
       .addEventListener('click', () => {
         dialog.classList.remove('active');
       });
-  },
-  showLoadedMessage: function () {
+  }
+  showLoadedMessage() {
     const ns = this;
     // in app/views/issue_templates/_issue_select_form.html.erb
     const templateStatusArea = document.getElementById('template_status-area');
@@ -230,8 +229,8 @@ ISSUE_TEMPLATE.prototype = {
     messageElement.classList.add('fadeout');
 
     templateStatusArea.appendChild(messageElement);
-  },
-  getCsrfToken: function () {
+  }
+  getCsrfToken() {
     const metas = document.getElementsByTagName('meta');
     for (let meta of metas) {
       if (meta.getAttribute('name') === 'csrf-token') {
@@ -239,8 +238,8 @@ ISSUE_TEMPLATE.prototype = {
       }
     }
     return '';
-  },
-  setPulldown: function (tracker) {
+  }
+  setPulldown(tracker) {
     const ns = this;
     const params = { issue_tracker_id: tracker, is_triggered_by: ns.isTriggeredBy };
     const pullDownProject = document.getElementById('issue_project_id');
@@ -266,8 +265,8 @@ ISSUE_TEMPLATE.prototype = {
       const changeEvent = new Event('change');
       document.getElementById('issue_template').dispatchEvent(changeEvent);
     });
-  },
-  setRelatedLink: function (obj) {
+  }
+  setRelatedLink(obj) {
     const relatedLink = document.getElementById('issue_template_related_link');
     if (obj.related_link != null && obj.related_link !== '') {
       relatedLink.setAttribute('href', obj.related_link);
@@ -276,22 +275,22 @@ ISSUE_TEMPLATE.prototype = {
     } else {
       relatedLink.style.display = 'none';
     }
-  },
-  escapeHTML: function (val) {
+  }
+  escapeHTML(val) {
     const div = document.createElement('div');
     div.textContent = val;
     return div.textContent;
-  },
-  unescapeHTML: function (val) {
+  }
+  unescapeHTML(val) {
     const div = document.createElement('div');
     div.innerHTML = val;
     return div.innerHTML;
-  },
-  replaceCkeContent: function () {
+  }
+  replaceCkeContent() {
     const element = document.getElementById('issue_description');
     return CKEDITOR.instances.issue_description.setData(element.value);
-  },
-  hideOverwiteConfirm: function () {
+  }
+  hideOverwiteConfirm() {
     const cookieArray = [];
     if (document.cookie !== '') {
       const tmp = document.cookie.split('; ');
@@ -305,9 +304,9 @@ ISSUE_TEMPLATE.prototype = {
       return false;
     }
     return true;
-  },
+  }
   // support built-in field update
-  builtinFields: function (template) {
+  builtinFields(template) {
     const ns = this;
     const builtinFieldsJson = template.builtin_fields_json;
     if (builtinFieldsJson == null) return false;
@@ -339,8 +338,8 @@ ISSUE_TEMPLATE.prototype = {
     } catch (e) {
       console.log(`NOTE: Builtin / custom fields could not be applied due to this error. ${e.message} : ${e.message}`);
     }
-  },
-  updateFieldValue: function (element, value) {
+  }
+  updateFieldValue(element, value) {
     // In case field is a select element, scans its option values and marked 'selected'.
     if (element.tagName.toLowerCase() === 'select') {
       let values = [];
@@ -360,8 +359,8 @@ ISSUE_TEMPLATE.prototype = {
     } else {
       element.value = value;
     }
-  },
-  updateFieldValues: function (elements, value) {
+  }
+  updateFieldValues(elements, value) {
     const ns = this;
     for (let i = 0; i < elements.length; i++) {
       const element = elements[i];
@@ -382,8 +381,8 @@ ISSUE_TEMPLATE.prototype = {
         }
       }
     }
-  },
-  updateTemplateSelect: function (event) {
+  }
+  updateTemplateSelect(event) {
     const link = event.target;
     const optionId = link.getAttribute('data-issue-template-id');
     let optionSelector = '#issue_template > optgroup > option[value="' + optionId + '"]';
@@ -395,8 +394,8 @@ ISSUE_TEMPLATE.prototype = {
 
     const changeEvent = new Event('change');
     document.getElementById('issue_template').dispatchEvent(changeEvent);
-  },
-  checkSelectedWatchers: function (values) {
+  }
+  checkSelectedWatchers(values) {
     // HACK: want to get this url and params in a stable way.
     const rootPath = document.querySelector('a.home').href;
     const issueProjectId = document.getElementById('issue_project_id').value;
@@ -408,8 +407,8 @@ ISSUE_TEMPLATE.prototype = {
         user_ids: values
       },
     });
-  },
-  filterTemplate: function (event) {
+  }
+  filterTemplate(event) {
     const cols = document.getElementsByClassName('template_data');
     const searchWord = event.target.value;
     const reg = new RegExp(searchWord, 'gi');
@@ -421,15 +420,15 @@ ISSUE_TEMPLATE.prototype = {
         val.style.display = 'none';
       }
     }
-  },
-  changeTemplatePlace: function () {
+  }
+  changeTemplatePlace() {
     if (document.querySelector('div.flash_message')) {
       document.querySelector('div.flash_message').remove();
     }
     const subjectParentNode = document.getElementById('issue_subject').parentNode;
     subjectParentNode.parentNode.insertBefore(document.getElementById('template_area'), subjectParentNode);
   }
-};
+}
 
 // --------- Add event listeners -------------- //
 document.onreadystatechange = () => {
@@ -505,16 +504,15 @@ document.onreadystatechange = () => {
 
 // ------- for NoteTemplate
 
-function NOTE_TEMPLATE (config) {
-  this.baseElementId = config.baseElementId;
-  this.baseTemplateListUrl = config.baseTemplateListUrl;
-  this.baseTrackerId = config.baseTrackerId;
-  this.baseProjectId = config.baseProjectId;
-  this.loadNoteTemplateUrl = config.loadNoteTemplateUrl;
-}
-
-NOTE_TEMPLATE.prototype = {
-  setNoteDescription: function (target, value, container) {
+class NOTE_TEMPLATE {
+  constructor(config) {
+    this.baseElementId = config.baseElementId;
+    this.baseTemplateListUrl = config.baseTemplateListUrl;
+    this.baseTrackerId = config.baseTrackerId;
+    this.baseProjectId = config.baseProjectId;
+    this.loadNoteTemplateUrl = config.loadNoteTemplateUrl;
+  }
+  setNoteDescription(target, value, container) {
     const element = document.getElementById(target);
     if (element.value.length === 0) {
       element.value = value;
@@ -532,8 +530,8 @@ NOTE_TEMPLATE.prototype = {
     } catch (e) {
       // do nothing.
     }
-  },
-  applyNoteTemplate: function (targetElement) {
+  }
+  applyNoteTemplate(targetElement) {
     const ns = this;
     const templateId = targetElement.dataset.noteTemplateId;
     const projectId = document.getElementById('issue_project_id');
@@ -557,8 +555,8 @@ NOTE_TEMPLATE.prototype = {
       target = target.replace('_dialog', '');
       ns.setNoteDescription(target, data.note_template.description, container);
     });
-  },
-  changeNoteTemplateList: function (elementId) {
+  }
+  changeNoteTemplateList(elementId) {
     const ns = this;
     const projectId = document.getElementById('issue_project_id');
     const trackerId = document.getElementById('issue_tracker_id');
@@ -577,7 +575,7 @@ NOTE_TEMPLATE.prototype = {
       dialog.style = 'display: block;';
     });
   }
-};
+}
 
 window.ISSUE_TEMPLATE = ISSUE_TEMPLATE;
 window.NOTE_TEMPLATE = NOTE_TEMPLATE;
