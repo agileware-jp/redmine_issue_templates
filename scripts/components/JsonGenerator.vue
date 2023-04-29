@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="json_generator">
     <p>
       <label>{{ l('label_select_field') }}</label>
       <select id="field_selector" v-model="model.title">
@@ -152,24 +152,23 @@ export default {
         this.json = JSON.stringify(convertObj);
       }
     },
+    show: async function(trackerId) {
+      if (trackerId) {
+        this.$el.style.display = 'block';
+        this.customFields = await this.getCustomFields(trackerId);
+      } else {
+        this.$el.style.display = 'none';
+      }
+    }
   },
   mounted: async function () {
     const trackerPulldown = document.getElementById(this.trackerPulldownId);
-    if (trackerPulldown?.value) {
-      this.$el.style.display = 'block';
-      this.customFields = await this.getCustomFields(trackerPulldown?.value);
-      trackerPulldown.addEventListener('change', async (event) => {
-        if (event.target.value === '') {
-          this.$el.style.display = 'none';
-        } else {
-          this.$el.style.display = 'block';
-          this.customFields = await this.getCustomFields(event.target.value);
-        }
-      });
-    } else {
-      this.$el.style.display = 'none';
-    }
+    await this.show(trackerPulldown?.value);
     this.loadField();
+
+    trackerPulldown.addEventListener('change', (event) => {
+      this.show(event.target.value);
+    });
   },
   computed: {
     currentField: function () {

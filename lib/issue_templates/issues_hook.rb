@@ -3,7 +3,6 @@
 module IssueTemplates
   class IssuesHook < Redmine::Hook::ViewListener
     include IssuesHelper
-    include IssueTemplatesHelper
 
     CONTROLLERS = %(
       'IssuesController' 'IssueTemplatesController' 'ProjectsController' 'IssueTemplatesSettingsController'
@@ -15,7 +14,7 @@ module IssueTemplates
 
     def view_layouts_base_html_head(context = {})
       o = stylesheet_link_tag('issue_templates', plugin: 'redmine_issue_templates')
-      o << redmine_issue_template_javascript_include_tag('issue_templates') if need_template_js?(context[:controller])
+      o << redmine_issue_template_javascript_include_tag if need_template_js?(context[:controller])
       o
     end
 
@@ -97,6 +96,15 @@ module IssueTemplates
                                action: 'set_pulldown', project_id: project_id, is_triggered_by: is_triggered_by)
                      end
       pulldown_url
+    end
+
+    def redmine_issue_template_javascript_include_tag
+      if ENV['REDMINE_ISSUE_TEMPLATE_VITE_SERVE_URL'].present?
+        source = "#{ENV['REDMINE_ISSUE_TEMPLATE_VITE_SERVE_URL']}/scripts/issue_templates.js"
+        javascript_include_tag(source, type: :module)
+      else
+        javascript_include_tag(:issue_templates, plugin: :redmine_issue_templates, type: :module)
+      end
     end
   end
 end

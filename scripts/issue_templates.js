@@ -7,9 +7,13 @@
 /* global CKEDITOR  */
 'use strict';
 import axios from 'axios';
+
+// NOTE: To bundle and to prevent to split libraries.
+import './template_fields';
+
 axios.defaults.headers.common = {
   'X-Requested-With': 'XMLHttpRequest',
-  'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+  'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]')?.getAttribute?.('content')
 };
 
 class ISSUE_TEMPLATE {
@@ -229,15 +233,6 @@ class ISSUE_TEMPLATE {
     messageElement.classList.add('fadeout');
 
     templateStatusArea.appendChild(messageElement);
-  }
-  getCsrfToken() {
-    const metas = document.getElementsByTagName('meta');
-    for (let meta of metas) {
-      if (meta.getAttribute('name') === 'csrf-token') {
-        return meta.getAttribute('content');
-      }
-    }
-    return '';
   }
   setPulldown(tracker) {
     const ns = this;

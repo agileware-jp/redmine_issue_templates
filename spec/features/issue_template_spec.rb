@@ -119,10 +119,10 @@ feature 'IssueTemplate', js: true do
         expect(page).to have_selector('select#field_selector')
 
         select 'Priority', from: 'field_selector'
-        expect(page).to have_select('Value', options: IssuePriority.active.pluck(:name))
+        expect(page).to have_select('Value', options: IssuePriority.active.pluck(:name).unshift(''))
 
         select 'Watcher', from: 'field_selector'
-        expect(page).to have_select('Value', options:  ['Dave Lopper :3', 'John Smith :2'])
+        expect(page).to have_select('Value', options:  ['', 'Dave Lopper :3', 'John Smith :2'])
       end
     end
   end
