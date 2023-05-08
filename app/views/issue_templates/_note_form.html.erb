@@ -28,27 +28,25 @@
   </div>
 </div>
 
-<script type='text/javascript'>
-  $(function() {
-    var noteTemplateConfig = {
-      baseElementId: '<%= element_id %>',
-      baseTemplateListUrl: '<%= url_for(controller: 'note_templates', action:'list_templates') %>',
-      baseTrackerId: <%= tracker_id %>,
-      baseProjectId: <%= project_id %>,
-      loadNoteTemplateUrl: '<%= load_note_templates_path %>'
+<script type='module'>
+  var noteTemplateConfig = {
+    baseElementId: '<%= element_id %>',
+    baseTemplateListUrl: '<%= url_for(controller: 'note_templates', action:'list_templates') %>',
+    baseTrackerId: <%= tracker_id %>,
+    baseProjectId: <%= project_id %>,
+    loadNoteTemplateUrl: '<%= load_note_templates_path %>'
+  }
+
+  // let baseElementId = '<%= element_id %>'
+  let content = document.querySelectorAll('#' + noteTemplateConfig.baseElementId)
+
+  if (content.length === 1) {
+    let element = content[0].closest('form')
+    if (noteTemplateConfig.baseElementId === 'template_issue_notes') {
+      element = content[0].closest('fieldset')
     }
+    element.insertBefore(content[0], element.firstChild)
+  }
 
-    // let baseElementId = '<%= element_id %>'
-    let content = document.querySelectorAll('#' + noteTemplateConfig.baseElementId)
-
-    if (content.length === 1) {
-      let element = content[0].closest('form')
-      if (noteTemplateConfig.baseElementId === 'template_issue_notes') {
-        element = content[0].closest('fieldset')
-      }
-      element.insertBefore(content[0], element.firstChild)
-    }
-
-    window.noteTemplateNS ||= new NOTE_TEMPLATE(noteTemplateConfig)
-  })
+  window.noteTemplateNS ||= new NOTE_TEMPLATE(noteTemplateConfig)
 </script>
