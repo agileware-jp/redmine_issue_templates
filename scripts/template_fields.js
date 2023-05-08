@@ -3,7 +3,7 @@ import JsonGenerator from './components/JsonGenerator.vue';
 import { CustomFieldPlugin } from './plugins/customFields';
 import { LocalePlugin } from './plugins/locales';
 
-const TemplateFields = function (props) {
+const TEMPLATE_FIELDS = function (props) {
   const {
     loadSelectableFieldsPath,
     templateId,
@@ -22,5 +22,4 @@ const TemplateFields = function (props) {
   }).$mount('#json_generator');
 };
 
-window.RedmineIssueTemplate ||= {};
-window.RedmineIssueTemplate.TemplateFields = TemplateFields;
+window.TEMPLATE_FIELDS = TEMPLATE_FIELDS;

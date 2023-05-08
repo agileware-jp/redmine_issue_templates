@@ -126,7 +126,7 @@
 <!-- tooltip content -->
 <% if builtin_fields_enable %>
 <script type="module">
-  RedmineIssueTemplate.TemplateFields({
+  TEMPLATE_FIELDS({
     loadSelectableFieldsPath: "<%= url_for(controller: 'issue_templates', action: 'load_selectable_fields') %>",
     projectId: "<%= project.id %>",
     templateId: "<%= issue_template&.id || '' %>",
