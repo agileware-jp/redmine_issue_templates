@@ -18,6 +18,9 @@ export default defineConfig({
     },
     outDir: 'assets/javascripts',
   },
+  server: {
+    port: 5244,
+  },
   resolve: {
     alias: {
       '^': fileURLToPath(new URL('./scripts', import.meta.url))

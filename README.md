@@ -174,6 +174,24 @@ By default, `headless` is added as an option. If you set the environment variabl
 % HEADLESS=0 bundle exec rspec -I plugins/redmine_issue_templates/spec --format documentation plugins/redmine_issue_templates/spec/
 ```
 
+### 6.) Build scripts
+
+required
+
+* nodejs: 18.16.0
+
+```bash
+% npm install
+% npm run build
+```
+
+#### Serve with vite-dev-server
+
+```bash
+% npm run dev
+% REDMINE_ISSUE_TEMPLATE_VITE_SERVE_URL=http://localhost:5244 bundle exec rails server
+```
+
 ### Changelog
 
 For detailed list of changes please see: [CHANGELOG.md](CHANGELOG.md)
