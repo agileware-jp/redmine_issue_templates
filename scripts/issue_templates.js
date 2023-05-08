@@ -393,7 +393,7 @@ class ISSUE_TEMPLATE {
   checkSelectedWatchers(values) {
     // HACK: want to get this url and params in a stable way.
     const rootPath = document.querySelector('a.home').href;
-    const issueProjectId = document.getElementById('issue_project_id').value;
+    const issueProjectId = document.getElementById('issue_project_id')?.value;
     const projectPath = document.querySelector('a.overview')?.href ?? `/projects/${issueProjectId}`;
     const { projectId }  = /projects\/(?<projectId>.+)/.exec(projectPath).groups;
     axios.post(`${rootPath}watchers/append.js`, {
@@ -401,6 +401,9 @@ class ISSUE_TEMPLATE {
       watcher: {
         user_ids: values
       },
+    }).then(({ data }) => {
+      console.log(data);
+      eval(data);
     });
   }
   filterTemplate(event) {
