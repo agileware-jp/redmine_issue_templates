@@ -35,7 +35,7 @@ module IssueTemplatesHelper
       label_field_information: l(:label_field_information, default: "Field information"),
       label_builtin_fields_json: l(:label_builtin_fields_json, default: "JSON for fields"),
       label_select_field: l(:label_select_field, default: "Select a field"),
-      unavailable_fields_for_this_tracker: l(:unavailable_fields_for_this_tracker, default: "Unavailable field for this tarcker"),
+      unavailable_fields_for_this_tracker: l(:unavailable_fields_for_this_tracker, default: "Unavailable field for this tracker"),
     }
   end
 end
