@@ -376,13 +376,16 @@ ISSUE_TEMPLATE.prototype = {
         values = value
       }
 
+      let isChangedSelected = false;
       for (let i = 0; i < values.length; i++) {
         let options = document.querySelectorAll('#' + element.id + ' option')
         let filteredOptions = Array.from(options).filter(option => option.text === values[i])
         if (filteredOptions.length > 0) {
+          if (filteredOptions[0].selected == false) { isChangedSelected = true }
           filteredOptions[0].selected = true
         }
       }
+      if (isChangedSelected) { element.dispatchEvent(new Event("change")); }
     } else {
       element.value = value
     }
