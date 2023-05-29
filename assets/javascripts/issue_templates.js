@@ -381,7 +381,7 @@ ISSUE_TEMPLATE.prototype = {
         let options = document.querySelectorAll('#' + element.id + ' option')
         let filteredOptions = Array.from(options).filter(option => option.text === values[i])
         if (filteredOptions.length > 0) {
-          if (filteredOptions[0].selected == false) { isChangedSelected = true }
+          if (filteredOptions[0].selected === false) { isChangedSelected = true }
           filteredOptions[0].selected = true
         }
       }
