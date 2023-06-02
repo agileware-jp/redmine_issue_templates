@@ -344,12 +344,19 @@ class ISSUE_TEMPLATE {
         values = value;
       }
 
+      let isChangedSelected = false;
       for (let i = 0; i < values.length; i++) {
         const options = document.querySelectorAll('#' + element.id + ' option');
         const filteredOptions = Array.from(options).filter(option => option.text === values[i]);
         if (filteredOptions.length > 0) {
+          if (filteredOptions[0].selected === false) {
+            isChangedSelected = true;
+          }
           filteredOptions[0].selected = true;
         }
+      }
+      if (isChangedSelected) {
+        element.dispatchEvent(new Event("change"));
       }
     } else {
       element.value = value;
