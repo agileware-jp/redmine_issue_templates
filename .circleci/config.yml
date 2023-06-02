@@ -92,7 +92,7 @@ workflows:
     jobs:
         - run-tests:
             <<: *default_context
-            name: test on supported maximum versions with PostgreSQ
+            name: test on supported maximum versions with PostgreSQL
             redmine_version: $REDMINE_MAX_VERSION
             ruby_version: $RUBY_MAX_VERSION
             database: pg

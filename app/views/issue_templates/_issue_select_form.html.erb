@@ -71,85 +71,87 @@
     <%= textilizable(setting.help_message) %>
   </div>
 </div>
-<script type='module'>
-  //<![CDATA[
-  var templateConfig = {
-    pulldownUrl: '<%= pulldown_url %>',
-    isTriggeredBy: '<%= is_triggered_by %>',
-    loadUrl: '<%= url_for(controller: 'issue_templates', action: 'load', project_id: project_id, is_triggered_by: is_triggered_by) %>',
-    shouldReplaced: '<%= setting.should_replaced %>',
-    generalTextYes: '<%=h l(:general_text_Yes) %>',
-    generalTextNo : '<%=h l(:general_text_No) %>',
-    confirmMessage: '<%=h l(:label_template_applied, default: "Issue template is applied. You can revert with click 'Revert' link.") %>'
-  }
+<script type='text/javascript'>
+  $(() => {
+    //<![CDATA[
+    var templateConfig = {
+      pulldownUrl: '<%= pulldown_url %>',
+      isTriggeredBy: '<%= is_triggered_by %>',
+      loadUrl: '<%= url_for(controller: 'issue_templates', action: 'load', project_id: project_id, is_triggered_by: is_triggered_by) %>',
+      shouldReplaced: '<%= setting.should_replaced %>',
+      generalTextYes: '<%=h l(:general_text_Yes) %>',
+      generalTextNo : '<%=h l(:general_text_No) %>',
+      confirmMessage: '<%=h l(:label_template_applied, default: "Issue template is applied. You can revert with click 'Revert' link.") %>'
+    }
 
-  var templateNS = templateNS || new ISSUE_TEMPLATE(templateConfig)
-  templateNS.isTriggeredBy = '<%= is_triggered_by %>'
-  templateNS.setPulldown('<%= @issue.tracker.id %>')
+    var templateNS = templateNS || new ISSUE_TEMPLATE(templateConfig)
+    templateNS.isTriggeredBy = '<%= is_triggered_by %>'
+    templateNS.setPulldown('<%= @issue.tracker.id %>')
 
-  document.getElementById('issue_template').addEventListener('change', (event) => {
-    templateNS.changeTemplatePlace()
-    templateNS.loadTemplate()
-  })
+    document.getElementById('issue_template').addEventListener('change', (event) => {
+      templateNS.changeTemplatePlace()
+      templateNS.loadTemplate()
+    })
 
-  // Show dialog
-  document.getElementById('link_template_dialog').addEventListener('click', (event) => {
-    let templateListUrl = '<%= url_for(controller: 'issue_templates',
-                                       action:'list_templates', project_id: project_id, issue_tracker_id: @issue.tracker.id) %>'
-    let templateListTitle = '<%= "#{l(:issue_template)}: #{@issue.tracker.name}".html_safe %>'
+    // Show dialog
+    document.getElementById('link_template_dialog').addEventListener('click', (event) => {
+      let templateListUrl = '<%= url_for(controller: 'issue_templates',
+                                         action:'list_templates', project_id: project_id, issue_tracker_id: @issue.tracker.id) %>'
+      let templateListTitle = '<%= "#{l(:issue_template)}: #{@issue.tracker.name}".html_safe %>'
 
-    templateNS.openDialog(templateListUrl, templateListTitle)
-  })
+      templateNS.openDialog(templateListUrl, templateListTitle)
+    })
 
-  // revert template
-  document.getElementById('revert_template').addEventListener('click', (event) => {
-    templateNS.revertAppliedTemplate()
-  })
+    // revert template
+    document.getElementById('revert_template').addEventListener('click', (event) => {
+      templateNS.revertAppliedTemplate()
+    })
 
-  document.getElementById('erase_template').addEventListener('click', (event) => {
-    templateNS.eraseSubjectAndDescription()
-  })
+    document.getElementById('erase_template').addEventListener('click', (event) => {
+      templateNS.eraseSubjectAndDescription()
+    })
 
-  // keydown keyup
-  document.querySelector("input[name='template_search_filter']").addEventListener('keydown', (event) => {
-    templateNS.filterTemplate(event)
-  })
+    // keydown keyup
+    document.querySelector("input[name='template_search_filter']").addEventListener('keydown', (event) => {
+      templateNS.filterTemplate(event)
+    })
 
-  document.querySelector("input[name='template_search_filter']").addEventListener('keyup', (event) => {
-    templateNS.filterTemplate(event)
-  })
+    document.querySelector("input[name='template_search_filter']").addEventListener('keyup', (event) => {
+      templateNS.filterTemplate(event)
+    })
 
-  // NOTE: Workaround for GitHub issue: 193
-  // Start observing the target node for configured mutations
-  try {
-    if (CKEDITOR.instances) {
-      // Create an observer instance linked to the callback function
-      let observer = new MutationObserver(callback)
+    // NOTE: Workaround for GitHub issue: 193
+    // Start observing the target node for configured mutations
+    try {
+      if (CKEDITOR.instances) {
+        // Create an observer instance linked to the callback function
+        let observer = new MutationObserver(callback)
 
-      // Select the node that will be observed for mutations
-      let targetNode = document.querySelector('#issue_description_and_toolbar')
+        // Select the node that will be observed for mutations
+        let targetNode = document.querySelector('#issue_description_and_toolbar')
 
-      // Options for the observer (which mutations to observe)
-      let config = { attributes: true, childList: true, characterData: true, subtree: true }
+        // Options for the observer (which mutations to observe)
+        let config = { attributes: true, childList: true, characterData: true, subtree: true }
 
-      // Callback function to execute when mutations are observed
-      let callback = function (mutationsList) {
-        for (let i = 0, len = mutationsList.length; i < len; ++i) {
-          let mutation = mutationsList[i]
-          if (mutation.type === 'attributes') {
-            console.log('The ' + mutation.attributeName + ' attribute was modified.')
-            if (mutation.target.className == 'cke_contents cke_reset') {
-              // Wait for a while til CKE Editor's textarea is rendered, and after that
-              // apply template text.
-              setTimeout('templateNS.replaceCkeContent()', 200)
-              observer.disconnect()
+        // Callback function to execute when mutations are observed
+        let callback = function (mutationsList) {
+          for (let i = 0, len = mutationsList.length; i < len; ++i) {
+            let mutation = mutationsList[i]
+            if (mutation.type === 'attributes') {
+              console.log('The ' + mutation.attributeName + ' attribute was modified.')
+              if (mutation.target.className == 'cke_contents cke_reset') {
+                // Wait for a while til CKE Editor's textarea is rendered, and after that
+                // apply template text.
+                setTimeout('templateNS.replaceCkeContent()', 200)
+                observer.disconnect()
+              }
             }
           }
         }
+        observer.observe(targetNode, config)
       }
-      observer.observe(targetNode, config)
+    } catch (e) {
+      // do nothing.
     }
-  } catch (e) {
-    // do nothing.
-  }
+  });
 </script>
