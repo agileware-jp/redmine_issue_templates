@@ -22,7 +22,7 @@ RSpec.configure do |config|
       # In case window size is not specified, Redmine renderes its contents with responsive mode.
       #
       options.add_argument('window-size=1280,800')
-      if ENV['DRIVER'] == 'headless'
+      unless ENV['HEADLESS'] == '0'
         options.add_argument('headless')
         options.add_argument('disable-gpu')
       end

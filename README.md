@@ -167,11 +167,11 @@ Please see .circleci/config.yml for more details.
 % bundle exec rspec -I plugins/redmine_issue_templates/spec --format documentation plugins/redmine_issue_templates/spec/
 ```
 
-By default, `chrome` is used as a webdriver. If you set the environment variable
-`DRIVER` to `headless`, `headless_chrome` will be used.
+By default, `headless` is added as an option. If you set the environment variable
+`HEADLESS` to `0`, `headless` will be removed.
 
 ```bash
-% DRIVER='headless' bundle exec rspec -I plugins/redmine_issue_templates/spec --format documentation plugins/redmine_issue_templates/spec/
+% HEADLESS=0 bundle exec rspec -I plugins/redmine_issue_templates/spec --format documentation plugins/redmine_issue_templates/spec/
 ```
 
 ### Changelog
