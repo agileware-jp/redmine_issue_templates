@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  redmine-plugin: agileware-jp/redmine-plugin@3.1.0
+  redmine-plugin: agileware-jp/redmine-plugin@3.3.0
   plugin-test:
     commands:
       run-tests:
@@ -75,6 +75,10 @@ jobs:
       ruby_version: << parameters.ruby_version >>
       db_version: << parameters.db_version >>
     steps:
+      - run:
+          name: Uninstall pre-installed Chrome
+          # https://github.com/agileware-jp/lychee_checklist/pull/11/files#r1315433101
+          command: sudo dpkg --purge google-chrome-stable
       - checkout
       - redmine-plugin/download-redmine:
           version: << parameters.redmine_version >>
