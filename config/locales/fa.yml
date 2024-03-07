@@ -36,19 +36,19 @@ fa:
   label_enabledshaing_help_message: "اگر فعال شود، این قالب می‌تواند با پروژه‌های فرزند به اشتراک گذاشته شود (به علاوه، باید گزینه‌ی قالب ارث‌برده‌شده در پروژه‌ی فرزند را هم فعال کنید)."
   label_should_replaced: "جای‌گذاری عنوان و توضیحات"
   label_should_replaced_help_message: "اگر فعال شود، عنوان و توضیحات موجود، پاک و با متن قالب، جای‌گزین می‌شوند (به طور پیش‌فرض غیرفعال و متن افزوده‌شده است)."
-  global_issue_templates: "قالب‌های عمومی مسئله"
-  no_issue_templates_for_this_redmine: "قالب‌های عمومی مسئله برای این سایت ردماین تعریف نشده‌اند."
-  only_admin_can_associate_global_template: "تنها راه‌بر ردماین می‌تواند قالب‌های عمومی را با این پروژه مرتبط کند."
+  global_issue_templates: "قالب‌های همگانی مسئله"
+  no_issue_templates_for_this_redmine: "قالب‌های همگانی مسئله برای این سایت ردماین تعریف نشده‌اند."
+  only_admin_can_associate_global_template: "تنها راه‌بر ردماین می‌تواند قالب‌های همگانی را با این پروژه مرتبط کند."
   text_no_tracker_enabled_for_global: "هنوز گردش‌های کار تعریف نشده‌اند. لطفا اول گردش‌های کار را ایجاد کنید؛ زیرا، قالب‌ها به گردش‌های کار متصل می‌شوند."
   display_and_filter_issue_templates_in_dialog: "پیش‌نمایش محتویات قالب"
   label_filter_template: "غربال قالب‌ها"
   label_msg_confirm_to_replace: "عنوان و توضیحات را جای‌گذاری می‌کنید؟"
-  label_apply_global_template_to_all_projects: "قالب‌های عمومی مسئله را به تمام پروژه‌ها اعمال کن."
-  note_apply_global_template_to_all_projects_setting_enabled: "این قالب عمومی مسئله به تمام پروژه‌ها بر اساس تنظیمات افزونه، اعمال شده‌است."
+  label_apply_global_template_to_all_projects: "قالب‌های همگانی مسئله را به تمام پروژه‌ها اعمال کن."
+  note_apply_global_template_to_all_projects_setting_enabled: "این قالب همگانی مسئله به تمام پروژه‌ها بر اساس تنظیمات افزونه، اعمال شده‌است."
   project_list_associated_this_template: "لیست پروژه:  (اعمال‌شده بر: %{applied} از %{all})"
-  note_project_local_template_override_global_template: "اگر قالب مخصوص پروژه موجود است، آن را بر قالب‌های عمومی اولویت بده. همچنین، قالب‌های عمومی در صفحه‌ی ساخت مسئله نمایش داده نمی‌شوند."
-  help_project_local_template_override_global_template: "اگر این گزینه فعال شود، قالب‌های عمومی تیکت به تمام پروژه‌ها اعمال می‌شوند. اگر قالبی مخصوص پروژه بر اساس نوع مسئله تنظیم شود، اولویت‌ داده می‌شود و قالب عمومی در صفحه‌ی ساخت تیکت جدید، مخفی می‌شود."
-  warning_project_local_template_override_global_template: "زمانی که قالب‌های عمومی را ایجاد می‌کنید، مراقب باشید که شامل اطلاعات مطمئنی باشد که شما می‌خواهید به آن‌ها توجه شود. زمانی که این گزینه فعال شود، همه‌ی قالب‌های عمومی به تمام پروژه‌ها اعمال می‌شوند."
+  note_project_local_template_override_global_template: "اگر قالب مخصوص پروژه موجود است، آن را بر قالب‌های همگانی اولویت بده. همچنین، قالب‌های همگانی در صفحه‌ی ساخت مسئله نمایش داده نمی‌شوند."
+  help_project_local_template_override_global_template: "اگر این گزینه فعال شود، قالب‌های همگانی تیکت به تمام پروژه‌ها اعمال می‌شوند. اگر قالبی مخصوص پروژه بر اساس نوع مسئله تنظیم شود، اولویت‌ داده می‌شود و قالب همگانی در صفحه‌ی ساخت تیکت جدید، مخفی می‌شود."
+  warning_project_local_template_override_global_template: "زمانی که قالب‌های همگانی را ایجاد می‌کنید، مراقب باشید که شامل اطلاعات مطمئنی باشد که شما می‌خواهید به آن‌ها توجه شود. زمانی که این گزینه فعال شود، همه‌ی قالب‌های همگانی به تمام پروژه‌ها اعمال می‌شوند."
   revert_before_applying_template: "بازگردانی"
   template_remove_confirm: "مطمئنید که می‌خواهید این قالب حذف شود؟ %{count} زیر پروژه از این پروژه استفاده می‌کنند."
   label_number_of_subprojects_use_this_template: "%{count} زیر پروژه از این پروژه استفاده می‌کنند."
@@ -86,5 +86,5 @@ fa:
   warning_enable_builtin_fields: نسبت به فعال‌سازی این گزینه مراقب باشید. این گزینه فعلا به شکل آزمایشی قرار داده شده‌است؛ طوری که هنوز به حد کافی روی محیط کاربری آن و عملکردهای آن برای پشتیبانی از انواع مختلف بخش‌ها کاری نکرده‌ام. ممکن است وابسته به مرورگر کار کند یا خیر. با احتیاط از این گزینه در محیط‌های عملیاتی، استفاده کنید.
   label_field_information: اطلاعات بخش
   unavailable_fields_for_this_tracker: بخش خارج از دسترس برای این نوع مسئله
-  global_note_templates: قالب عمومی برای یادداشت
+  global_note_templates: قالب همگانی برای یادداشت
   link_to_index_edit_note_template: لیست قالب‌های یادداشت یا ویرایش آن‌ها
