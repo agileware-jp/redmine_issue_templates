@@ -30,7 +30,7 @@ de:
   label_inherit_templates_help_message: Vorlage von Elternprojekt erben (nur falls Vererbung erlaubt)
   label_inherited_templates: Geerbte Vorlagen
   no_issue_templates_for_this_project: Für dieses Projekt sind keine Vorlagen definiert.
-  link_to_index_edit_template: Vorlagenliste / Vorlagen bearbeiten
+  link_to_index_edit_template: Vorlagenliste der Tickets / Vorlagen bearbeiten
   erase_issue_subject_and_description: Lösche Thema und Beschreibung
   unused_tracker_at_this_project: "ACHTUNG: Dieser Tracker ist für dieses Projekt nicht aktiviert. Bitte Vorlage anpassen."
   label_enabledshaing_help_message: Falls aktiv kann diese Vorlage an Unterprojekte vererbt werden.
@@ -61,6 +61,7 @@ de:
   note_template_name: Name für Notizvorlage
   label_template_applied: Die Ausgabevorlage wird angewendet. Sie können mit dem Link "Zurücksetzen" rückgängig gemacht werden.
   label_hide_confirm_dialog_in_the_future: "Diese Bestätigung in Zukunft ausblenden, einfach überschreiben."
+  no_note_templates_for_this_redmine: "Es sind keine globalen Kommentarvorlagen definiert."
   no_note_templates_for_this_project: "Für dieses Projekt sind keine Kommentarvorlagen definiert."
   label_memo_help_message: "Bitte richten Sie einen Hinweis ein, der erklärt, wann Sie diese Vorlage anwenden."
   note_description: "Comment body"
@@ -86,3 +87,5 @@ de:
   warning_enable_builtin_fields: Bitte mit Vorsicht dieses Flag zu aktivieren. Diese Funktion ist nur experimentell. Da ich noch nicht genügend UI und Funktionen zur Verfügung gestellt habe, um alle Feldtypen zu unterstützen. Je nach Browser funktioniert dies möglicherweise nicht. Nutzen Sie diese Funktion in einer Produktionsumgebung mit Vorsicht.
   label_field_information: Feld Information
   unavailable_fields_for_this_tracker: Feld für diesen Tracker nicht verfügbar
+  global_note_templates: Globale Vorlagen für Notizen
+  link_to_index_edit_note_template: Vorlagenliste der Notizen / Vorlagen bearbeiten
