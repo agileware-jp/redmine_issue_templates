@@ -7,6 +7,7 @@ class IssueTemplatesController < ApplicationController
   include IssueTemplatesCommon
   include ProjectTemplatesCommon
   menu_item :issues
+  before_action :find_user, :find_project, :authorize, except: %i[preview]
   before_action :find_tracker, :find_templates, only: %i[set_pulldown list_templates]
 
   def index
