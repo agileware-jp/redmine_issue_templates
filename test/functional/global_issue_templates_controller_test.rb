@@ -22,6 +22,33 @@ class GlobalIssueTemplatesControllerTest < Redmine::ControllerTest
     assert_response :success
   end
 
+  def test_should_require_admin
+    @request.session[:user_id] = 2 # Non-admin
+
+    get :index
+    assert_response 403
+
+    get :new
+    assert_response 403
+
+    get :orphaned_templates
+    assert_response 403
+
+    get :show, params: { id: 2 }
+    assert_response 403
+
+    post :preview, params: { global_issue_template: { description: 'Test' } }
+    assert_response 403
+
+    post :create, params: { global_issue_template: { title: 'Global Template title', description: 'test'}}
+    assert_response 403
+
+    assert_no_difference 'GlobalIssueTemplate.count' do
+      delete :destroy, params: { id: 2 }
+      assert_response 403
+    end
+  end
+
   def test_get_index_should_sort_trackers_in_position_order
     [
       ['Feature request', 1],
