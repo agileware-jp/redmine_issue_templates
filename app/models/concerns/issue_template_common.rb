@@ -43,7 +43,14 @@ module IssueTemplateCommon
     end
 
     # ActiveRecord::SerializationTypeMismatch may be thrown if non hash object is assigned.
-    serialize :builtin_fields_json, Hash
+    #
+    # Passing the class as positional argument has removed in Rails 7.2.
+    # https://edgeguides.rubyonrails.org/7_2_release_notes.html#active-record-removals
+    if Rails.gem_version >= Gem::Version.new('7.2')
+      serialize :builtin_fields_json, type: Hash, coder: YAML
+    else
+      serialize :builtin_fields_json, Hash
+    end
   end
 
   #
