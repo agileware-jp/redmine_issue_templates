@@ -122,7 +122,7 @@ class ISSUE_TEMPLATE {
 
       this.loadedTemplate = obj;
 
-      if (ns.shouldReplaced === 'true' && (issueDescription.value !== '' || issueSubject.value !== '')) {
+      if (ns.shouldReplaced === 'true' && ((issueDescription !== null && issueDescription.value !== '') || issueSubject.value !== '')) {
         if (obj.description !== '' || obj.issue_title !== '') {
           const hideConfirmFlag = ns.hideOverwiteConfirm();
           if (hideConfirmFlag === false) {

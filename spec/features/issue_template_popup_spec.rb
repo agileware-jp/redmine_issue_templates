@@ -116,6 +116,21 @@ feature 'Confirm dialog before overwrite description', js: true do
           wait_for_ajax
           expect(page).not_to have_selector('#issue_template_confirm_to_replace_dialog')
         end
+
+        context 'Tracker without core_fields' do
+          background do
+            tracker.update!(core_fields: [])
+          end
+
+          scenario 'Select template and content is applied.' do
+            visit_new_issue(user)
+            page.driver.browser.manage.add_cookie(name: 'issue_template_confirm_to_replace_hide_dialog', value: '1')
+
+            first_target.select_option
+            wait_for_ajax
+            expect(issue_subject.value).to eq first_template.issue_title
+          end
+        end
       end
     end
   end
