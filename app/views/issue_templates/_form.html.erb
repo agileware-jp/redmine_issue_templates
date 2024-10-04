@@ -127,7 +127,7 @@
 <% if builtin_fields_enable %>
 <script type="module">
   TEMPLATE_FIELDS({
-    loadSelectableFieldsPath: "<%= url_for(controller: 'issue_templates', action: 'load_selectable_fields') %>",
+    loadSelectableFieldsPath: "<%= j url_for(controller: 'issue_templates', action: 'load_selectable_fields') %>",
     projectId: "<%= project.id %>",
     templateId: "<%= issue_template&.id || '' %>",
     templateType: 'issue_template',
