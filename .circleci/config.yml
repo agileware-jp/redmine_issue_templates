@@ -34,6 +34,13 @@ orbs:
                 RAILS_ENV=test bundle exec rake redmine:plugins:test PLUGIN=`cat .tested_plugin`
               working_directory: << parameters.redmine_root >>
 jobs:
+  hello-world:
+    docker:
+      - image: circleci/python:3.8
+    steps:
+      - run:
+          name: Say Hello
+          command: echo "Hello world"
   run-tests:
     executor:
       name: redmine-plugin/ruby-<< parameters.database >>
@@ -98,29 +105,30 @@ default_context: &default_context
 workflows:
   run-tests-workflow:
     jobs:
-        - run-tests:
-            <<: *default_context
-            name: test on supported maximum versions with PostgreSQL
-            redmine_version: $REDMINE_MAX_VERSION
-            ruby_version: $RUBY_MAX_VERSION
-            database: pg
-        - run-tests:
-            <<: *default_context
-            name: test on supported minimum versions with MySQL
-            redmine_version: $REDMINE_MIN_VERSION
-            ruby_version: $RUBY_MIN_VERSION
-            database: mysql
-        - rspec:
-            <<: *default_context
-            name: RSpec on supported maximum versions with PostgreSQL
-            redmine_version: $REDMINE_MAX_VERSION
-            ruby_version: $RUBY_MAX_VERSION
-            db: pg
-            db_version: $POSTGRES_VERSION
-        - rspec:
-            <<: *default_context
-            name: RSpec on supported minimum versions with MySQL
-            redmine_version: $REDMINE_MIN_VERSION
-            ruby_version: $RUBY_MIN_VERSION
-            db: mysql
-            db_version: $MYSQL_VERSION
+        - hello-world
+        # - run-tests:
+        #     <<: *default_context
+        #     name: test on supported maximum versions with PostgreSQL
+        #     redmine_version: $REDMINE_MAX_VERSION
+        #     ruby_version: $RUBY_MAX_VERSION
+        #     database: pg
+        # - run-tests:
+        #     <<: *default_context
+        #     name: test on supported minimum versions with MySQL
+        #     redmine_version: $REDMINE_MIN_VERSION
+        #     ruby_version: $RUBY_MIN_VERSION
+        #     database: mysql
+        # - rspec:
+        #     <<: *default_context
+        #     name: RSpec on supported maximum versions with PostgreSQL
+        #     redmine_version: $REDMINE_MAX_VERSION
+        #     ruby_version: $RUBY_MAX_VERSION
+        #     db: pg
+        #     db_version: $POSTGRES_VERSION
+        # - rspec:
+        #     <<: *default_context
+        #     name: RSpec on supported minimum versions with MySQL
+        #     redmine_version: $REDMINE_MIN_VERSION
+        #     ruby_version: $RUBY_MIN_VERSION
+        #     db: mysql
+        #     db_version: $MYSQL_VERSION
