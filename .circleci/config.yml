@@ -121,18 +121,21 @@ default_context: &default_context
 workflows:
   run-tests-workflow:
     jobs:
+        - check-asset-js
         - run-tests:
             <<: *default_context
             name: test on supported maximum versions with PostgreSQL
             redmine_version: $REDMINE_MAX_VERSION
             ruby_version: $RUBY_MAX_VERSION
             database: pg
+            requires: [check-asset-js]
         - run-tests:
             <<: *default_context
             name: test on supported minimum versions with MySQL
             redmine_version: $REDMINE_MIN_VERSION
             ruby_version: $RUBY_MIN_VERSION
             database: mysql
+            requires: [check-asset-js]
         - rspec:
             <<: *default_context
             name: RSpec on supported maximum versions with PostgreSQL
@@ -140,6 +143,7 @@ workflows:
             ruby_version: $RUBY_MAX_VERSION
             db: pg
             db_version: $POSTGRES_VERSION
+            requires: [check-asset-js]
         - rspec:
             <<: *default_context
             name: RSpec on supported minimum versions with MySQL
@@ -147,4 +151,4 @@ workflows:
             ruby_version: $RUBY_MIN_VERSION
             db: mysql
             db_version: $MYSQL_VERSION
-        - check-asset-js
+            requires: [check-asset-js]
