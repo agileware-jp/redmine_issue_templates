@@ -34,36 +34,6 @@ orbs:
                 RAILS_ENV=test bundle exec rake redmine:plugins:test PLUGIN=`cat .tested_plugin`
               working_directory: << parameters.redmine_root >>
 jobs:
-  check-asset-js:
-    docker:
-      - image: cimg/node:18.16.0
-    steps:
-      - checkout
-      - run:
-          name: Install dependencies
-          command: npm ci
-      - run:
-          name: Rebuild the assets/javascripts/issue_templates.js
-          command: npm run build
-      - run:
-          name: Compare the expected and actual assets/javascripts/issue_templates.js
-          command: |
-            if [ "$(git diff --ignore-space-at-eol assets/javascripts/ | wc -l)" -gt "0" ]; then
-              message="assets/javascripts/issue_templates.js is out of date. Please build and push again according to the \"Build scripts\" section in README.md."
-              echo $message
-
-              # Also add the message to the GitHub step summary
-              echo "## :x: assets/javascripts/issue_templates.js is out of date" >> $GITHUB_STEP_SUMMARY
-              echo $message >> $GITHUB_STEP_SUMMARY
-              exit 1
-            fi
-  hello-world:
-    docker:
-      - image: circleci/python:3.8
-    steps:
-      - run:
-          name: Say Hello
-          command: echo "Hello world"
   run-tests:
     executor:
       name: redmine-plugin/ruby-<< parameters.database >>
@@ -120,6 +90,29 @@ jobs:
             sed -i 's/gem "selenium-webdriver".*/gem "selenium-webdriver", ">= 3.4.0"/' Gemfile
       - redmine-plugin/bundle-install
       - redmine-plugin/rspec
+  check-asset-js:
+    docker:
+      - image: cimg/node:18.16.0
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: npm ci
+      - run:
+          name: Rebuild the assets/javascripts/issue_templates.js
+          command: npm run build
+      - run:
+          name: Compare the expected and actual assets/javascripts/issue_templates.js
+          command: |
+            if [ "$(git diff --ignore-space-at-eol assets/javascripts/ | wc -l)" -gt "0" ]; then
+              message="assets/javascripts/issue_templates.js is out of date. Please build and push again according to the \"Build scripts\" section in README.md."
+              echo $message
+
+              # Also add the message to the GitHub step summary
+              echo "## :x: assets/javascripts/issue_templates.js is out of date" >> $GITHUB_STEP_SUMMARY
+              echo $message >> $GITHUB_STEP_SUMMARY
+              exit 1
+            fi
 
 default_context: &default_context
   context:
@@ -128,31 +121,30 @@ default_context: &default_context
 workflows:
   run-tests-workflow:
     jobs:
-        - hello-world
+        - run-tests:
+            <<: *default_context
+            name: test on supported maximum versions with PostgreSQL
+            redmine_version: $REDMINE_MAX_VERSION
+            ruby_version: $RUBY_MAX_VERSION
+            database: pg
+        - run-tests:
+            <<: *default_context
+            name: test on supported minimum versions with MySQL
+            redmine_version: $REDMINE_MIN_VERSION
+            ruby_version: $RUBY_MIN_VERSION
+            database: mysql
+        - rspec:
+            <<: *default_context
+            name: RSpec on supported maximum versions with PostgreSQL
+            redmine_version: $REDMINE_MAX_VERSION
+            ruby_version: $RUBY_MAX_VERSION
+            db: pg
+            db_version: $POSTGRES_VERSION
+        - rspec:
+            <<: *default_context
+            name: RSpec on supported minimum versions with MySQL
+            redmine_version: $REDMINE_MIN_VERSION
+            ruby_version: $RUBY_MIN_VERSION
+            db: mysql
+            db_version: $MYSQL_VERSION
         - check-asset-js
-        # - run-tests:
-        #     <<: *default_context
-        #     name: test on supported maximum versions with PostgreSQL
-        #     redmine_version: $REDMINE_MAX_VERSION
-        #     ruby_version: $RUBY_MAX_VERSION
-        #     database: pg
-        # - run-tests:
-        #     <<: *default_context
-        #     name: test on supported minimum versions with MySQL
-        #     redmine_version: $REDMINE_MIN_VERSION
-        #     ruby_version: $RUBY_MIN_VERSION
-        #     database: mysql
-        # - rspec:
-        #     <<: *default_context
-        #     name: RSpec on supported maximum versions with PostgreSQL
-        #     redmine_version: $REDMINE_MAX_VERSION
-        #     ruby_version: $RUBY_MAX_VERSION
-        #     db: pg
-        #     db_version: $POSTGRES_VERSION
-        # - rspec:
-        #     <<: *default_context
-        #     name: RSpec on supported minimum versions with MySQL
-        #     redmine_version: $REDMINE_MIN_VERSION
-        #     ruby_version: $RUBY_MIN_VERSION
-        #     db: mysql
-        #     db_version: $MYSQL_VERSION
