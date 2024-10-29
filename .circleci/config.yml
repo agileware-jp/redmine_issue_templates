@@ -90,6 +90,23 @@ jobs:
             sed -i 's/gem "selenium-webdriver".*/gem "selenium-webdriver", ">= 3.4.0"/' Gemfile
       - redmine-plugin/bundle-install
       - redmine-plugin/rspec
+  check-asset-js:
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: npm ci
+      - run:
+          name: Rebuild the assets/javascripts/issue_templates.js
+          command: npm run build
+      - run:
+          name: Compare the expected and actual assets/javascripts/issue_templates.js
+          command: |
+            if [ "$(git diff --ignore-space-at-eol assets/javascripts/ | wc -l)" -gt "0" ]; then
+              message="assets/javascripts/issue_templates.js is out of date. Please build and push again according to the \"Build scripts\" section in README.md."
+              echo $message
+              exit 1
+            fi
 
 default_context: &default_context
   context:
@@ -124,3 +141,6 @@ workflows:
             ruby_version: $RUBY_MIN_VERSION
             db: mysql
             db_version: $MYSQL_VERSION
+  check-asset-js-workflow:
+    jobs:
+      - check-asset-js
