@@ -36,7 +36,7 @@ orbs:
 jobs:
   check-asset-js:
     docker:
-      - image: circleci/node:18.16.0
+      - image: cimg/node:18.16.0
     steps:
       - checkout
       - run:
