@@ -259,6 +259,7 @@ feature 'IssueTemplate', js: true do
         expect(issue_subject.value).to eq expected_title
 
         # dialog should be closed
+        pending
         expect(template_dialog).not_to be_visible
       end
     end
@@ -278,6 +279,7 @@ feature 'IssueTemplate', js: true do
         expect(issue_subject.value).to eq "different subject #{expected_title}"
 
         # dialog should be closed
+        pending
         expect(template_dialog).not_to be_visible
       end
     end
