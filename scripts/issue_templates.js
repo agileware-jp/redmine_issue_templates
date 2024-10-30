@@ -387,6 +387,7 @@ class ISSUE_TEMPLATE {
   updateTemplateSelect(event) {
     const link = event.target;
     const optionId = link.getAttribute('data-issue-template-id');
+    console.log(link, optionId);
     let optionSelector = '#issue_template > optgroup > option[value="' + optionId + '"]';
     if (link.classList.contains('template-global')) {
       optionSelector = optionSelector + '[class="global"]';
