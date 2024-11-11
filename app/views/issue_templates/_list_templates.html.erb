@@ -18,7 +18,7 @@
         </td>
         <td>
           <div class='template_tooltip_wrapper'>
-            <a class='icon template_tooltip' href='#' title='<%= l(:label_preview) %>'></a>
+            <a class='icon-only template_tooltip' href='#' title='<%= l(:label_preview) %>'></a>
             <div class='wiki template_tooltip_body'>
               <span class='title'><%= template.title %></span>
               <%= textilizable(template.description) %>
@@ -33,7 +33,7 @@
         <td class='center'><%= checked_image template.is_default? %></td>
         <td>
           <i data-issue-template-id='<%= template.id %>'
-             class='icon icon-test template-update-link'></i>
+             class='icon-only icon-test template-update-link'></i>
         </td>
       </tr>
 <% end %>
@@ -47,7 +47,7 @@
         </td>
         <td>
           <div class='template_tooltip_wrapper'>
-            <a class='icon template_tooltip' href='#' title='<%= l(:label_preview) %>'></a>
+            <a class='icon-only template_tooltip' href='#' title='<%= l(:label_preview) %>'></a>
             <div class='wiki template_tooltip_body'>
               <span class="title"><%= template.title %></span>
               <%= textilizable(template.description) %>
@@ -62,7 +62,7 @@
         <td class='center'><%= checked_image template == default_template %></td>
         <td>
           <i data-issue-template-id='<%= template.id %>'
-             class='icon icon-test template-update-link'></i>
+             class='icon-only icon-test template-update-link'></i>
         </td>
       </tr>
 <% end %>
@@ -76,7 +76,7 @@
         </td>
         <td>
           <div class='template_tooltip_wrapper'>
-            <a class='icon template_tooltip' href='#' title='<%= l(:label_preview) %>'></a>
+            <a class='icon-only template_tooltip' href='#' title='<%= l(:label_preview) %>'></a>
             <div class='wiki template_tooltip_body'>
               <span class='title'><%= template.issue_title %></span>
               <%= textilizable(template.description) %>
@@ -91,7 +91,7 @@
         <td class='center'><%= checked_image template == default_template %></td>
         <td>
           <i data-issue-template-id='<%= template.id %>'
-             class='icon icon-test template-update-link template-global cursor: pointer;'></i>
+             class='icon-only icon-test template-update-link template-global cursor: pointer;'></i>
         </td>
       </tr>
 <% end %>

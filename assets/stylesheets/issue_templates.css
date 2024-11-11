@@ -188,7 +188,7 @@ select.issue_template {
     width: 240px;
 }
 
-.issue_template.icon.settings {
+.issue_template.icon-only.settings {
     background: url("../images/lamp.png") no-repeat 3px center;
 }
 
