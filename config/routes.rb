@@ -10,7 +10,9 @@ Rails.application.routes.draw do
     post 'preview', on: :collection
   end
 
-  resources :global_issue_templates, except: [:edit], concerns: %i[tamplate_common previewable]
+  resources :global_issue_templates, except: [:edit], concerns: %i[tamplate_common previewable] do
+    get 'load_selectable_fields', on: :collection
+  end
 
   # for project issue template
   resources :projects, only: [] do
