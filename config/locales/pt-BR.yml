@@ -1,27 +1,27 @@
 pt-BR:
-  issue_templates: Modelos de problema
-  issue_template: Modelo de problema
+  issue_templates: Modelos de tarefa
+  issue_template: Modelo de tarefa
   issue_template_note: Nota
   label_enabled: Habilitar
   label_disabled: Desabilitar
   label_help_message: Sobre modelos
-  label_show_help_message: Mostrar mensagem de ajuda ao criar/atualizar problemas.
+  label_show_help_message: Mostrar mensagem de ajuda ao criar/atualizar tarefas.
   about_help_message: Cada projeto pode ter mensagens de ajuda personalizadas para modelos.
   close_help: Fechar mensagem de ajuda.
-  about_template_help_message: Você pode ver as instruções dos modelos de problema neste projeto.
+  about_template_help_message: Você pode ver as instruções dos modelos de tarefa neste projeto.
   label_enabled_help_message: Caixa de seleção para ativar este modelo. Se deseja salvar este modelo como rascunho, desmarque esta caixa.
   label_list_templates: "Lista de modelos"
   label_new_templates: "Adicionar modelo"
   issue_template_name: "Nome do modelo"
-  issue_description: "Corpo do problema"
-  issue_title: "Título do problema"
-  label_applied_for_issue: "Campos aplicados ao problema: "
-  help_for_issue_title: "Se o título do problema for definido, ele será aplicado ao assunto do problema ao selecionar este modelo."
+  issue_description: "Corpo da tarefa"
+  issue_title: "Título da tarefa"
+  label_applied_for_issue: "Campos aplicados a tarefa: "
+  help_for_issue_title: "Se o título da tarefa for definido, ele será aplicado ao assunto da tarefa ao selecionar este modelo."
   help_for_this_field: "Ajuda para este campo."
   permission_manage_issue_templates: "Gerenciar modelos"
   permission_edit_issue_templates: "Editar modelos"
   permission_show_issue_templates: "Exibir modelos"
-  project_module_issue_templates: "Modelos de problema"
+  project_module_issue_templates: "Modelos de tarefa"
   label_isdefault_help_message: "Marque para usar este modelo como padrão para o rastreador de destino."
   defaulf_template_loaded: "Modelo padrão carregado na área de texto da descrição. (Rastreador: %{tracker})"
   text_no_tracker_enabled: "Nenhum rastreador foi configurado para este projeto ainda.\nPor favor, configure-os primeiro, pois os modelos são atribuídos aos rastreadores do projeto."
@@ -29,36 +29,36 @@ pt-BR:
   label_inherit_templates: "Herdar modelos"
   label_inherit_templates_help_message: "Herdar modelos do projeto pai. (Apenas os modelos do pai marcados como compartilhamento ativado com a árvore do projeto serão listados.)"
   label_inherited_templates: "Modelos herdados"
-  no_issue_templates_for_this_project: "Nenhum modelo de problema foi definido para este projeto."
-  link_to_index_edit_template: "Lista de modelos de problema / editar modelos"
+  no_issue_templates_for_this_project: "Nenhum modelo de tarefa foi definido para este projeto."
+  link_to_index_edit_template: "Lista de modelos de tarefa / editar modelos"
   erase_issue_subject_and_description: "Limpar assunto e descrição."
   unused_tracker_at_this_project: "NOTA: Este rastreador não está definido para uso neste projeto. Redefina a configuração do modelo, se necessário."
   label_enabledshaing_help_message: "Se verdadeiro, este modelo pode ser compartilhado com projetos descendentes. (Você também deve ativar a opção de modelo herdado no projeto filho.)"
   label_should_replaced: "Substituir assunto e descrição"
   label_should_replaced_help_message: "Se verdadeiro, o assunto e a descrição existentes são apagados e substituídos pelo texto do modelo. (O padrão é falso e o texto é apenas anexado.)"
-  global_issue_templates: "Modelos globais de problema"
-  no_issue_templates_for_this_redmine: "Nenhum modelo global de problema foi definido para este site Redmine."
+  global_issue_templates: "Modelos globais de tarefa"
+  no_issue_templates_for_this_redmine: "Nenhum modelo global de tarefa foi definido para este site Redmine."
   only_admin_can_associate_global_template: "Somente o administrador do Redmine pode associar modelos globais a este projeto."
   text_no_tracker_enabled_for_global: "Os rastreadores ainda não foram definidos.\nPor favor, configure-os primeiro, pois os modelos são atribuídos aos rastreadores."
   display_and_filter_issue_templates_in_dialog: "Visualizar conteúdo do modelo"
   label_filter_template: "Filtrar modelos"
   label_msg_confirm_to_replace: "Deseja substituir o assunto e a descrição?"
-  label_apply_global_template_to_all_projects: "Aplicar modelos globais de problema a todos os projetos."
-  note_apply_global_template_to_all_projects_setting_enabled: "Este modelo global de problema é aplicado a todos os projetos pela configuração do plugin."
+  label_apply_global_template_to_all_projects: "Aplicar modelos globais de tarefa a todos os projetos."
+  note_apply_global_template_to_all_projects_setting_enabled: "Este modelo global de tarefa é aplicado a todos os projetos pela configuração do plugin."
   project_list_associated_this_template: "Lista de projetos: (aplicado: %{applied} de %{all})"
-  note_project_local_template_override_global_template: "Se um modelo local de projeto existir, ele substituirá os modelos globais, e nenhum modelo global será exibido na tela de criação de problema."
-  help_project_local_template_override_global_template: "Se esta opção estiver ativada, todos os modelos globais de problema serão aplicados a todos os projetos. Se um modelo específico por rastreador for definido para um projeto, ele terá prioridade e ocultará o modelo global na tela de criação de novo problema."
-  warning_project_local_template_override_global_template: "Tenha cuidado ao registrar modelos globais de problema que contenham conteúdo confidencial. Se esta opção estiver ativada, todos os modelos globais serão aplicados a todos os projetos."
+  note_project_local_template_override_global_template: "Se um modelo local de projeto existir, ele substituirá os modelos globais, e nenhum modelo global será exibido na tela de criação de tarefa."
+  help_project_local_template_override_global_template: "Se esta opção estiver ativada, todos os modelos globais de tarefa serão aplicados a todos os projetos. Se um modelo específico por rastreador for definido para um projeto, ele terá prioridade e ocultará o modelo global na tela de criação de novo problema."
+  warning_project_local_template_override_global_template: "Tenha cuidado ao registrar modelos globais de tarefa que contenham conteúdo confidencial. Se esta opção estiver ativada, todos os modelos globais serão aplicados a todos os projetos."
   revert_before_applying_template: "Reverter"
   template_remove_confirm: "Tem certeza de que deseja remover este modelo? %{count} subprojetos utilizam este modelo."
   label_number_of_subprojects_use_this_template: "%{count} subprojetos utilizam este modelo."
   enabled_template_cannot_destroy: "Apenas modelos desativados podem ser excluídos. Verifique se outros subprojetos utilizam este modelo e desative-o antes de excluí-lo."
   orphaned_templates: "Modelos órfãos do rastreador"
   orphaned_template: "Modelo órfão do rastreador"
-  label_template_applied: "Modelo de problema aplicado. Você pode reverter clicando no link 'Reverter'."
+  label_template_applied: "Modelo de tarefa aplicado. Você pode reverter clicando no link 'Reverter'."
   label_hide_confirm_dialog_in_the_future: "Ocultar esta confirmação no futuro, apenas sobrescrever."
   label_template_for_note: "Modelo para nota"
-  label_use_template_when_edit: "Usar modelos ao editar problema"
+  label_use_template_when_edit: "Usar modelos ao editar tarefa"
   note_template: "Modelo para nota"
   no_note_templates_for_this_project: "Nenhum modelo de comentário foi definido para este projeto."
   label_memo_help_message: "Configure uma nota explicativa ao aplicar este modelo."
@@ -71,11 +71,11 @@ pt-BR:
       roles: apenas para estes papéis
       open: para todos os usuários
   please_select_at_least_one_role: "Por favor, selecione pelo menos um papel."
-  issue_templates_settings: Configuração de modelos de problema
+  issue_templates_settings: Configuração de modelos de tarefa
   issue_templates_optional_settings: Configuração opcional de modelos
   issue_template_related_link: Link relacionado
   issue_template_link_title: Título do link relacionado
-  label_related_link_help_message: "Se houver páginas de exemplo ou problemas de amostra que utilizam este modelo de problema, especifique o link. Assim, o operador pode vê-los como referência."
+  label_related_link_help_message: "Se houver páginas de exemplo ou tarefas de amostra que utilizam este modelo de tarefa, especifique o link. Assim, o operador pode vê-los como referência."
   label_link_title_help_message: "Você pode personalizar o título do link relacionado. (Padrão: Link relacionado)"
   enter_value: Por favor, insira um valor.
   label_select_field: Selecione um campo
