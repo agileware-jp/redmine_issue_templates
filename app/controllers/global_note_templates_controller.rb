@@ -2,14 +2,15 @@
 
 # noinspection RubocopInspection
 class GlobalNoteTemplatesController < ApplicationController
-  layout 'base'
+  layout 'admin'
+  self.main_menu = false
+  menu_item :redmine_issue_templates
   helper :issues
   helper :issue_templates
-  menu_item :issues
 
   before_action :find_object, only: %i[show update destroy]
   before_action :find_project, only: %i[update]
-  before_action :require_admin, only: %i[index new show], excep: [:preview]
+  before_action :require_admin
 
   #
   # Action for global template : Admin right is required.
