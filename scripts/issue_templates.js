@@ -403,7 +403,15 @@ class ISSUE_TEMPLATE {
     const issueProjectId = document.getElementById('issue_project_id')?.value;
     const projectPath = document.querySelector('a.overview')?.href ?? `/projects/${issueProjectId}`;
     const { projectId }  = /projects\/(?<projectId>.+)/.exec(projectPath).groups;
-    axios.post(`${rootPath}watchers/append.js`, {
+    
+    // Ensure the URL is properly constructed for subdirectory deployments
+    let watcherUrl = `${rootPath}watchers/append.js`;
+    if (!watcherUrl.startsWith('http')) {
+      // If rootPath doesn't include protocol, construct relative URL
+      watcherUrl = new URL('watchers/append.js', window.location.origin + window.location.pathname).href;
+    }
+    
+    axios.post(watcherUrl, {
       project_id: projectId,
       watcher: {
         user_ids: values
