@@ -152,7 +152,7 @@
 <% if builtin_fields_enable %>
 <script type="module">
   TEMPLATE_FIELDS({
-    loadSelectableFieldsPath: "<%= url_for(controller: 'issue_templates', action: 'load_selectable_fields') %>",
+    loadSelectableFieldsPath: "<%= url_for(controller: 'global_issue_templates', action: 'load_selectable_fields') %>",
     templateId: "<%= issue_template&.id || '' %>",
     templateType: 'global_issue_template',
     trackerPulldownId: 'global_issue_template_tracker_id',

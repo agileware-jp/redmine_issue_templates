@@ -32,6 +32,17 @@ class IssueTemplatesControllerTest < Redmine::ControllerTest
     assert_response 403
   end
 
+  def test_list_templates
+    get :list_templates, params: { project_id: 1, issue_tracker_id: 1 }
+    assert_response :success
+  end
+
+  def test_list_templates_without_show_permission
+    Role.find(1).remove_permission! :show_issue_templates
+    get :list_templates, params: { project_id: 1, issue_tracker_id: 1 }
+    assert_response 403
+  end
+
   def test_get_index_with_normal
     get :index, params: { project_id: 1 }
     assert_response :success
@@ -118,6 +129,19 @@ class IssueTemplatesControllerTest < Redmine::ControllerTest
 
     get :preview, params: { issue_template: { description: 'h1. Test data.' } }
     assert_select 'h1', /Test data\./, @response.body.to_s
+  end
+
+  def test_create_template_without_edit_permission
+    post :create, params: { issue_template:
+      { title: 'new', note: 'note', description: 'description', tracker_id: 1, enabled: 1, author_id: 1 }, project_id: 1 }
+    assert_response 403
+  end
+
+  def test_update_template_without_edit_permission
+    put :update, params: { id: 2,
+                           issue_template: { description: 'Update Test template2' },
+                           project_id: 1 }
+    assert_response 403
   end
 
   def test_update_template

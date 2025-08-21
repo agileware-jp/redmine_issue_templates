@@ -6,7 +6,8 @@ class NoteTemplatesControllerTest < Redmine::ControllerTest
            :users, :roles,
            :members, :member_roles,
            :trackers, :projects_trackers,
-           :note_templates, :note_visible_roles
+           :note_templates, :note_visible_roles, :global_note_templates
+
 
   def setup
     @request.session[:user_id] = 2  # jsmith
@@ -110,5 +111,38 @@ class NoteTemplatesControllerTest < Redmine::ControllerTest
       assert_select 'td a[href=?]', "/projects/ecookbook/note_templates/2", count: 1
       assert_select 'td a[href=?]', "/projects/ecookbook/note_templates/3", count: 1
     end
+  end
+
+  def test_list_templates
+    get :list_templates, params: { project_id: 1, tracker_id: 1 }
+    assert_response :success
+  end
+
+  def test_list_templates_without_show_permission
+    Role.find(1).remove_permission! :show_issue_templates
+    get :list_templates, params: { project_id: 1, tracker_id: 1 }
+    assert_response 403
+  end
+
+  def test_load_return_json_hash
+    get :load, params: { note_template: { project_id: 1, note_template_id: 1 } }
+    assert_response :success
+    assert_equal "comment 1-1\ncomment 1-2", json_response['note_template']['description']
+  end
+
+  def test_load_return_json_hash_of_global
+    get :load, params: { note_template: { project_id: 1, note_template_id: 1, template_type: 'global' } }
+    assert_response :success
+    assert_equal "global description 1-1\nglobal description 1-2", json_response['note_template']['description']
+  end
+
+  def test_load_without_permission
+    Role.find(1).remove_permission! :show_issue_templates
+    get :load, params: { note_template: { project_id: 1, note_template_id: 1 } }
+    assert_response 403
+  end
+
+  def json_response
+    ActiveSupport::JSON.decode @response.body
   end
 end

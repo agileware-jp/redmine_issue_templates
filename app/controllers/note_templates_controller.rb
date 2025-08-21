@@ -5,6 +5,7 @@ class NoteTemplatesController < ApplicationController
   layout 'base'
   helper :issue_templates
   menu_item :issues
+  before_action :find_user, :find_project, :authorize, except: %i[preview load]
 
   def index
     project_id = @project.id
@@ -60,6 +61,10 @@ class NoteTemplatesController < ApplicationController
 
   # load template description
   def load
+    # work around weird parameter structure
+    @project = Project.find(template_params[:project_id])
+    return unless authorize
+
     note_template_id = template_params[:note_template_id]
     template_type = template_params[:template_type]
 
