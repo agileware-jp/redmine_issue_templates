@@ -192,31 +192,34 @@ class ISSUE_TEMPLATE {
     dialog.style.visibility = 'visible';
     dialog.classList.add('active');
 
-    document.getElementById('overwrite_yes').addEventListener('click', () => {
+    document.getElementById('overwrite_yes').onclick = function(){
       if (document.getElementById('issue_template_confirm_to_replace_hide_dialog').checked) {
         // NOTE: Use document.cookie because Redmine itself does not use jquery.cookie.js.
         document.cookie = 'issue_template_confirm_to_replace_hide_dialog=1';
       } else {
         document.cookie = 'issue_template_confirm_to_replace_hide_dialog=0';
       }
+      dialog.style.visibility = 'hidden';
       dialog.classList.remove('active');
       ns.replaceTemplateValue(obj);
-    });
+    };
 
-    document.getElementById('overwrite_no').addEventListener('click', () => {
+    document.getElementById('overwrite_no').onclick = function(){
       if (document.getElementById('issue_template_confirm_to_replace_hide_dialog').checked) {
         // NOTE: Use document.cookie because Redmine itself does not use jquery.cookie.js.
         document.cookie = 'issue_template_confirm_to_replace_hide_dialog=1';
       } else {
         document.cookie = 'issue_template_confirm_to_replace_hide_dialog=0';
       }
+      dialog.style.visibility = 'hidden';
       dialog.classList.remove('active');
-    });
+    };
 
     document.getElementById('issue_template_confirm_to_replace_dialog_cancel')
-      .addEventListener('click', () => {
+      .onclick = function(){
         dialog.classList.remove('active');
-      });
+        dialog.style.visibility = 'hidden';
+      };
   }
   showLoadedMessage() {
     const ns = this;
