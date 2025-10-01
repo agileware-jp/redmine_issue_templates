@@ -34,9 +34,8 @@ Rails.application.routes.draw do
   end
 
   # for note temlate
-  resources :note_templates, only: [] do
+  resources :note_templates, only: [], concerns: [:previewable] do
     post 'load', on: :collection
-    post 'preview', on: :collection
     get 'list_templates', on: :collection
   end
 
