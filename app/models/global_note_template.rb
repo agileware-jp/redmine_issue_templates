@@ -30,7 +30,7 @@ class GlobalNoteTemplate < (defined?(ApplicationRecord) == 'constant' ? Applicat
   validates :description, presence: true
   acts_as_positioned scope: %i[tracker_id]
 
-  enum visibility: { roles: 1, open: 2 }
+  enum :visibility, { roles: 1, open: 2 }
 
   scope :mine_condition, lambda { |user_id|
     where(author_id: user_id).mine if user_id.present?
