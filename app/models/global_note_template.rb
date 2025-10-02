@@ -30,7 +30,12 @@ class GlobalNoteTemplate < (defined?(ApplicationRecord) == 'constant' ? Applicat
   validates :description, presence: true
   acts_as_positioned scope: %i[tracker_id]
 
-  enum :visibility, { roles: 1, open: 2 }
+  # Support for the change in enum API in Rails 7.0 and later
+  if Rails.gem_version >= Gem::Version.new('7.0')
+    enum :visibility, { roles: 1, open: 2 }
+  else
+    enum visibility: { roles: 1, open: 2 }
+  end
 
   scope :mine_condition, lambda { |user_id|
     where(author_id: user_id).mine if user_id.present?

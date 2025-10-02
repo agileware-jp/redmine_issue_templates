@@ -27,7 +27,12 @@ class NoteTemplate < (defined?(ApplicationRecord) == 'constant' ? ApplicationRec
   validates :description, presence: true
   acts_as_positioned scope: %i[project_id tracker_id]
 
-  enum :visibility, { mine: 0, roles: 1, open: 2 }
+  # Support for the change in enum API in Rails 7.0 and later
+  if Rails.gem_version >= Gem::Version.new('7.0')
+    enum :visibility, { mine: 0, roles: 1, open: 2 }
+  else
+    enum visibility: { mine: 0, roles: 1, open: 2 }
+  end
 
   scope :mine_condition, lambda { |user_id|
     where(author_id: user_id).mine if user_id.present?
