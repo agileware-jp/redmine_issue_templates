@@ -9,7 +9,7 @@ RSpec.configure do |c|
 end
 
 feature 'Update issue', js: true do
-  given(:user) { FactoryBot.create(:user, :password_same_login, login: 'test-manager', language: 'en', admin: false) }
+  given(:user) { FactoryBot.create(:user, login: 'test-manager', password: 'password', language: 'en', admin: false) }
   given(:project) { FactoryBot.create(:project_with_enabled_modules) }
   given(:tracker) { FactoryBot.create(:tracker, :with_default_status) }
   given(:role) { FactoryBot.create(:role, :manager_role) }
@@ -58,9 +58,13 @@ feature 'Update issue', js: true do
 
   scenario 'Click edit link without apply_template_when_edit_issue flag', js: true do
     Setting.send 'plugin_redmine_issue_templates=', 'apply_template_when_edit_issue' => 'false'
-    visit_update_issue(user)
-    issue = Issue.last
-    visit "/issues/#{issue.id}"
+
+    log_user(user.login, user.password)
+    expect(page).to have_current_path(my_page_path, wait: 5)
+
+    visit issue_path(Issue.last)
+    expect(page).to have_current_path(issue_path(Issue.last), wait: 5)
+
     page.find('#content > div:nth-child(1) > a.icon.icon-edit').click
     sleep(0.2)
     expect(page).not_to have_selector('div#template_area select#issue_template')
@@ -75,9 +79,12 @@ feature 'Update issue', js: true do
     end
 
     scenario 'Template for note exists' do
-      visit_update_issue(user)
-      issue = Issue.last
-      visit "/issues/#{issue.id}"
+      log_user(user.login, user.password)
+      expect(page).to have_current_path(my_page_path, wait: 5)
+
+      visit issue_path(Issue.last)
+      expect(page).to have_current_path(issue_path(Issue.last), wait: 5)
+
       page.find('#content > div:nth-child(1) > a.icon.icon-edit').click
       sleep(0.2)
       expect(page).to have_selector('a#link_template_issue_notes_dialog')
@@ -274,6 +281,6 @@ feature 'Update issue', js: true do
 
   def visit_update_issue(user)
     user.update_attribute(:admin, false)
-    log_user(user.login, user.login)
+    log_user(user.login, user.password)
   end
 end

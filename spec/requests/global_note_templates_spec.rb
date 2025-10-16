@@ -8,7 +8,7 @@ RSpec.configure do |c|
 end
 
 RSpec.describe 'Global Note Template', type: :request do
-  let(:user) { FactoryBot.create(:user, :password_same_login, login: 'test-manager', language: 'en', admin: true) }
+  let(:user) { FactoryBot.create(:user, login: 'test-manager', password: 'password', language: 'en', admin: true) }
   let(:tracker) { FactoryBot.create(:tracker, :with_default_status) }
   let(:target_template_name) { 'Global Note template name' }
   let(:target_template) { GlobalNoteTemplate.last }
@@ -18,7 +18,7 @@ RSpec.describe 'Global Note Template', type: :request do
   end
 
   it 'show global note template list' do
-    login_request(user.login, user.login)
+    login_request(user.login, 'password')
     get '/global_note_templates'
     expect(response.status).to eq 200
 
@@ -27,7 +27,7 @@ RSpec.describe 'Global Note Template', type: :request do
   end
 
   it 'create global note template and load' do
-    login_request(user.login, user.login)
+    login_request(user.login, 'password')
     post '/global_note_templates',
          params: { global_note_template:
            { tracker_id: tracker.id, name: target_template_name,
@@ -40,7 +40,7 @@ RSpec.describe 'Global Note Template', type: :request do
   end
 
   it 'create global note template with roles visibility' do
-    login_request(user.login, user.login)
+    login_request(user.login, 'password')
 
     expected_roles = FactoryBot.create_list(:role, 2)
     post '/global_note_templates',
@@ -59,7 +59,7 @@ RSpec.describe 'Global Note Template', type: :request do
   context 'update global note template' do
     context 'when visibility changes from open to roles' do
       it 'changes visibility to roles' do
-        login_request(user.login, user.login)
+        login_request(user.login, 'password')
         expected_roles = FactoryBot.create_list(:role, 2)
         target = FactoryBot.create(:global_note_template, { tracker_id: tracker.id, visibility: 'open' })
         patch '/global_note_templates/' + target.id.to_s,
@@ -78,7 +78,7 @@ RSpec.describe 'Global Note Template', type: :request do
 
     context 'when visibility changes from roles to open' do
       it 'changes visibility to open' do
-        login_request(user.login, user.login)
+        login_request(user.login, 'password')
         roles = FactoryBot.create_list(:role, 2)
         target = FactoryBot.create(:global_note_template, { tracker_id: tracker.id, visibility: 'roles', role_ids: roles.map(&:id) })
         patch '/global_note_templates/' + target.id.to_s,
@@ -96,7 +96,7 @@ RSpec.describe 'Global Note Template', type: :request do
 
     context 'when changes role_ids' do
       it 'updates roles' do
-        login_request(user.login, user.login)
+        login_request(user.login, 'password')
         expected_roles = FactoryBot.create_list(:role, 3)
         target = FactoryBot.create(:global_note_template, { tracker_id: tracker.id, visibility: 'roles', role_ids: FactoryBot.create_list(:role, 2).map(&:id) })
         patch '/global_note_templates/' + target.id.to_s,

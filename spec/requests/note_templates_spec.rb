@@ -8,7 +8,7 @@ RSpec.configure do |c|
 end
 
 RSpec.describe 'Note Template', type: :request do
-  let(:user) { FactoryBot.create(:user, :password_same_login, login: 'test-manager', language: 'en', admin: false) }
+  let(:user) { FactoryBot.create(:user, login: 'test-manager', password: 'password', language: 'en', admin: false) }
   let(:project) { FactoryBot.create(:project_with_enabled_modules) }
   let(:tracker) { FactoryBot.create(:tracker, :with_default_status) }
   let(:role) { FactoryBot.create(:role, :manager_role) }
@@ -24,7 +24,7 @@ RSpec.describe 'Note Template', type: :request do
   end
 
   it 'show note template list' do
-    login_request(user.login, user.login)
+    login_request(user.login, 'password')
     get "/projects/#{project.identifier}/note_templates"
     expect(response.status).to eq 200
 
@@ -33,7 +33,7 @@ RSpec.describe 'Note Template', type: :request do
   end
 
   it 'create note template and load' do
-    login_request(user.login, user.login)
+    login_request(user.login, 'password')
     post "/projects/#{project.identifier}/note_templates",
          params: { note_template:
            { tracker_id: tracker.id, name: 'Note template name',

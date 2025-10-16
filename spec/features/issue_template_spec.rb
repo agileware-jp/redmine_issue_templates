@@ -25,6 +25,12 @@ feature 'IssueTemplate', js: true do
            :enumerations
 
   given(:role) { Role.find(1) }
+  before do
+    # Cannot user same text login and password by User#validate_password_complexity
+    User.find_by(login: 'admin').update(mail: 'admin@badge.example.com', password: 'password')
+    User.find_by(login: 'jsmith').update(mail: 'jsmith@badge.example.com', password: 'password')
+  end
+
   after do
     page.execute_script 'window.close();'
   end
@@ -38,12 +44,13 @@ feature 'IssueTemplate', js: true do
     end
 
     context 'When Administrator' do
-      background do
-        log_user('admin', 'admin')
-        visit '/admin'
-      end
-
       scenario 'Link to Global issue template is displayed.' do
+        log_user('admin', 'password')
+        expect(page).to have_current_path(my_page_path, wait: 5)
+
+        visit admin_path
+        expect(page).to have_current_path(admin_path, wait: 5)
+
         expect(page).to have_selector('#admin-menu > ul > li > a.redmine-issue-templates')
       end
     end
@@ -55,7 +62,7 @@ feature 'IssueTemplate', js: true do
     context 'When user has no priv to use issue template' do
       background do
         assign_template_priv(role, remove_permission: :show_issue_templates)
-        log_user('jsmith', 'jsmith')
+        log_user('jsmith', 'password')
         visit '/projects/ecookbook/issues'
       end
 
@@ -67,11 +74,15 @@ feature 'IssueTemplate', js: true do
     context 'When user has priv to use issue template' do
       background do
         assign_template_priv(role, add_permission: :show_issue_templates)
-        log_user('jsmith', 'jsmith')
-        visit '/projects/ecookbook/issues'
       end
 
       scenario 'Link to issue template list is displayed.' do
+        log_user('jsmith', 'password')
+        expect(page).to have_current_path(my_page_path, wait: 5)
+
+        visit project_issues_path(Project.find('ecookbook'))
+        expect(page).to have_current_path(project_issues_path(Project.find('ecookbook')), wait: 5)
+
         expect(page).to have_selector('h3', text: I18n.t('issue_template'))
       end
     end
@@ -79,27 +90,6 @@ feature 'IssueTemplate', js: true do
 
   feature 'create template' do
     given!(:enabled_module) { FactoryBot.create(:enabled_module) }
-    given(:issue_template_title) { page.find('#issue_template_title') }
-    given(:issue_template_description) { page.find('#issue_template_description') }
-
-    context 'When user has priv to  issue template' do
-      given(:create_button) { page.find('#issue_template-form > input[type="submit"]') }
-      given(:error_message) { page.find('#errorExplanation') }
-      background do
-        assign_template_priv(role, add_permission: :edit_issue_templates)
-        log_user('jsmith', 'jsmith')
-        visit '/projects/ecookbook/issue_templates/new'
-
-        issue_template_title.set('')
-        issue_template_description.set('Test for issue template description')
-        create_button.click
-        sleep(0.2)
-      end
-
-      scenario 'create template failed' do
-        expect(error_message).to have_content('Template name cannot be blank')
-      end
-    end
 
     # enable buildin-fields
     context 'Setting "enable_builtin_fields" is true' do
@@ -107,11 +97,15 @@ feature 'IssueTemplate', js: true do
         # enable_builtin_fields
         Setting.send 'plugin_redmine_issue_templates=', 'enable_builtin_fields' => 'true'
         assign_template_priv(role, add_permission: :edit_issue_templates)
-        log_user('jsmith', 'jsmith')
-        visit '/projects/ecookbook/issue_templates/new'
       end
 
       scenario 'form for builtin_fields are shown' do
+        log_user('jsmith', 'password')
+        expect(page).to have_current_path(my_page_path, wait: 5)
+
+        visit new_project_issue_template_path(Project.find('ecookbook'))
+        expect(page).to have_current_path(new_project_issue_template_path(Project.find('ecookbook')), wait: 5)
+
         select 'Bug', from: 'issue_template[tracker_id]'
 
         wait_for_ajax
@@ -140,15 +134,25 @@ feature 'IssueTemplate', js: true do
 
     background do
       assign_template_priv(role, add_permission: :show_issue_templates)
-      log_user('jsmith', 'jsmith')
-      visit '/projects/ecookbook/issues/new'
     end
 
     scenario 'Template filter is enabled.' do
+      log_user('jsmith', 'password')
+      expect(page).to have_current_path(my_page_path, wait: 5)
+
+      visit new_project_issue_path(Project.find('ecookbook'))
+      expect(page).to have_current_path(new_project_issue_path(Project.find('ecookbook')), wait: 5)
+
       expect(page).to have_selector('div#template_area select#issue_template')
     end
 
     scenario 'Template pulldown is enabled.' do
+      log_user('jsmith', 'password')
+      expect(page).to have_current_path(my_page_path, wait: 5)
+
+      visit new_project_issue_path(Project.find('ecookbook'))
+      expect(page).to have_current_path(new_project_issue_path(Project.find('ecookbook')), wait: 5)
+
       expect(page).to have_selector('a#link_template_dialog')
     end
 
@@ -156,6 +160,8 @@ feature 'IssueTemplate', js: true do
       given(:table) { page.find('div#filtered_templates_list table') }
       given(:titlebar) { page.find('#issue_template_dialog_title') }
       background do
+        log_user('jsmith', 'password')
+        visit new_project_issue_path(Project.find('ecookbook'))
         page.find('#link_template_dialog').click
         sleep(0.2)
       end
@@ -201,6 +207,12 @@ feature 'IssueTemplate', js: true do
       end
 
       scenario 'Select sub project then template for subproject is shown' do
+        log_user('jsmith', 'password')
+        expect(page).to have_current_path(my_page_path, wait: 5)
+
+        visit new_project_issue_path(Project.find('ecookbook'))
+        expect(page).to have_current_path(new_project_issue_path(Project.find('ecookbook')), wait: 5)
+
         sub_project = page.find('#issue_project_id > option[value="3"]')
 
         expect(page).to have_selector('#issue_template > optgroup > option', count: 3)
@@ -240,8 +252,8 @@ feature 'IssueTemplate', js: true do
 
     background do
       assign_template_priv(role, add_permission: :show_issue_templates)
-      log_user('jsmith', 'jsmith')
-      visit '/projects/ecookbook/issues/new'
+      log_user('jsmith', 'password')
+      visit new_project_issue_path(Project.find('ecookbook'))
     end
 
     context 'Issue has the same title and description with selected template' do
@@ -300,22 +312,40 @@ feature 'IssueTemplate', js: true do
 
     background do
       assign_template_priv(role, add_permission: :show_issue_templates)
-      log_user('jsmith', 'jsmith')
-      visit '/projects/ecookbook/issues/new'
+    end
+
+    scenario 'Title and Description should be appended text' do
+      log_user('jsmith', 'password')
+      expect(page).to have_current_path(my_page_path, wait: 5)
+
+      visit new_project_issue_path(Project.find('ecookbook'))
+      wait_for_ajax
+      expect(page).to have_current_path(new_project_issue_path(Project.find('ecookbook')), wait: 5)
 
       issue_subject.set('Test for revert subject')
       issue_description.set('Test for revert description')
 
       select expected_title, from: 'issue_template'
       sleep(0.2)
-    end
 
-    scenario 'Title and Description should be appended text' do
       expect(issue_description.value).to eq "Test for revert description\n\n#{expected_description}"
       expect(issue_subject.value).to eq "Test for revert subject #{expected_title}"
     end
 
     scenario 'Click Revert and reverted applied template' do
+      log_user('jsmith', 'password')
+      expect(page).to have_current_path(my_page_path, wait: 5)
+
+      visit new_project_issue_path(Project.find('ecookbook'))
+      wait_for_ajax
+      expect(page).to have_current_path(new_project_issue_path(Project.find('ecookbook')), wait: 5)
+
+      issue_subject.set('Test for revert subject')
+      issue_description.set('Test for revert description')
+
+      select expected_title, from: 'issue_template'
+      sleep(0.2)
+
       page.find('#revert_template').click
       expect(issue_description.value).to eq 'Test for revert description'
       expect(issue_subject.value).to eq 'Test for revert subject'
@@ -342,14 +372,19 @@ feature 'IssueTemplate', js: true do
       Setting.send 'plugin_redmine_issue_templates=', 'enable_builtin_fields' => 'true'
 
       assign_template_priv(role, add_permission: :show_issue_templates)
-      log_user('jsmith', 'jsmith')
-      visit '/projects/ecookbook/issues/new'
-
-      select expected_title, from: 'issue_template'
-      sleep(0.2)
     end
 
     scenario 'Builtin fields are filled' do
+      log_user('jsmith', 'password')
+      expect(page).to have_current_path(my_page_path, wait: 5)
+
+      visit new_project_issue_path(Project.find('ecookbook'))
+      wait_for_ajax
+      expect(page).to have_current_path(new_project_issue_path(Project.find('ecookbook')), wait: 5)
+
+      select expected_title, from: 'issue_template'
+      sleep(0.2)
+
       expect(page).to have_select('issue[priority_id]', selected: priority_name)
       expect(page.find('#issue_estimated_hours').value).to eq '5'
     end

@@ -48,7 +48,7 @@ FactoryBot.define do
       view_changesets
     ] }
 
-        trait :no_issue_templates_permission do
+    trait :no_issue_templates_permission do
       name { 'No issue templates permission' }
       issues_visibility { 'all' }
       users_visibility { 'all' }

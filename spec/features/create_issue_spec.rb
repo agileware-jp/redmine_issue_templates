@@ -9,7 +9,7 @@ RSpec.configure do |c|
 end
 
 feature 'Create issue', js: true do
-  given(:user) { FactoryBot.create(:user, :password_same_login, login: 'test-manager', language: 'en', admin: false) }
+  given(:user) { FactoryBot.create(:user, login: 'test-manager', password: 'password', language: 'en', admin: false) }
   given(:project) { FactoryBot.create(:project_with_enabled_modules) }
   given(:tracker) { FactoryBot.create(:tracker, :with_default_status) }
   given(:role) { FactoryBot.create(:role, :manager_role) }
@@ -46,8 +46,12 @@ feature 'Create issue', js: true do
     context 'is_default: true' do
       let(:is_default) { true }
       scenario 'Select tracker and apply default template' do
-        log_user(user.login, user.login)
-        visit "/projects/#{project.identifier}/issues/new"
+        log_user(user.login, 'password')
+        expect(page).to have_current_path(my_page_path, wait: 5)
+
+        visit project_issues_new_path(project)
+        expect(page).to have_current_path(project_issues_new_path(project), wait: 5)
+        
         select tracker.name, from: 'issue[tracker_id]'
         expect(find('#issue_subject').value).to eq('default issue title')
         expect(find('#issue_description').value).to eq('default issue description')
@@ -57,8 +61,12 @@ feature 'Create issue', js: true do
     context 'is_default: false' do
       let(:is_default) { false }
       scenario 'Select tracker and apply default template' do
-        log_user(user.login, user.login)
-        visit "/projects/#{project.identifier}/issues/new"
+        log_user(user.login, user.password)
+        expect(page).to have_current_path(my_page_path, wait: 5)
+
+        visit new_project_issue_path(project)
+        expect(page).to have_current_path(new_project_issue_path(project), wait: 5)
+
         select tracker.name, from: 'issue[tracker_id]'
         expect(find('#issue_subject').value).to eq('')
         expect(find('#issue_description').value).to eq('')

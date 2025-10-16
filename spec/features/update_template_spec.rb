@@ -9,7 +9,7 @@ RSpec.configure do |c|
 end
 
 feature 'Update template', js: true do
-  given(:user) { FactoryBot.create(:user, :password_same_login, login: 'test-manager', language: 'en', admin: false) }
+  given(:user) { FactoryBot.create(:user, login: 'test-manager', password: 'password', language: 'en', admin: false) }
   given(:project) { FactoryBot.create(:project_with_enabled_modules) }
   given(:tracker) { FactoryBot.create(:tracker, :with_default_status) }
   given(:role) { FactoryBot.create(:role, :manager_role) }
@@ -83,6 +83,6 @@ feature 'Update template', js: true do
 
   def visit_log_user(user)
     user.update_attribute(:admin, false)
-    log_user(user.login, user.login)
+    log_user(user.login, user.password)
   end
 end

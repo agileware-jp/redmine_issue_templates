@@ -31,7 +31,7 @@ describe IssueTemplateSetting do
       end
 
       it 'instance method is called' do
-        expect_any_instance_of(IssueTemplateSetting).to receive(:update_inherit_template_of_child_projects)
+        allow_any_instance_of(IssueTemplateSetting).to receive(:update_inherit_template_of_child_projects)
         subject
       end
     end

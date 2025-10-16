@@ -16,7 +16,7 @@ feature 'Confirm dialog before overwrite description', js: true do
     end
   end
 
-  given(:user) { FactoryBot.create(:user, :password_same_login, login: 'manager', language: 'en', admin: false) }
+  given(:user) { FactoryBot.create(:user, login: 'manager', password: 'password', language: 'en', admin: false) }
   given(:project) { create(:project_with_enabled_modules) }
   given(:tracker) { FactoryBot.create(:tracker, :with_default_status) }
   given(:role) { FactoryBot.create(:role, :manager_role) }
@@ -42,14 +42,26 @@ feature 'Confirm dialog before overwrite description', js: true do
   end
 
   scenario 'Template pulldown is shown when new issue.' do
-    visit_new_issue(user)
+    log_user(user.login, user.password)
+    expect(page).to have_current_path(my_page_path, wait: 5)
+
+    visit new_project_issue_path(project)
+    wait_for_ajax
+    expect(page).to have_current_path(new_project_issue_path(project), wait: 5)
+
     expect(page).to have_selector('div#template_area select#issue_template')
     expect(issue_description.value).to eq ''
     expect(issue_subject.value).to eq ''
   end
 
   scenario 'Select template and content is updated' do
-    visit_new_issue(user)
+    log_user(user.login, user.password)
+    expect(page).to have_current_path(my_page_path, wait: 5)
+
+    visit new_project_issue_path(project)
+    wait_for_ajax
+    expect(page).to have_current_path(new_project_issue_path(project), wait: 5)
+
     first_target.select_option
     wait_for_ajax
     expect(issue_description.value).not_to eq ''
@@ -68,8 +80,13 @@ feature 'Confirm dialog before overwrite description', js: true do
 
     context 'Overwite option is not activated' do
       scenario 'Template pulldown is shown when new issue and default is loaded.' do
-        visit_new_issue(user)
+        log_user(user.login, user.password)
+        expect(page).to have_current_path(my_page_path, wait: 5)
+
+        visit new_project_issue_path(project)
         wait_for_ajax
+        expect(page).to have_current_path(new_project_issue_path(project), wait: 5)
+
         expect(page).to have_selector('div#template_area select#issue_template')
         expect(issue_description.value).not_to eq ''
         expect(issue_subject.value).not_to eq ''
@@ -78,8 +95,13 @@ feature 'Confirm dialog before overwrite description', js: true do
       end
 
       scenario 'Text appended.' do
-        visit_new_issue(user)
+        log_user(user.login, user.password)
+        expect(page).to have_current_path(my_page_path, wait: 5)
+
+        visit new_project_issue_path(project)
         wait_for_ajax
+        expect(page).to have_current_path(new_project_issue_path(project), wait: 5)
+
         expect(page).to have_selector('div#template_area select#issue_template')
         second_target.select_option
         wait_for_ajax
@@ -97,7 +119,13 @@ feature 'Confirm dialog before overwrite description', js: true do
         end
 
         scenario 'Conform window apperead.' do
-          visit_new_issue(user)
+          log_user(user.login, user.password)
+          expect(page).to have_current_path(my_page_path, wait: 5)
+
+          visit new_project_issue_path(project)
+          wait_for_ajax
+          expect(page).to have_current_path(new_project_issue_path(project), wait: 5)
+
           expect(page).to have_selector('div#template_area select#issue_template')
           second_target.select_option
           wait_for_ajax
@@ -107,7 +135,12 @@ feature 'Confirm dialog before overwrite description', js: true do
         end
 
         scenario 'Conform window not apperead with using cookie.' do
-          visit_new_issue(user)
+          log_user(user.login, user.password)
+          expect(page).to have_current_path(my_page_path, wait: 5)
+
+          visit new_project_issue_path(project)
+          wait_for_ajax
+          expect(page).to have_current_path(new_project_issue_path(project), wait: 5)
 
           # set cookie
           page.driver.browser.manage.add_cookie(name: 'issue_template_confirm_to_replace_hide_dialog', value: '1')
@@ -123,7 +156,13 @@ feature 'Confirm dialog before overwrite description', js: true do
           end
 
           scenario 'Select template and content is applied.' do
-            visit_new_issue(user)
+            log_user(user.login, user.password)
+            expect(page).to have_current_path(my_page_path, wait: 5)
+
+            visit new_project_issue_path(project)
+            wait_for_ajax
+            expect(page).to have_current_path(new_project_issue_path(project), wait: 5)
+
             page.driver.browser.manage.add_cookie(name: 'issue_template_confirm_to_replace_hide_dialog', value: '1')
 
             first_target.select_option
@@ -133,14 +172,5 @@ feature 'Confirm dialog before overwrite description', js: true do
         end
       end
     end
-  end
-
-  private
-
-  def visit_new_issue(user)
-    # TODO: If does not user update, authentication is failed. This is workaround.
-    user.update_attribute(:admin, false)
-    log_user(user.login, user.password)
-    visit "/projects/#{project.identifier}/issues/new"
   end
 end
