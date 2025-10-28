@@ -29,7 +29,7 @@
         :format="fieldFormat"
         v-model="model.value"
       />
-      <span style="margin-left: 4px;" class="icon icon-add" v-on:click="addField">
+      <span style="margin-left: 4px;" class="icon icon-add-template" v-on:click="addField">
 
         {{ l('button_add') }}
       </span>
