@@ -33,7 +33,7 @@ class IssueTemplatesController < ApplicationController
                locals: { apply_all_projects: apply_all_projects?, tracker_ids: tracker_ids }
       end
       format.api do
-        render formats: :json, locals: { project_templates: project_templates }
+        render formats: :api, locals: { project_templates: project_templates }
       end
     end
   end
