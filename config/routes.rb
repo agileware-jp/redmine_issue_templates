@@ -40,5 +40,5 @@ Rails.application.routes.draw do
   end
 
   # for global note temlate
-  resources :global_note_templates, except: [:edit], concerns: %i[previewable]
+  resources :global_note_templates, except: [:edit]
 end
