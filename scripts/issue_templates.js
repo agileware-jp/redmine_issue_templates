@@ -199,6 +199,7 @@ class ISSUE_TEMPLATE {
       } else {
         document.cookie = 'issue_template_confirm_to_replace_hide_dialog=0';
       }
+      dialog.style.visibility = 'hidden';
       dialog.classList.remove('active');
       ns.replaceTemplateValue(obj);
     });
@@ -210,12 +211,14 @@ class ISSUE_TEMPLATE {
       } else {
         document.cookie = 'issue_template_confirm_to_replace_hide_dialog=0';
       }
+      dialog.style.visibility = 'hidden';
       dialog.classList.remove('active');
     });
 
     document.getElementById('issue_template_confirm_to_replace_dialog_cancel')
       .addEventListener('click', () => {
         dialog.classList.remove('active');
+        dialog.style.visibility = 'hidden';
       });
   }
   showLoadedMessage() {
