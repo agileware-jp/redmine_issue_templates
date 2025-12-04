@@ -18,7 +18,8 @@ div.issue_template {
     padding: 6px;
 }
 
-#issue_template_builtin_fields, #issue_template_json_setting_field {
+#issue_template_builtin_fields,
+#issue_template_json_setting_field {
     width: 60%;
 }
 
@@ -84,6 +85,10 @@ option.global {
 
 .icon-global_issue_templates {
     background-image: url("../images/issue_templates.png");
+}
+
+.icon-add-template {
+    background: url("../images/icon-add.png") no-repeat 3px center;
 }
 
 .icon-template {
@@ -156,9 +161,9 @@ a.template_tooltip {
 }
 
 table.list.template_list {
-  margin: 8px 0;
-  border: 2px solid #e4e4e4;
-  overflow: visible;
+    margin: 8px 0;
+    border: 2px solid #e4e4e4;
+    overflow: visible;
 }
 
 td.template_title {
@@ -242,7 +247,7 @@ a.icon.icon-del[disabled=disabled] {
     margin-left: 180px;
 }
 
-#template-help-message-area > p {
+#template-help-message-area>p {
     padding-left: 4px;
 }
 
@@ -252,18 +257,23 @@ a.icon.icon-del[disabled=disabled] {
     #orphaned_templates>table>thead>tr>th.hideable {
         display: none;
     }
+
     #orphaned_templates>table>tbody>tr>td.hideable {
         display: none;
     }
+
     #content>div.template_box>table>thead>tr>th.hideable {
         display: none;
     }
+
     #content>div.template_box>table>tbody>tr>td.hideable {
         display: none;
     }
+
     #fields_setting_display_area {
         margin-left: 0;
     }
+
     #field_information {
         margin-left: 0;
         margin-right: 0;
@@ -303,11 +313,13 @@ a.icon-help:hover .tooltip-area {
     visibility: hidden;
     opacity: 0;
     overflow: visible;
-    width:100%;
-    height:100%;
+    width: 100%;
+    height: 100%;
     z-index: -1;
 }
-.overlay:target, .overlay.active {
+
+.overlay:target,
+.overlay.active {
     visibility: visible;
     opacity: 1;
     z-index: 10;
@@ -354,8 +366,8 @@ a.icon-help:hover .tooltip-area {
 }
 
 .popup .content {
-  max-height:50%;
-  overflow: auto;
+    max-height: 50%;
+    overflow: auto;
 }
 
 .popup.small {
@@ -400,24 +412,26 @@ a.icon-help:hover .tooltip-area {
 }
 
 .overlay .template_search_filter_wrapper {
-    margin-top:  8px;
+    margin-top: 8px;
     margin-bottom: 8px;
 }
 
 /*--------- for Flash message --------*/
 .fadeout {
-    animation : fadeOut 5s;
+    animation: fadeOut 5s;
     animation-fill-mode: both;
 }
 
 @keyframes fadeOut {
     0% {
-      opacity: 1;
+        opacity: 1;
     }
+
     100% {
-      opacity: 0;
+        opacity: 0;
     }
 }
+
 /*--------- for Flash message --------*/
 
 /*--------- for Template related Link --------*/
@@ -439,6 +453,7 @@ div.template_link_area label {
 .template-update-link {
     cursor: pointer;
 }
+
 /*--------- for Template related Link --------*/
 
 .overwrite_confirm_btn {
@@ -451,19 +466,19 @@ div.template_link_area label {
     text-decoration: none;
     color: #1B1B1B;
     background: #fff;
-    border:1px solid rgb(165, 164, 164);
+    border: 1px solid rgb(165, 164, 164);
     border-radius: 6px;
 }
 
 /*--------- for Overwrite Confirmation --------*/
 .overwrite_confirm_btn:hover {
-     background: rgb(190, 187, 187);
-     color: #fff;
-     cursor: pointer;
-     text-decoration: none;
+    background: rgb(190, 187, 187);
+    color: #fff;
+    cursor: pointer;
+    text-decoration: none;
 }
 
-#template_area > p a {
+#template_area>p a {
     display: inline-block;
     margin-right: .85em;
 }
@@ -478,11 +493,11 @@ div.template_link_area label {
     padding-left: 5px;
 }
 
-#template-help-wiki > p {
+#template-help-wiki>p {
     padding-left: 5px;
 }
 
-#filtered_templates_list > table div.wiki.template_tooltip_body p {
+#filtered_templates_list>table div.wiki.template_tooltip_body p {
     padding-left: 0;
 }
 
