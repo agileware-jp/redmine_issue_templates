@@ -1,0 +1,90 @@
+# Persian strings go here for Rails i18n
+fa:
+  issue_templates: قالب‌های مسئله
+  issue_template: قالب مسئله
+  issue_template_note: یادداشت
+  label_enabled: فعال
+  label_help_message: در مورد قالب‌ها
+  label_show_help_message: پیام کمک را در هنگام ایجاد یا ویرایش مسائل نشان بده.
+  about_help_message: هر پروژه می‌تواند پیام‌های شخصی‌سازی‌شده‌ی کمک برای قالب‌ها داشته باشد.
+  close_help: پیام کمک را ببند.
+  about_template_help_message: شما می‌توانید ساز و کار قالب‌های مسئله در این پروژه را ببینید. 
+  label_enabled_help_message: فعال‌سازی این گزینه باعث فعال‌سازی قالب می‌شود. اگر تمایل دارید که این قالب را به عنوان یه پیش‌نویس در نظر بگیرید، این گزینه را فعال نکنید. 
+  label_list_templates: "لیست قالب‌ها"
+  label_new_templates: "افزودن قالب"
+  issue_template_name: "نام قالب"
+  issue_description: "جزئیات مسئله"
+  issue_title: "عنوان مسئله"
+  label_applied_for_issue: "بخش‌های اعمال‌شده بر مسئله: "
+  help_for_issue_title: "اگر عنوان مسئله تعریف‌شده است، وقتی که این قالب انتخاب شود، بر روی موضوع مسئله اعمال می‌شود."
+  help_for_this_field: "برای این بخش کمک کن."
+  permission_manage_issue_templates: "مدیریت قالب‌ها"
+  permission_edit_issue_templates: "ویرایش قالب‌ها"
+  permission_show_issue_templates: "نمایش قالب‌ها"
+  project_module_issue_templates: "قالب‌های مسئله"
+  label_isdefault_help_message: "گزینه را فعال کنید تا از این قالب به عنوان قالب پیش‌فرض برای نوع مسئله مورد نظر استفاده شود."
+  defaulf_template_loaded: "قالب پیش‌فرض در محل توضیحات اعمال شد. (نوع مسئله: %{tracker})"
+  text_no_tracker_enabled: "هنوز هیچ نوع مسئله‌ای برای این پروژه تنظیم نشده‌است. لطفا اول گردش‌های کار را ایجاد کنید؛ زیرا، قالب‌ها به نوع مسئله پروژه‌ها متصل می‌شوند."
+  label_enabled_sharing: "اشتراک‌گذاری با سلسله‌مراتب پروژه، فعال شود."
+  label_inherit_templates: "ارث‌بری قالب‌ها"
+  label_inherit_templates_help_message: "قالب‌ها را از پروژه‌ی والد به ارث ببر. (تنها قالب‌های والدی لیست شده‌اند که اشتراک‌گذاری با سلسله‌مراتب پروژه برای آن‌ها فعال شده‌است.)"
+  label_inherited_templates: "قالب‌های ارث‌برده‌شده"
+  no_issue_templates_for_this_project: "هیچ قالب مسئله‌ای برای این پروژه تعریف نشده‌است."
+  link_to_index_edit_template: "لیست قالب‌های مسئله یا ویرایش آن‌ها"
+  erase_issue_subject_and_description: "پاک‌سازی متن عنوان و توضیحات"
+  unused_tracker_at_this_project: "نکته: این نوع مسئله برای استفاده در این پروژه تعریف نشده‌است. لطفا تنظیمات قالب را در صورت ضرورت، بازتعریف کنید."
+  label_enabledshaing_help_message: "اگر فعال شود، این قالب می‌تواند با پروژه‌های فرزند به اشتراک گذاشته شود (به علاوه، باید گزینه‌ی قالب ارث‌برده‌شده در پروژه‌ی فرزند را هم فعال کنید)."
+  label_should_replaced: "جای‌گذاری عنوان و توضیحات"
+  label_should_replaced_help_message: "اگر فعال شود، عنوان و توضیحات موجود، پاک و با متن قالب، جای‌گزین می‌شوند (به طور پیش‌فرض غیرفعال و متن افزوده‌شده است)."
+  global_issue_templates: "قالب‌های همگانی مسئله"
+  no_issue_templates_for_this_redmine: "قالب‌های همگانی مسئله برای این سایت ردماین تعریف نشده‌اند."
+  only_admin_can_associate_global_template: "تنها راه‌بر ردماین می‌تواند قالب‌های همگانی را با این پروژه مرتبط کند."
+  text_no_tracker_enabled_for_global: "هنوز گردش‌های کار تعریف نشده‌اند. لطفا اول گردش‌های کار را ایجاد کنید؛ زیرا، قالب‌ها به گردش‌های کار متصل می‌شوند."
+  display_and_filter_issue_templates_in_dialog: "پیش‌نمایش محتویات قالب"
+  label_filter_template: "غربال قالب‌ها"
+  label_msg_confirm_to_replace: "عنوان و توضیحات را جای‌گذاری می‌کنید؟"
+  label_apply_global_template_to_all_projects: "قالب‌های همگانی مسئله را به تمام پروژه‌ها اعمال کن."
+  note_apply_global_template_to_all_projects_setting_enabled: "این قالب همگانی مسئله به تمام پروژه‌ها بر اساس تنظیمات افزونه، اعمال شده‌است."
+  project_list_associated_this_template: "لیست پروژه:  (اعمال‌شده بر: %{applied} از %{all})"
+  note_project_local_template_override_global_template: "اگر قالب مخصوص پروژه موجود است، آن را بر قالب‌های همگانی اولویت بده. همچنین، قالب‌های همگانی در صفحه‌ی ساخت مسئله نمایش داده نمی‌شوند."
+  help_project_local_template_override_global_template: "اگر این گزینه فعال شود، قالب‌های همگانی تیکت به تمام پروژه‌ها اعمال می‌شوند. اگر قالبی مخصوص پروژه بر اساس نوع مسئله تنظیم شود، اولویت‌ داده می‌شود و قالب همگانی در صفحه‌ی ساخت تیکت جدید، مخفی می‌شود."
+  warning_project_local_template_override_global_template: "زمانی که قالب‌های همگانی را ایجاد می‌کنید، مراقب باشید که شامل اطلاعات مطمئنی باشد که شما می‌خواهید به آن‌ها توجه شود. زمانی که این گزینه فعال شود، همه‌ی قالب‌های همگانی به تمام پروژه‌ها اعمال می‌شوند."
+  revert_before_applying_template: "بازگردانی"
+  template_remove_confirm: "مطمئنید که می‌خواهید این قالب حذف شود؟ %{count} زیر پروژه از این پروژه استفاده می‌کنند."
+  label_number_of_subprojects_use_this_template: "%{count} زیر پروژه از این پروژه استفاده می‌کنند."
+  enabled_template_cannot_destroy: "فقط قالب‌های غیرفعال قابل نابودی هستند. گزینه را وقتی بزنید که دیگر زیرپروژه‌ها از این قالب استفاده می‌کنند یا خیر و این را قبل از پاک‌سازی غیرفعال کنید."
+  orphaned_templates: "قالب‌های بدون والد نوع مسئله"
+  orphaned_template: "قالب بدون والد نوع مسئله"
+  label_template_applied: "قالب مسئله اعمال شد. شما می‌توانید این کار را با انتخاب «بازگردانی» برگردانید."
+  label_hide_confirm_dialog_in_the_future: "این تاییدیه را در دفعات بعد نشان نده."
+  label_template_for_note: "قالب برای یادداشت"
+  label_use_template_when_edit: "از قالب‌ها زمانی که مسئله ویرایش می‌شود، استفاده شود."
+  note_template: "قالب برای یادداشت"
+  no_note_templates_for_this_project: "قالبی برای نظرات این پروژه تعریف نشده‌است."
+  label_memo_help_message: "لطفا یک یادداشتی توضیحی برای زمانی که این قالب اعمال می‌شود، تنظیم کنید."
+  note_template_name: "قالب نام برای یادداشت"
+  note_description: "جزئیات نظر"
+  field_template_visibility: قابلیت مشاهده‌ی قالب‌ها
+  note_templates:
+    visibility:
+      mine: فقط به من
+      roles: فقط به این نقش‌ها
+      open: به هر کاربری
+  please_select_at_least_one_role: "حداقل یک نقش یا دسترسی را انتخاب کنید."
+  issue_templates_settings: تنظیمات قالب‌های مسئله
+  issue_templates_optional_settings: تنظیمات اختیاری قالب‌ها
+  issue_template_related_link: لینک مربوطه
+  issue_template_link_title: عنوان لینک مربوطه
+  label_related_link_help_message: "اگر صفحه‌ای برای نمونه یا مثالی از مسئله وجود دارد که می‌تواند از قالب مسائل استفاده کند، لطفا لینک آن را وارد کنید. به این شکل، کاربر می‌تواند آن‌ها را به عنوان یک مورد استفاده یا نمونه‌ای برای قالب ببیند."
+  label_link_title_help_message: "می‌توانید عنوان لینک مروبطه را ویرایش کنید (پیش‌فرض: لینک مربوطه)."
+  enter_value: لطفا یک مقدار وارد کنید.
+  label_select_field: یک بخش را انتخاب کنید
+  label_builtin_fields_help_message: به شکل JSON مقدار پیش‌فرض بخش‌های استاندارد یا سفارشی را وارد کنید. لطفا بخش‌ها را انتخاب کنید و مقدار را وارد کنید، سپس با انتخاب «اعمال» می‌توانید شکل JSON داده‌ها را بسازید.
+  label_builtin_fields_json: JSON برای بخش‌ها
+  label_enable_builtin_fields: فعال‌سازی پشتیبانی از بخش‌های استاندارد
+  help_enable_builtin_fields: اگر این گزینه فعال شد، فرمی که به شما اجازه می‌دهد که برای بخش‌های استاندارد یا سفارشی قالبی تعیین کنید، نمایش داده می‌شود. لطفا تنظیمات را به شکل JSON وارد کنید.
+  warning_enable_builtin_fields: نسبت به فعال‌سازی این گزینه مراقب باشید. این گزینه فعلا به شکل آزمایشی قرار داده شده‌است؛ طوری که هنوز به حد کافی روی محیط کاربری آن و عملکردهای آن برای پشتیبانی از انواع مختلف بخش‌ها کاری نکرده‌ام. ممکن است وابسته به مرورگر کار کند یا خیر. با احتیاط از این گزینه در محیط‌های عملیاتی، استفاده کنید.
+  label_field_information: اطلاعات بخش
+  unavailable_fields_for_this_tracker: بخش خارج از دسترس برای این نوع مسئله
+  global_note_templates: قالب همگانی برای یادداشت
+  link_to_index_edit_note_template: لیست قالب‌های یادداشت یا ویرایش آن‌ها
