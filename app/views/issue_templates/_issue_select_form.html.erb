@@ -75,17 +75,17 @@
   $(() => {
     //<![CDATA[
     var templateConfig = {
-      pulldownUrl: '<%= pulldown_url %>',
-      isTriggeredBy: '<%= is_triggered_by %>',
-      loadUrl: '<%= url_for(controller: 'issue_templates', action: 'load', project_id: project_id, is_triggered_by: is_triggered_by) %>',
-      shouldReplaced: '<%= setting.should_replaced %>',
-      generalTextYes: '<%=h l(:general_text_Yes) %>',
-      generalTextNo : '<%=h l(:general_text_No) %>',
-      confirmMessage: '<%=h l(:label_template_applied, default: "Issue template is applied. You can revert with click 'Revert' link.") %>'
+      pulldownUrl: '<%= j pulldown_url %>',
+      isTriggeredBy: '<%= j is_triggered_by %>',
+      loadUrl: '<%= j url_for(controller: 'issue_templates', action: 'load', project_id: project_id, is_triggered_by: is_triggered_by) %>',
+      shouldReplaced: '<%= j setting.should_replaced %>',
+      generalTextYes: '<%= l(:general_text_Yes) %>',
+      generalTextNo : '<%= l(:general_text_No) %>',
+      confirmMessage: '<%= j l(:label_template_applied, default: "Issue template is applied. You can revert with click 'Revert' link.") %>'
     }
 
     var templateNS = templateNS || new ISSUE_TEMPLATE(templateConfig)
-    templateNS.isTriggeredBy = '<%= is_triggered_by %>'
+    templateNS.isTriggeredBy = '<%= j is_triggered_by %>'
     templateNS.setPulldown('<%= @issue.tracker.id %>')
 
     document.getElementById('issue_template').addEventListener('change', (event) => {
@@ -95,9 +95,9 @@
 
     // Show dialog
     document.getElementById('link_template_dialog').addEventListener('click', (event) => {
-      let templateListUrl = '<%= url_for(controller: 'issue_templates',
+      let templateListUrl = '<%= j url_for(controller: 'issue_templates',
                                          action:'list_templates', project_id: project_id, issue_tracker_id: @issue.tracker.id) %>'
-      let templateListTitle = '<%= "#{l(:issue_template)}: #{@issue.tracker.name}".html_safe %>'
+      let templateListTitle = '<%= j "#{l(:issue_template)}: #{@issue.tracker.name}" %>'
 
       templateNS.openDialog(templateListUrl, templateListTitle)
     })
