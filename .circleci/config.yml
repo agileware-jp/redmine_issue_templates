@@ -58,6 +58,12 @@ jobs:
           version: << parameters.redmine_version >>
       - redmine-plugin/install-self
       - redmine-plugin/generate-database_yml
+      # NOTE: minitest 6.x is incompatible with Rails 7.2's test runner
+      #       (line_filtering.rb raises "wrong number of arguments"). Pin it to < 6.
+      - run:
+          name: Pin minitest to < 6
+          working_directory: redmine
+          command: echo 'gem "minitest", "< 6"' >> Gemfile.local
       - redmine-plugin/bundle-install
       - redmine-plugin/migrate-without-plugins
       - plugin-test/run-tests
@@ -83,6 +89,12 @@ jobs:
           version: << parameters.redmine_version >>
       - redmine-plugin/install-self
       - redmine-plugin/generate-database_yml
+      # NOTE: minitest 6.x is incompatible with Rails 7.2's test runner
+      #       (line_filtering.rb raises "wrong number of arguments"). Pin it to < 6.
+      - run:
+          name: Pin minitest to < 6
+          working_directory: redmine
+          command: echo 'gem "minitest", "< 6"' >> Gemfile.local
       - redmine-plugin/bundle-install
       - redmine-plugin/migrate-without-plugins
       - plugin-test/run-tests
@@ -117,6 +129,12 @@ jobs:
           working_directory: redmine
           command: |
             sed -i 's/gem "selenium-webdriver".*/gem "selenium-webdriver", ">= 3.4.0"/' Gemfile
+      # NOTE: minitest 6.x is incompatible with Rails 7.2's test runner
+      #       (line_filtering.rb raises "wrong number of arguments"). Pin it to < 6.
+      - run:
+          name: Pin minitest to < 6
+          working_directory: redmine
+          command: echo 'gem "minitest", "< 6"' >> Gemfile.local
       - redmine-plugin/bundle-install
       - redmine-plugin/rspec
   check-asset-js:
