@@ -321,6 +321,8 @@ a.icon-help:hover .tooltip-area {
     width: 60%;
     max-width: 860px;
     min-width: 520px;
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
     position: relative;
     transition: all 5s ease-in-out;
 }
