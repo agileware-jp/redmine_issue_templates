@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  redmine-plugin: agileware-jp/redmine-plugin@3.9.0
+  redmine-plugin: agileware-jp/redmine-plugin@4.0.1
   plugin-test:
     commands:
       run-tests:
@@ -58,6 +58,12 @@ jobs:
           version: << parameters.redmine_version >>
       - redmine-plugin/install-self
       - redmine-plugin/generate-database_yml
+      # NOTE: minitest 6.x is incompatible with Rails 7.2's test runner
+      #       (line_filtering.rb raises "wrong number of arguments"). Pin it to < 6.
+      - run:
+          name: Pin minitest to < 6
+          working_directory: redmine
+          command: echo 'gem "minitest", "< 6"' >> Gemfile.local
       - redmine-plugin/bundle-install
       - redmine-plugin/migrate-without-plugins
       - plugin-test/run-tests
@@ -83,6 +89,12 @@ jobs:
           version: << parameters.redmine_version >>
       - redmine-plugin/install-self
       - redmine-plugin/generate-database_yml
+      # NOTE: minitest 6.x is incompatible with Rails 7.2's test runner
+      #       (line_filtering.rb raises "wrong number of arguments"). Pin it to < 6.
+      - run:
+          name: Pin minitest to < 6
+          working_directory: redmine
+          command: echo 'gem "minitest", "< 6"' >> Gemfile.local
       - redmine-plugin/bundle-install
       - redmine-plugin/migrate-without-plugins
       - plugin-test/run-tests
@@ -117,6 +129,12 @@ jobs:
           working_directory: redmine
           command: |
             sed -i 's/gem "selenium-webdriver".*/gem "selenium-webdriver", ">= 3.4.0"/' Gemfile
+      # NOTE: minitest 6.x is incompatible with Rails 7.2's test runner
+      #       (line_filtering.rb raises "wrong number of arguments"). Pin it to < 6.
+      - run:
+          name: Pin minitest to < 6
+          working_directory: redmine
+          command: echo 'gem "minitest", "< 6"' >> Gemfile.local
       - redmine-plugin/bundle-install
       - redmine-plugin/rspec
   check-asset-js:
@@ -162,14 +180,17 @@ workflows:
         - run-tests:
             <<: *default_context
             name: test on supported maximum versions with PostgreSQL
-            redmine_version: $REDMINE_MAX_VERSION
+            # NOTE: Pin the full x.y.z version so download-redmine fetches the
+            #       tarball directly and skips the GitHub API tag lookup, which
+            #       hits the unauthenticated rate limit (jq error). Bump manually.
+            redmine_version: "6.0.9"
             ruby_version: $RUBY_MAX_VERSION
             database: pg
             requires: [check-asset-js]
         - run-tests:
             <<: *default_context
             name: test on supported minimum versions with MySQL
-            redmine_version: $REDMINE_MIN_VERSION
+            redmine_version: "5.0.14"
             ruby_version: $RUBY_MIN_VERSION
             database: mysql
             requires: [check-asset-js]
@@ -177,7 +198,7 @@ workflows:
             <<: *default_context
             name: RSpec on supported maximum versions with PostgreSQL
             github_token: $GITHUB_PERSONAL_TOKEN
-            redmine_version: $REDMINE_MAX_VERSION
+            redmine_version: "6.0.9"
             ruby_version: $RUBY_MAX_VERSION
             db: pg
             db_version: $POSTGRES_VERSION
@@ -186,7 +207,7 @@ workflows:
             <<: *default_context
             name: RSpec on supported minimum versions with MySQL
             github_token: $GITHUB_PERSONAL_TOKEN
-            redmine_version: $REDMINE_MIN_VERSION
+            redmine_version: "5.0.14"
             ruby_version: $RUBY_MIN_VERSION
             db: mysql
             db_version: $MYSQL_VERSION
