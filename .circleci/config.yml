@@ -79,8 +79,6 @@ jobs:
           - mariadb
           - sqlite3
         type: enum
-      github_token:
-        type: string
       redmine_version:
         type: string
       ruby_version:
@@ -89,7 +87,6 @@ jobs:
       - checkout
       - redmine-plugin/download-redmine:
           version: << parameters.redmine_version >>
-          github_token: << parameters.github_token >>
       - redmine-plugin/install-self
       - redmine-plugin/generate-database_yml
       # NOTE: minitest 6.x is incompatible with Rails 7.2's test runner
@@ -122,7 +119,6 @@ jobs:
       - checkout
       - redmine-plugin/download-redmine:
           version: << parameters.redmine_version >>
-          github_token: << parameters.github_token >>
       - redmine-plugin/install-self
       - redmine-plugin/generate-database_yml
       # NOTE: For Redmine v4.2, it is necessary to upgrade the version of selenium-webdriver to avoid the error:
@@ -184,7 +180,6 @@ workflows:
         - run-tests:
             <<: *default_context
             name: test on supported maximum versions with PostgreSQL
-            github_token: $GITHUB_PERSONAL_TOKEN
             redmine_version: $REDMINE_MAX_VERSION
             ruby_version: $RUBY_MAX_VERSION
             database: pg
@@ -192,7 +187,6 @@ workflows:
         - run-tests:
             <<: *default_context
             name: test on supported minimum versions with MySQL
-            github_token: $GITHUB_PERSONAL_TOKEN
             redmine_version: $REDMINE_MIN_VERSION
             ruby_version: $RUBY_MIN_VERSION
             database: mysql
