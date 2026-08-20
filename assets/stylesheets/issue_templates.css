@@ -78,19 +78,19 @@ option.global {
     border: 1px solid #E4E4E4;
 }
 
-.icon-erase {
+.icon-erase:not(:has(svg)) {
     background-image: url("../images/eraser.png");
 }
 
-.icon-global_issue_templates {
+.icon-global_issue_templates:not(:has(svg)) {
     background-image: url("../images/issue_templates.png");
 }
 
-.icon-template {
+.icon-template:not(:has(svg)) {
     background: url("../images/issue_templates.png") no-repeat 3px center;
 }
 
-.icon-hint {
+.icon-hint:not(:has(svg)) {
     background: url("../images/ticket.png") no-repeat 3px center;
 }
 
