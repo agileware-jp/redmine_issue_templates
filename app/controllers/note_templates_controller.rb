@@ -27,7 +27,7 @@ class NoteTemplatesController < ApplicationController
                locals: { apply_all_projects: apply_all_projects?, tracker_ids: tracker_ids }
       end
       format.api do
-        render formats: :json, locals: { note_templates: note_templates }
+        render locals: { note_templates: note_templates }
       end
     end
   end
