@@ -1,3 +1,10 @@
+# commonmarker < 2.6 requires RubyGems ~> 3.4, so bundle install fails on RubyGems 4.
+# Redmine's Gemfile pins commonmarker ~> 2.3; replace it when running on RubyGems 4.
+if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('4.0')
+  dependencies.reject! { |i| i.name == 'commonmarker' }
+  gem 'commonmarker', '~> 2.6'
+end
+
 group :test do
   gem 'simplecov-rcov', require: false
   gem 'rspec-rails'
