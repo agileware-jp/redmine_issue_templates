@@ -10,7 +10,9 @@ feature 'Templates can be reorder via drag and drop', js: true do
   given(:project) { create(:project_with_enabled_modules) }
   given(:tracker) { FactoryBot.create(:tracker, :with_default_status) }
   given(:role) { FactoryBot.create(:role, :manager_role) }
-  given(:table) { page.find('table.list.issues.table-sortable:first-of-type > tbody') }
+  # `.ui-sortable` is added once positionedItems() has initialized the table,
+  # so finding it also waits until drag and drop is actually available.
+  given(:table) { page.find('table.list.issues.table-sortable:first-of-type > tbody.ui-sortable') }
 
   background do
     project.trackers << tracker
