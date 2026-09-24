@@ -9,6 +9,17 @@ module LoginHelper
       fill_in 'password', with: password
       find('input[name=login]').click
     end
+
+    if redmine_version_higher_than?('6.1')
+      expect(page).to have_css('#account .dropdown-trigger', wait: 5)
+    else
+      expect(page).to have_css('#loggedas', wait: 5)
+    end
+  end
+
+  def redmine_version_higher_than?(version)
+    current = Gem::Version.new("#{Redmine::VERSION::MAJOR}.#{Redmine::VERSION::MINOR}")
+    current > Gem::Version.new(version)
   end
 
   def assign_template_priv(role, add_permission: nil, remove_permission: nil)
