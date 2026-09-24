@@ -40,7 +40,7 @@ feature 'Templates can be reorder via drag and drop', js: true do
       Redmine::VERSION::STRING < '4.2' ?
         page.driver.browser.action.drag_and_drop_by(first_target.native, 0, 90).perform :
         first_target.drag_to(last_target)
-      wait_for_reorder(templates.values_at(1, 2, 3, 0).map(&:title))
+      wait_for_reorder(templates, [4, 1, 2, 3])
     end.to change {
              IssueTemplate.order(:id).pluck(:position).to_a
            }.from([1, 2, 3, 4]).to([4, 1, 2, 3])
@@ -53,7 +53,7 @@ feature 'Templates can be reorder via drag and drop', js: true do
       Redmine::VERSION::STRING < '4.2' ?
         page.driver.browser.action.drag_and_drop_by(second_target.native, 0, 60).perform :
         second_target.drag_to(last_target)
-      wait_for_reorder(templates.values_at(1, 3, 0, 2).map(&:title))
+      wait_for_reorder(templates, [3, 1, 4, 2])
     end.to change {
              IssueTemplate.order(:id).pluck(:position).to_a
            }.from([4, 1, 2, 3]).to([3, 1, 4, 2])
@@ -79,7 +79,7 @@ feature 'Templates can be reorder via drag and drop', js: true do
         Redmine::VERSION::STRING < '4.2' ?
           page.driver.browser.action.drag_and_drop_by(first_target.native, 0, 90).perform :
           first_target.drag_to(last_target)
-        wait_for_reorder(templates.values_at(1, 2, 3, 0).map(&:name))
+        wait_for_reorder(templates, [4, 1, 2, 3])
       end.to change {
                NoteTemplate.reorder(:id).pluck(:position).to_a
              }.from([1, 2, 3, 4]).to([4, 1, 2, 3])
@@ -94,7 +94,7 @@ feature 'Templates can be reorder via drag and drop', js: true do
         Redmine::VERSION::STRING < '4.2' ?
           page.driver.browser.action.drag_and_drop_by(second_target.native, 0, 60).perform :
           second_target.drag_to(last_target)
-        wait_for_reorder(templates.values_at(1, 3, 0, 2).map(&:name))
+        wait_for_reorder(templates, [3, 1, 4, 2])
       end.to change {
                NoteTemplate.reorder(:id).pluck(:position).to_a
              }.from([4, 1, 2, 3]).to([3, 1, 4, 2])
@@ -118,7 +118,7 @@ feature 'Templates can be reorder via drag and drop', js: true do
       visit_note_template_list(user)
 
       expect do
-        names = template_list.map(&:name)
+        positions = [1, 2]
         5.times do
           first_target = table.find('tr:nth-child(1) > td.buttons > span')
           last_target = table.find('tr:nth-child(2) > td.buttons > span')
@@ -126,8 +126,8 @@ feature 'Templates can be reorder via drag and drop', js: true do
           Redmine::VERSION::STRING < '4.2' ?
             page.driver.browser.action.drag_and_drop_by(first_target.native, 0, 30).perform :
             first_target.drag_to(last_target)
-          names.reverse!
-          wait_for_reorder(names)
+          positions.reverse!
+          wait_for_reorder(template_list, positions)
         end
       end.to \
         change {
@@ -154,7 +154,7 @@ feature 'Templates can be reorder via drag and drop', js: true do
       Redmine::VERSION::STRING < '4.2' ?
         page.driver.browser.action.drag_and_drop_by(first_target.native, 0, 90).perform :
         first_target.drag_to(last_target)
-      wait_for_reorder(templates.values_at(1, 2, 3, 0).map(&:title))
+      wait_for_reorder(templates, [4, 1, 2, 3])
     end.to change {
              GlobalIssueTemplate.reorder(:id).pluck(:position).to_a
            }.from([1, 2, 3, 4]).to([4, 1, 2, 3])
@@ -167,7 +167,7 @@ feature 'Templates can be reorder via drag and drop', js: true do
       Redmine::VERSION::STRING < '4.2' ?
         page.driver.browser.action.drag_and_drop_by(second_target.native, 0, 60).perform :
         second_target.drag_to(last_target)
-      wait_for_reorder(templates.values_at(1, 3, 0, 2).map(&:title))
+      wait_for_reorder(templates, [3, 1, 4, 2])
     end.to change {
              GlobalIssueTemplate.reorder(:id).pluck(:position).to_a
            }.from([4, 1, 2, 3]).to([3, 1, 4, 2])
@@ -175,13 +175,19 @@ feature 'Templates can be reorder via drag and drop', js: true do
 
   private
 
-  # Wait until the title column shows the rows in the expected order, then wait
+  # Wait until the title column shows the templates ordered by the expected
+  # positions (positions[i] is the expected position of templates[i]), then wait
   # for the reorder request issued on drop to finish.
-  def wait_for_reorder(titles)
+  def wait_for_reorder(templates, positions)
+    titles = templates.zip(positions).sort_by(&:last).map { |template, _| template_title(template) }
     titles.each_with_index do |title, i|
       expect(table).to have_css("tr:nth-child(#{i + 1}) > td.template_title", exact_text: title, wait: 5)
     end
     wait_for_ajax
+  end
+
+  def template_title(template)
+    template.is_a?(NoteTemplate) ? template.name : template.title
   end
 
   def visit_template_list(user)
