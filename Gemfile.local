@@ -1,3 +1,10 @@
+# rubygems4 で bundle install が失敗する件の対応
+# Redmine6.0以下を最新のrubygemsで動かす際に必要
+if RUBY_VERSION >= '3.2'
+  dependencies.reject! { |i| %w[commonmarker].include? i.name }
+  gem 'commonmarker', '~> 2.6.0'
+end
+
 group :test do
   gem 'simplecov-rcov', require: false
   gem 'rspec-rails'
