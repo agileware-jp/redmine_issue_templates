@@ -10,7 +10,9 @@ feature 'Templates can be reorder via drag and drop', js: true do
   given(:project) { create(:project_with_enabled_modules) }
   given(:tracker) { FactoryBot.create(:tracker, :with_default_status) }
   given(:role) { FactoryBot.create(:role, :manager_role) }
-  given(:table) { page.find('table.list.issues.table-sortable:first-of-type > tbody') }
+  # `.ui-sortable` is added once positionedItems() has initialized the table,
+  # so finding it also waits until drag and drop is actually available.
+  given(:table) { page.find('table.list.issues.table-sortable:first-of-type > tbody.ui-sortable') }
 
   background do
     project.trackers << tracker
@@ -22,7 +24,7 @@ feature 'Templates can be reorder via drag and drop', js: true do
   end
 
   scenario 'Can drag and drop on Issue Templates' do
-    FactoryBot.create_list(:issue_template, 4, project_id: project.id, tracker_id: tracker.id)
+    templates = FactoryBot.create_list(:issue_template, 4, project_id: project.id, tracker_id: tracker.id)
 
     log_user(user.login, user.password)
     expect(page).to have_current_path(my_page_path, wait: 5)
@@ -38,7 +40,7 @@ feature 'Templates can be reorder via drag and drop', js: true do
       Redmine::VERSION::STRING < '4.2' ?
         page.driver.browser.action.drag_and_drop_by(first_target.native, 0, 90).perform :
         first_target.drag_to(last_target)
-      wait_for_ajax
+      wait_for_reorder(templates, [4, 1, 2, 3])
     end.to change {
              IssueTemplate.order(:id).pluck(:position).to_a
            }.from([1, 2, 3, 4]).to([4, 1, 2, 3])
@@ -51,7 +53,7 @@ feature 'Templates can be reorder via drag and drop', js: true do
       Redmine::VERSION::STRING < '4.2' ?
         page.driver.browser.action.drag_and_drop_by(second_target.native, 0, 60).perform :
         second_target.drag_to(last_target)
-      wait_for_ajax
+      wait_for_reorder(templates, [3, 1, 4, 2])
     end.to change {
              IssueTemplate.order(:id).pluck(:position).to_a
            }.from([4, 1, 2, 3]).to([3, 1, 4, 2])
@@ -63,7 +65,7 @@ feature 'Templates can be reorder via drag and drop', js: true do
     end
 
     scenario 'Can drag and drop on Note Templates' do
-      FactoryBot.create_list(:note_template, 4, project_id: project.id, tracker_id: tracker.id)
+      templates = FactoryBot.create_list(:note_template, 4, project_id: project.id, tracker_id: tracker.id)
 
       visit_note_template_list(user)
 
@@ -77,7 +79,7 @@ feature 'Templates can be reorder via drag and drop', js: true do
         Redmine::VERSION::STRING < '4.2' ?
           page.driver.browser.action.drag_and_drop_by(first_target.native, 0, 90).perform :
           first_target.drag_to(last_target)
-        wait_for_ajax
+        wait_for_reorder(templates, [4, 1, 2, 3])
       end.to change {
                NoteTemplate.reorder(:id).pluck(:position).to_a
              }.from([1, 2, 3, 4]).to([4, 1, 2, 3])
@@ -92,7 +94,7 @@ feature 'Templates can be reorder via drag and drop', js: true do
         Redmine::VERSION::STRING < '4.2' ?
           page.driver.browser.action.drag_and_drop_by(second_target.native, 0, 60).perform :
           second_target.drag_to(last_target)
-        wait_for_ajax
+        wait_for_reorder(templates, [3, 1, 4, 2])
       end.to change {
                NoteTemplate.reorder(:id).pluck(:position).to_a
              }.from([4, 1, 2, 3]).to([3, 1, 4, 2])
@@ -116,16 +118,16 @@ feature 'Templates can be reorder via drag and drop', js: true do
       visit_note_template_list(user)
 
       expect do
-        tr_idx = [1, 2]
+        positions = [1, 2]
         5.times do
-          first_target = table.find("tr:nth-child(#{tr_idx.first}) > td.buttons > span")
-          last_target = table.find("tr:nth-child(#{tr_idx.last}) > td.buttons > span")
+          first_target = table.find('tr:nth-child(1) > td.buttons > span')
+          last_target = table.find('tr:nth-child(2) > td.buttons > span')
 
           Redmine::VERSION::STRING < '4.2' ?
             page.driver.browser.action.drag_and_drop_by(first_target.native, 0, 30).perform :
             first_target.drag_to(last_target)
-          wait_for_ajax
-          tr_idx.reverse!
+          positions.reverse!
+          wait_for_reorder(template_list, positions)
         end
       end.to \
         change {
@@ -140,7 +142,7 @@ feature 'Templates can be reorder via drag and drop', js: true do
   end
 
   scenario 'Can drag and drop on Global Issue Templates' do
-    FactoryBot.create_list(:global_issue_template, 4, tracker_id: tracker.id)
+    templates = FactoryBot.create_list(:global_issue_template, 4, tracker_id: tracker.id)
 
     visit_global_template_list(user)
 
@@ -152,7 +154,7 @@ feature 'Templates can be reorder via drag and drop', js: true do
       Redmine::VERSION::STRING < '4.2' ?
         page.driver.browser.action.drag_and_drop_by(first_target.native, 0, 90).perform :
         first_target.drag_to(last_target)
-      wait_for_ajax
+      wait_for_reorder(templates, [4, 1, 2, 3])
     end.to change {
              GlobalIssueTemplate.reorder(:id).pluck(:position).to_a
            }.from([1, 2, 3, 4]).to([4, 1, 2, 3])
@@ -165,13 +167,28 @@ feature 'Templates can be reorder via drag and drop', js: true do
       Redmine::VERSION::STRING < '4.2' ?
         page.driver.browser.action.drag_and_drop_by(second_target.native, 0, 60).perform :
         second_target.drag_to(last_target)
-      wait_for_ajax
+      wait_for_reorder(templates, [3, 1, 4, 2])
     end.to change {
              GlobalIssueTemplate.reorder(:id).pluck(:position).to_a
            }.from([4, 1, 2, 3]).to([3, 1, 4, 2])
   end
 
   private
+
+  # Wait until the title column shows the templates ordered by the expected
+  # positions (positions[i] is the expected position of templates[i]), then wait
+  # for the reorder request issued on drop to finish.
+  def wait_for_reorder(templates, positions)
+    titles = templates.zip(positions).sort_by(&:last).map { |template, _| template_title(template) }
+    titles.each_with_index do |title, i|
+      expect(table).to have_css("tr:nth-child(#{i + 1}) > td.template_title", exact_text: title, wait: 5)
+    end
+    wait_for_ajax
+  end
+
+  def template_title(template)
+    template.is_a?(NoteTemplate) ? template.name : template.title
+  end
 
   def visit_template_list(user)
     # TODO: If does not user update, authentication is failed. This is workaround.
