@@ -6,7 +6,10 @@ require File.expand_path(File.dirname(__FILE__) + '/../support/controller_helper
 describe SettingsController, type: :controller do
   include_context 'As admin'
   before do
-    Redmine::SudoMode.disable!
+    # Redmine::SudoMode.disable! stores its state in ActiveSupport::CurrentAttributes,
+    # which is reset before each request on Rails 8.1 (Redmine 7.0). Stub enabled?
+    # instead, as Redmine's own test helper does.
+    allow(Redmine::SudoMode).to receive(:enabled?).and_return(false)
     Redmine::Plugin.register(:redmine_issue_templates) do
       settings partial: 'settings/redmine_issue_templates',
                default: { 'apply_global_template_to_all_projects' => 'false' }
