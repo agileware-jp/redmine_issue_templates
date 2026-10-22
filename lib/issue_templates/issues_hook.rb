@@ -41,7 +41,7 @@ module IssueTemplates
       context[:controller].send(
         :render_to_string,
         partial: 'issue_templates/issue_select_form',
-        locals: locals_params(issue, project_id, parameters[:form_update_triggered_by])
+        locals: locals_params(issue, project_id, parameters[:form_update_triggered_by].presence)
       )
     end
 
