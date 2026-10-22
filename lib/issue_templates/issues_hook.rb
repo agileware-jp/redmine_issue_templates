@@ -41,7 +41,8 @@ module IssueTemplates
       context[:controller].send(
         :render_to_string,
         partial: 'issue_templates/issue_select_form',
-        locals: locals_params(issue, project_id, parameters[:form_update_triggered_by].presence)
+        locals: locals_params(issue, project_id, parameters[:form_update_triggered_by].presence,
+                              skip_default_template: parameters[:copy_from].present?)
       )
     end
 
@@ -88,24 +89,22 @@ module IssueTemplates
       plugin_setting['apply_template_when_edit_issue'].to_s == 'true'
     end
 
-    def locals_params(issue, project_id, is_triggered_by)
+    def locals_params(issue, project_id, is_triggered_by, skip_default_template: false)
       { setting: setting(project_id),
         issue: issue,
         is_triggered_by: is_triggered_by,
         project_id: project_id,
-        pulldown_url: pulldown_url(issue, project_id, is_triggered_by) }
+        pulldown_url: pulldown_url(issue, project_id, is_triggered_by, skip_default_template: skip_default_template) }
     end
 
-    def pulldown_url(issue, project_id, is_triggered_by)
-      pulldown_url = if issue.try(:id).present?
-                       url_for(controller: 'issue_templates',
-                               action: 'set_pulldown', project_id: project_id, is_triggered_by: is_triggered_by,
-                               is_update_issue: issue.try(:id).present?)
-                     else
-                       url_for(controller: 'issue_templates',
-                               action: 'set_pulldown', project_id: project_id, is_triggered_by: is_triggered_by)
-                     end
-      pulldown_url
+    # The default template is applied automatically only for a brand-new issue.
+    # Pass is_update_issue so that set_pulldown does not select the default
+    # template for an existing issue or for an issue copied from another one.
+    def pulldown_url(issue, project_id, is_triggered_by, skip_default_template: false)
+      url_params = { controller: 'issue_templates', action: 'set_pulldown',
+                     project_id: project_id, is_triggered_by: is_triggered_by }
+      url_params[:is_update_issue] = true if issue.try(:id).present? || skip_default_template
+      url_for(url_params)
     end
 
     def redmine_issue_template_javascript_include_tag
