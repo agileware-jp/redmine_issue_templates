@@ -70,6 +70,55 @@ feature 'Update issue', js: true do
     expect(page).not_to have_selector('div#template_area select#issue_template')
   end
 
+  context 'Have default issue template and apply_template_when_edit_issue is enabled' do
+    given(:issue) { Issue.last }
+    given(:original_subject) { issue.subject }
+    given(:original_description) { issue.description }
+
+    background do
+      Setting.send 'plugin_redmine_issue_templates=', 'apply_template_when_edit_issue' => 'true'
+      FactoryBot.create(:issue_template, project_id: project.id, tracker_id: tracker.id,
+                                         issue_title: '[TPL-SUFFIX]', description: '### Steps to reproduce',
+                                         is_default: true)
+      log_user(user.login, user.password)
+      expect(page).to have_current_path(my_page_path, wait: 5)
+    end
+
+    scenario 'Default template is not applied when the edit form is re-rendered after a validation error' do
+      # Make the issue invalid on update so that the edit form is re-rendered with an error.
+      custom_field = IssueCustomField.create!(name: 'Required field', field_format: 'string',
+                                              is_required: true, is_for_all: true)
+      custom_field.trackers << tracker
+
+      visit issue_path(issue)
+      expect(page).to have_current_path(issue_path(issue), wait: 5)
+      page.find('#content > div:nth-child(1) > a.icon.icon-edit').click
+      expect(page).to have_selector('div#template_area', visible: true)
+      expect(find('#issue_subject').value).to eq(original_subject)
+      expect(find('#issue_description', visible: :all).value).to eq(original_description)
+
+      2.times do
+        page.find('#issue-form input[name=commit]').click
+        expect(page).to have_selector('#errorExplanation')
+        expect(page).to have_selector('div#template_area', visible: true)
+        sleep(1)
+        expect(find('#issue_subject').value).to eq(original_subject)
+        expect(find('#issue_description', visible: :all).value).to eq(original_description)
+      end
+    end
+
+    scenario 'Default template is not applied when copying an issue' do
+      assign_template_priv(role, add_permission: :copy_issues)
+
+      visit new_project_issue_path(project, copy_from: issue.id)
+      expect(page).to have_current_path(new_project_issue_path(project, copy_from: issue.id), wait: 5)
+      expect(page).to have_selector('div#template_area', visible: true)
+      sleep(1)
+      expect(find('#issue_subject').value).to eq(original_subject)
+      expect(find('#issue_description', visible: :all).value).to eq(original_description)
+    end
+  end
+
   context 'Have note template' do
     given(:expected_note_description) { 'Note Template desctiption' }
 
