@@ -75,9 +75,9 @@
   $(() => {
     //<![CDATA[
     var templateConfig = {
-      pulldownUrl: '<%= pulldown_url %>',
+      pulldownUrl: <%= raw pulldown_url.to_json %>,
       isTriggeredBy: '<%= is_triggered_by %>',
-      loadUrl: '<%= url_for(controller: 'issue_templates', action: 'load', project_id: project_id, is_triggered_by: is_triggered_by) %>',
+      loadUrl: <%= raw url_for(controller: 'issue_templates', action: 'load', project_id: project_id, is_triggered_by: is_triggered_by).to_json %>,
       shouldReplaced: '<%= setting.should_replaced %>',
       generalTextYes: '<%=h l(:general_text_Yes) %>',
       generalTextNo : '<%=h l(:general_text_No) %>',
