@@ -73,4 +73,49 @@ feature 'Create issue', js: true do
       end
     end
   end
+
+  describe 're-render the new issue form after a validation error' do
+    given(:edited_subject) { 'default issue title (edited)' }
+    given(:edited_description) { "default issue description\n\nedited by the operator" }
+
+    background do
+      FactoryBot.create(
+        :issue_template,
+        project_id: project.id,
+        tracker_id: tracker.id,
+        issue_title: 'default issue title',
+        description: 'default issue description',
+        is_default: true
+      )
+      # Make the issue invalid on create so that the new issue form is re-rendered with an error.
+      custom_field = IssueCustomField.create!(name: 'Required field', field_format: 'string',
+                                              is_required: true, is_for_all: true)
+      custom_field.trackers << tracker
+    end
+
+    scenario 'Default template is not applied again to the edited content' do
+      # GitHub issue #76. This happens regardless of apply_template_when_edit_issue.
+      Setting.send 'plugin_redmine_issue_templates=', 'apply_template_when_edit_issue' => 'false'
+
+      log_user(user.login, user.password)
+      expect(page).to have_current_path(my_page_path, wait: 5)
+
+      visit new_project_issue_path(project)
+      expect(page).to have_current_path(new_project_issue_path(project), wait: 5)
+      expect(page).to have_field('issue_subject', with: 'default issue title', wait: 5)
+      expect(page).to have_field('issue_description', with: 'default issue description', wait: 5)
+
+      fill_in 'issue_subject', with: edited_subject
+      fill_in 'issue_description', with: edited_description
+
+      2.times do
+        page.find('#issue-form input[name=commit]').click
+        expect(page).to have_selector('#errorExplanation')
+        expect(page).to have_selector('div#template_area', visible: true)
+        sleep(1)
+        expect(find('#issue_subject').value).to eq(edited_subject)
+        expect(find('#issue_description', visible: :all).value).to eq(edited_description)
+      end
+    end
+  end
 end
