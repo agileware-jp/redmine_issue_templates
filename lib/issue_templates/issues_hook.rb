@@ -42,7 +42,7 @@ module IssueTemplates
         :render_to_string,
         partial: 'issue_templates/issue_select_form',
         locals: locals_params(issue, project_id, parameters[:form_update_triggered_by].presence,
-                              skip_default_template: parameters[:copy_from].present?)
+                              skip_default_template: skip_default_template?(issue, parameters))
       )
     end
 
@@ -61,6 +61,14 @@ module IssueTemplates
 
       copy_from = parameters[:copy_from]
       copy_from.present?
+    end
+
+    # The default template must not be selected automatically when:
+    # - the issue is copied from another one (the copied content should be kept as is)
+    # - the form is re-rendered after a validation error (the template has already
+    #   been applied and the operator may have edited it; see GitHub issue #76)
+    def skip_default_template?(issue, parameters)
+      parameters[:copy_from].present? || issue.errors.any?
     end
 
     def create_action?(action)
@@ -99,7 +107,7 @@ module IssueTemplates
 
     # The default template is applied automatically only for a brand-new issue.
     # Pass is_update_issue so that set_pulldown does not select the default
-    # template for an existing issue or for an issue copied from another one.
+    # template for an existing issue or when skip_default_template? is true.
     def pulldown_url(issue, project_id, is_triggered_by, skip_default_template: false)
       url_params = { controller: 'issue_templates', action: 'set_pulldown',
                      project_id: project_id, is_triggered_by: is_triggered_by }
